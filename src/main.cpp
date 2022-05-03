@@ -13,7 +13,8 @@ void	printRealVector( std::vector<int> &real ) {
 #define FOUR 0
 #define FIVE 0
 #define SIX 0
-#define SEVEN 1
+#define SEVEN 0
+#define EIGHT 1
 
 int	main( void )
 {
@@ -226,16 +227,63 @@ int	main( void )
 	}
 	#endif
 
-	// pop_back added
+	// resize added
 	#if SEVEN
 	{
-		ft::vector<int>		mine;
 		std::vector<int>	real;
+		ft::vector<int>		mine;
 
-		for (size_t i = 0; i < 5; i++) {
+		for (size_t i = 0; i < 16; i++) {
 			real.push_back(i);
 			mine.push_back(i);
 		}
+
+		mine.printVector();
+		printRealVector(real);
+
+		LOG_YELLOW("size\t\t" << real.size());
+		LOG_BLUE("size\t\t" << mine.size());
+		LOG_YELLOW("capacity\t" << real.capacity());
+		LOG_BLUE("capacity\t" << mine.capacity());
+
+		real.resize(44);
+		mine.resize(44);
+
+		LOG_GREEN(std::endl << "AFTER RESIZE");
+
+		mine.printVector();
+		printRealVector(real);
+
+		LOG_YELLOW("size\t\t" << real.size());
+		LOG_BLUE("size\t\t" << mine.size());
+		LOG_YELLOW("capacity\t" << real.capacity());
+		LOG_BLUE("capacity\t" << mine.capacity());
+	}
+	#endif
+
+	// resize more tests
+	#if EIGHT
+	{
+		std::vector<int>	real(5);
+		ft::vector<int>		mine(5);
+
+		for (size_t i = 0; i < 5; i++) {
+			real.at(i) = i;
+			mine.at(i) = i;
+		}
+
+		mine.printVector();
+		printRealVector(real);
+
+		LOG_YELLOW("size\t\t" << real.size());
+		LOG_BLUE("size\t\t" << mine.size());
+		LOG_YELLOW("capacity\t" << real.capacity());
+		LOG_BLUE("capacity\t" << mine.capacity());
+
+		real.resize(18,42);
+		mine.resize(18, 42);
+
+		LOG_GREEN(std::endl << "AFTER RESIZE");
 
 		mine.printVector();
 		printRealVector(real);

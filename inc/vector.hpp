@@ -184,7 +184,8 @@ namespace ft {
 					pointer	newPtr = newV.allocate(this->_capacity * 2);
 					for (size_t i = 0; i < this->_size; i++)
 						newV.construct(&newPtr[i], this->_ptr[i]);
-					// newPtr[i] = this->_ptr[i]; / old one
+					// newPtr[i] = this->_ptr[i]; // old one
+					// TODO: capacity or size for destroying length
 					for (size_t i = 0; i < this->_capacity; i++)
 						this->_v.destroy(&(this->_ptr[i]));
 					this->_v.deallocate(this->_ptr, this->_capacity);
@@ -233,10 +234,31 @@ namespace ft {
 			}
 
 			void	resize( size_type n, value_type val = value_type() ) {
-				if (n < this->_size) { // TODO: tests
-					for (int i = n; i < this->_size; i++)
+				LOG_WHITE("|" << val << "|");
+				if (n < this->_size) { // TODO: tests (what is with capacity?)
+					for (size_t i = n; i < this->_size; i++)
 						this->_v.destroy(&this->_ptr[i]);
-					this->size = n;
+					this->_size = n;
+				}
+				else if (n > this->_size && n > this->_capacity) { // TODO: tests
+					Alloc	newV = allocator_type();
+					pointer	newPtr = newV.allocate(n); // TODO: guess i can usepush_back instead of doing perfect alloc
+					for (size_t i = 0; i < this->_size; i++)
+						newV.construct(&newPtr[i], this->_ptr[i]);
+					for (size_t i = this->_size; i < n; i++)
+						newV.construct(&newPtr[i], val);
+					for (size_t i = 0; i < this->_capacity; i++)
+						this->_v.destroy(&this->_ptr[i]);
+					this->_v.deallocate(this->_ptr, this->_capacity);
+					this->_v = newV;
+					this->_ptr = newPtr;
+					this->_capacity = n;
+					this->_size = n;
+				}
+				else if (n > this->_size && n <= this->_capacity) { // TODO: tests
+					for (size_t i = this->_size; i < n; i++)
+						this->_v.construct(&this->_ptr[i], val);
+					this->_size = n;
 				}
 			}
 
