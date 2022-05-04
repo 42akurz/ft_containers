@@ -76,7 +76,6 @@ namespace ft {
 				vPtr = v.allocate(n);
 				for (size_t i = 0; i < n; i++)
 					v.construct(&vPtr[i], val);
-				// vPtr[i] = val;// old one
 
 				this->_size = n;
 				this->_capacity = n;
@@ -97,7 +96,6 @@ namespace ft {
 				vPtr = v.allocate(x._size);
 				for (size_t i = 0; i < x._size; i++)
 					v.construct(&vPtr[i], x._ptr[i]);
-				// vPtr[i] = x._ptr[i]; // old one
 
 				this->_ptr = vPtr;
 				this->_capacity = x._capacity;
@@ -138,7 +136,6 @@ namespace ft {
 
 				for (size_t i = 0; i < this->_size; i++)
 					newV.construct(&newPtr[i], this->_ptr[i]);
-				// newPtr[i] = this->_ptr[i]; // old one
 
 				// TODO: destroy pointer or objects?
 				// TODO: destroy length or capacity?
@@ -165,7 +162,6 @@ namespace ft {
 			void	push_back( const value_type& val ) {
 				if (this->_capacity > this->_size) {
 					this->_v.construct(&this->_ptr[this->_size], val);
-					// this->_ptr[this->_size] = val; // old one
 					this->_size++;
 				}
 				else if (!this->_capacity && !this->_size) {
@@ -174,7 +170,6 @@ namespace ft {
 					this->_v.deallocate(this->_ptr, this->_capacity);
 					this->_v = newV;
 					this->_ptr = newPtr;
-					// this->_ptr[this->_size] = val; // old one
 					this->_v.construct(&this->_ptr[this->_size], val);
 					this->_capacity++;
 					this->_size++;
@@ -184,14 +179,12 @@ namespace ft {
 					pointer	newPtr = newV.allocate(this->_capacity * 2);
 					for (size_t i = 0; i < this->_size; i++)
 						newV.construct(&newPtr[i], this->_ptr[i]);
-					// newPtr[i] = this->_ptr[i]; // old one
 					// TODO: capacity or size for destroying length
 					for (size_t i = 0; i < this->_capacity; i++)
 						this->_v.destroy(&(this->_ptr[i]));
 					this->_v.deallocate(this->_ptr, this->_capacity);
 					this->_v = newV;
 					this->_ptr = newPtr;
-					// this->_ptr[this->_size] = val; // old one
 					this->_v.construct(&this->_ptr[this->_size], val);
 					this->_capacity *= 2;
 					this->_size++;
@@ -293,14 +286,31 @@ namespace ft {
 			}
 
 			// https://www.cplusplus.com/reference/vector/vector/operator=/
-			// TODO: tests
+			// TODO: more tests
 			// it says: The container preserves its current allocator, which is used to allocate storage in case of reallocation.
 			// call get_allocator?
 			vector &	operator=( const vector& x ) {
 				// TODO: size or capacity ?
-				for (size_t i = 0; i < this->_size; i++) {
-					this->_v.destroy(&this->_ptr[i]);
+				if (this->_capacity >= x._capacity) {
+					// TODO: size or capacity ?
+					for (size_t i = 0; i < this->_size; i++)
+						this->_v.destroy(&this->_ptr[i]);
+					for (size_t i = 0; i < x._size; i++)
+						this->_v.construct(&this->_ptr[i], x._ptr[i]);
+					this->_size = x._size;
 				}
+				else if (this->_capacity < x._capacity) {
+					// TODO: size or capacity ?
+					for (size_t i = 0; i < this->_size; i++)
+						this->_v.destroy(&this->_ptr[i]);
+					this->_v.deallocate(this->_ptr, this->_capacity);
+					this->_ptr = this->_v.allocate(x._size);
+					for (size_t i = 0; i < x._size; i++)
+						this->_v.construct(&this->_ptr[i], x._ptr[i]);
+					this->_size = x._size;
+					this->_capacity = x._size;
+				}
+				return *this;
 			}
 
 

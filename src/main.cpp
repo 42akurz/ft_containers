@@ -7,6 +7,15 @@ void	printRealVector( std::vector<int> &real ) {
 	LOG_RED("-----------------");
 }
 
+template< typename T >
+void	printVectors( std::vector<T> &real, ft::vector<T> &mine ) {
+	LOG(std::endl << "\033[1;31m" << "Real Vector ----- " << "\033[0m" << "\033[1;36m" << "My Vector -----" << "\033[0m");
+	for(size_t i = 0; ((i < real.size()) && (i < mine.size())); i++) {
+		LOG(std::endl << "\033[1;31m" << real[i] << "                " << "\033[0m" << "\033[1;36m" << mine[i] << "                " << "\033[0m");
+	}
+	LOG(std::endl << "\033[1;31m" << "----------------- " << "\033[0m" << "\033[1;36m" << "----------------- " << "\033[0m");
+}
+
 #define ONE 0 // push_back
 #define TWO 0 // reserve
 #define THREE 0 // reserve more tests
@@ -19,7 +28,7 @@ void	printRealVector( std::vector<int> &real ) {
 #define TEN 0 // my swap
 #define ELEVEN 0 // operator[]
 #define TWELVE 1 // real operator=
-#define THIRTEEN 0 // my operator=
+#define THIRTEEN 1 // my operator=
 
 int	main( void )
 {
@@ -397,6 +406,9 @@ int	main( void )
 		std::vector<int>	real1;
 		std::vector<int>	real2;
 
+		real1.reserve(33);
+		real2.reserve(12);
+
 		for (size_t i = 0; i < 21; i++) {
 			real1.push_back(i);
 			if (i < 12)
@@ -411,7 +423,8 @@ int	main( void )
 		LOG_BLUE("size\t\t" << real2.size());
 		LOG_BLUE("capacity\t" << real2.capacity());
 
-		real1 = real2;
+		real2 = real1;
+		// real1 = real2;
 
 		LOG_GREEN(std::endl << "AFTER ASSIGN" << std::endl);
 		
@@ -427,10 +440,14 @@ int	main( void )
 	#endif
 
 	// my operator=
+	// TODO: test capacity < == >, etc.
 	#if THIRTEEN
 	{
 		ft::vector<int>	mine1;
 		ft::vector<int>	mine2;
+
+		mine1.reserve(33);
+		mine2.reserve(12);
 
 		for (size_t i = 0; i < 21; i++) {
 			mine1.push_back(i);
@@ -438,6 +455,19 @@ int	main( void )
 				mine2.push_back(i + 10);
 		}
 
+		mine1.printVector();
+		mine2.printVector();
+
+		LOG_YELLOW("size\t\t" << mine1.size());
+		LOG_YELLOW("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine2.size());
+		LOG_BLUE("capacity\t" << mine2.capacity());
+
+		mine2 = mine1;
+		// mine1 = mine2;
+
+		LOG_GREEN(std::endl << "AFTER ASSIGN" << std::endl);
+		
 		mine1.printVector();
 		mine2.printVector();
 
