@@ -4,7 +4,8 @@ CC = clang++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC = ./src/main.cpp		\
+SRC =	./src/main.cpp		\
+		./src/test.cpp		\
 
 INC = ./inc/vector.hpp		\
 

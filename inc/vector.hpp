@@ -227,7 +227,6 @@ namespace ft {
 			}
 
 			void	resize( size_type n, value_type val = value_type() ) {
-				LOG_WHITE("|" << val << "|");
 				if (n < this->_size) { // TODO: tests (what is with capacity?)
 					for (size_t i = n; i < this->_size; i++)
 						this->_v.destroy(&this->_ptr[i]);
@@ -277,10 +276,12 @@ namespace ft {
 				x._v = temp_v;
 			}
 
+			// TODO: when doing assignations, like mine[i] = i; something doesnt work!!!
 			reference	operator[]( size_type n ) {
 				return (this->_ptr[n]);
 			}
 
+			// TODO: when doing assignations, like mine[i] = i; something doesnt work!!!
 			const_reference	operator[]( size_type n ) const {
 				return (this->_ptr[n]);
 			}
@@ -323,6 +324,84 @@ namespace ft {
 
 	};
 
+	template <class T, class Alloc>
+	bool	operator==( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs ) {
+		if (lhs.size() != rhs.size())
+			return false;
+		for (size_t i = 0; i < lhs.size(); i++) {
+			if (lhs[i] != rhs[i])
+				return false;
+		}
+		return true;
+	}
+
+	template <class T, class Alloc>
+	bool	operator!=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs ) {
+		if (lhs.size() != rhs.size())
+			return true;
+		for (size_t i = 0; i < lhs.size(); i++) {
+			if (lhs[i] != rhs[i])
+				return true;
+		}
+		return false;
+	}
+
+	template <class T, class Alloc>
+	bool	operator<( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs ) {
+		for (size_t i = 0; ((i < lhs.size()) && (i < rhs.size())); i++) {
+			if (lhs[i] < rhs[i])
+				return true;
+			if (lhs[i] > rhs[i])
+				return false;
+		}
+		if (lhs.size() < rhs.size())
+			return true;
+		return false;
+	}
+
+	template <class T, class Alloc>
+	bool	operator<=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs ) {
+		for (size_t i = 0; ((i < lhs.size()) && (i < rhs.size())); i++) {
+			if (lhs[i] < rhs[i])
+				return true;
+			if (lhs[i] > rhs[i])
+				return false;
+		}
+		if (lhs.size() <= rhs.size())
+			return true;
+		return false;
+	}
+
+	template <class T, class Alloc>
+	bool	operator>( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs ) {
+		for (size_t i = 0; ((i < lhs.size()) && (i < rhs.size())); i++) {
+			if (lhs[i] > rhs[i])
+				return true;
+			if (lhs[i] < rhs[i])
+				return false;
+		}
+		if (lhs.size() > rhs.size())
+			return true;
+		return false;
+	}
+
+	template <class T, class Alloc>
+	bool	operator>=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs ) {
+		for (size_t i = 0; ((i < lhs.size()) && (i < rhs.size())); i++) {
+			if (lhs[i] > rhs[i])
+				return true;
+			if (lhs[i] < rhs[i])
+				return false;
+		}
+		if (lhs.size() >= rhs.size())
+			return true;
+		return false;
+	}
+
+	template <class T, class Alloc>
+	void	swap( vector<T,Alloc>& x, vector<T,Alloc>& y ) {
+		x.swap(y);
+	}
 }
 
 

@@ -1,20 +1,21 @@
 #include "../inc/vector.hpp"
+#include "../inc/test.hpp"
 
-void	printRealVector( std::vector<int> &real ) {
-	LOG_RED(std::endl << "Real Vector -----");
-	for(std::vector<int>::iterator it = real.begin(); it != real.end(); it++)
-		LOG_RED(*it);
-	LOG_RED("-----------------");
-}
+// void	printRealVector( std::vector<int> &real ) {
+// 	LOG_RED(std::endl << "Real Vector -----");
+// 	for(std::vector<int>::iterator it = real.begin(); it != real.end(); it++)
+// 		LOG_RED(*it);
+// 	LOG_RED("-----------------");
+// }
 
-template< typename T >
-void	printVectors( std::vector<T> &real, ft::vector<T> &mine ) {
-	LOG(std::endl << "\033[1;31m" << "Real Vector ----- " << "\033[0m" << "\033[1;36m" << "My Vector -----" << "\033[0m");
-	for(size_t i = 0; ((i < real.size()) && (i < mine.size())); i++) {
-		LOG(std::endl << "\033[1;31m" << real[i] << "                " << "\033[0m" << "\033[1;36m" << mine[i] << "                " << "\033[0m");
-	}
-	LOG(std::endl << "\033[1;31m" << "----------------- " << "\033[0m" << "\033[1;36m" << "----------------- " << "\033[0m");
-}
+// template< typename T >
+// void	printVectors( std::vector<T> &real, ft::vector<T> &mine ) {
+// 	LOG(std::endl << "\033[1;31m" << "Real Vector -----\t" << "\033[0m" << "\033[1;36m" << "My Vector -------" << "\033[0m");
+// 	for(size_t i = 0; ((i < real.size()) && (i < mine.size())); i++) {
+// 		LOG("\033[1;31m" << real[i] << "                \t" << "\033[0m" << "\033[1;36m" << mine[i] << "                " << "\033[0m");
+// 	}
+// 	LOG("\033[1;31m" << "-----------------\t" << "\033[0m" << "\033[1;36m" << "----------------- " << "\033[0m");
+// }
 
 #define ONE 0 // push_back
 #define TWO 0 // reserve
@@ -27,8 +28,12 @@ void	printVectors( std::vector<T> &real, ft::vector<T> &mine ) {
 #define NINE 0 // real swap
 #define TEN 0 // my swap
 #define ELEVEN 0 // operator[]
-#define TWELVE 1 // real operator=
-#define THIRTEEN 1 // my operator=
+#define TWELVE 0 // real operator=
+#define THIRTEEN 0 // my operator=
+#define FOURTEEN 0 // non member operators
+#define FIVETEEN 0 // non member operators part 2
+#define SIXTEEN 0 // non member operators part 3
+#define SEVENTEEN 1 // non member swap
 
 int	main( void )
 {
@@ -435,7 +440,6 @@ int	main( void )
 		LOG_YELLOW("capacity\t" << real1.capacity());
 		LOG_BLUE("size\t\t" << real2.size());
 		LOG_BLUE("capacity\t" << real2.capacity());
-
 	}
 	#endif
 
@@ -473,6 +477,73 @@ int	main( void )
 
 		LOG_YELLOW("size\t\t" << mine1.size());
 		LOG_YELLOW("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine2.size());
+		LOG_BLUE("capacity\t" << mine2.capacity());
+	}
+	#endif
+
+	// non member operators == / !=
+	#if FOURTEEN
+	{
+		non_member_operator_test_1();
+	}
+	#endif
+
+	// non member operators part 2 < / <=
+	#if FIVETEEN
+	{
+		non_member_operator_test_2();
+	}
+	#endif
+
+	// non member operators part 3 > / >=
+	#if SIXTEEN
+	{
+		non_member_operator_test_3();
+	}
+	#endif
+
+	// non member swap
+	#if SEVENTEEN
+	{
+		std::vector<int>	real1;
+		std::vector<int>	real2;
+		ft::vector<int>		mine1;
+		ft::vector<int>		mine2;
+
+		for (size_t i = 0; i < 21; i++) {
+			real1.push_back(i);
+			mine1.push_back(i);
+			if (i < 12) {
+				real2.push_back(i + 10);
+				mine2.push_back(i + 10);
+			}
+		}
+
+		printVectors(real1, mine1);
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_BLUE("size\t\t" << mine1.size());
+		LOG_BLUE("capacity\t" << mine1.capacity());
+		printVectors(real2, mine2);
+		LOG_YELLOW("size\t\t" << real2.size());
+		LOG_YELLOW("capacity\t" << real2.capacity());
+		LOG_BLUE("size\t\t" << mine2.size());
+		LOG_BLUE("capacity\t" << mine2.capacity());
+
+		swap(real1, real2);
+		swap(mine1, mine2);
+
+		LOG_GREEN(std::endl << "AFTER SWAP" << std::endl);
+
+		printVectors(real1, mine1);
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_BLUE("size\t\t" << mine1.size());
+		LOG_BLUE("capacity\t" << mine1.capacity());
+		printVectors(real2, mine2);
+		LOG_YELLOW("size\t\t" << real2.size());
+		LOG_YELLOW("capacity\t" << real2.capacity());
 		LOG_BLUE("size\t\t" << mine2.size());
 		LOG_BLUE("capacity\t" << mine2.capacity());
 	}
