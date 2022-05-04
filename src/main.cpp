@@ -7,14 +7,19 @@ void	printRealVector( std::vector<int> &real ) {
 	LOG_RED("-----------------");
 }
 
-#define ONE 0
-#define TWO 0
-#define THREE 0
-#define FOUR 0
-#define FIVE 0
-#define SIX 0
-#define SEVEN 0
-#define EIGHT 1
+#define ONE 0 // push_back
+#define TWO 0 // reserve
+#define THREE 0 // reserve more tests
+#define FOUR 0 // clear
+#define FIVE 0 // get_allocator
+#define SIX 0 // pop_back
+#define SEVEN 0 // resize
+#define EIGHT 0 // resize more tests
+#define NINE 0 // real swap
+#define TEN 0 // my swap
+#define ELEVEN 0 // operator[]
+#define TWELVE 1 // real operator=
+#define THIRTEEN 0 // my operator=
 
 int	main( void )
 {
@@ -113,7 +118,7 @@ int	main( void )
 	}
 	#endif
 
-	// added clear
+	// clear
 	#if FOUR
 	{
 		ft::vector<int>		mine;
@@ -160,7 +165,7 @@ int	main( void )
 	}
 	#endif
 
-	// test get_allocator
+	// get_allocator
 	#if FIVE
 	{
 		ft::vector<int>		mine;
@@ -194,7 +199,7 @@ int	main( void )
 	}
 	#endif
 
-	// pop_back added
+	// pop_back
 	#if SIX
 	{
 		ft::vector<int>		mine;
@@ -227,7 +232,7 @@ int	main( void )
 	}
 	#endif
 
-	// resize added
+	// resize 
 	#if SEVEN
 	{
 		std::vector<int>	real;
@@ -294,19 +299,155 @@ int	main( void )
 		LOG_BLUE("capacity\t" << mine.capacity());
 	}
 	#endif
+
+	// real swap
+	#if NINE
+	{
+		std::vector<int>	real1;
+		std::vector<int>	real2;
+
+		for (size_t i = 0; i < 21; i++) {
+			real1.push_back(i);
+			if (i < 12)
+				real2.push_back(i + 10);
+		}
+
+		printRealVector(real1);
+		printRealVector(real2);
+
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_BLUE("size\t\t" << real2.size());
+		LOG_BLUE("capacity\t" << real2.capacity());
+
+		real1.swap(real2);
+
+		printRealVector(real1);
+		printRealVector(real2);
+
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_BLUE("size\t\t" << real2.size());
+		LOG_BLUE("capacity\t" << real2.capacity());
+	}
+	#endif
+
+	// my swap
+	#if TEN
+	{
+		ft::vector<int>	mine1;
+		ft::vector<int>	mine2;
+
+		for (size_t i = 0; i < 21; i++) {
+			mine1.push_back(i);
+			if (i < 12)
+				mine2.push_back(i + 10);
+		}
+
+		mine1.printVector();
+		mine2.printVector();
+
+		LOG_YELLOW("size\t\t" << mine1.size());
+		LOG_YELLOW("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine2.size());
+		LOG_BLUE("capacity\t" << mine2.capacity());
+
+		mine1.swap(mine2);
+
+		mine1.printVector();
+		mine2.printVector();
+
+		LOG_YELLOW("size\t\t" << mine1.size());
+		LOG_YELLOW("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine2.size());
+		LOG_BLUE("capacity\t" << mine2.capacity());
+	}
+	#endif
+
+	// operator[]
+	#if ELEVEN
+	{
+		std::vector<int>	real(5);
+		ft::vector<int>		mine(5);
+
+		for (size_t i = 0; i < 5; i++) {
+			real[i] = i;
+			mine[i] = i;
+		}
+
+		mine.printVector();
+		printRealVector(real);
+
+		LOG_YELLOW("size\t\t" << real.size());
+		LOG_YELLOW("capacity\t" << real.capacity());
+		LOG_BLUE("size\t\t" << mine.size());
+		LOG_BLUE("capacity\t" << mine.capacity());
+
+		LOG_GREEN(std::endl << "PRINT VALUES" << std::endl);
+
+		for (int i = 0; i < 5; i++) {
+			LOG_GREEN("real["<< i << "]\t" << real[i] << "\t|\tmine[" << i << "]\t" << mine[i]);
+		}
+	}
+	#endif
+
+	// real operator=
+	#if TWELVE
+	{
+		std::vector<int>	real1;
+		std::vector<int>	real2;
+
+		for (size_t i = 0; i < 21; i++) {
+			real1.push_back(i);
+			if (i < 12)
+				real2.push_back(i + 10);
+		}
+
+		printRealVector(real1);
+		printRealVector(real2);
+
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_BLUE("size\t\t" << real2.size());
+		LOG_BLUE("capacity\t" << real2.capacity());
+
+		real1 = real2;
+
+		LOG_GREEN(std::endl << "AFTER ASSIGN" << std::endl);
+		
+		printRealVector(real1);
+		printRealVector(real2);
+
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_BLUE("size\t\t" << real2.size());
+		LOG_BLUE("capacity\t" << real2.capacity());
+
+	}
+	#endif
+
+	// my operator=
+	#if THIRTEEN
+	{
+		ft::vector<int>	mine1;
+		ft::vector<int>	mine2;
+
+		for (size_t i = 0; i < 21; i++) {
+			mine1.push_back(i);
+			if (i < 12)
+				mine2.push_back(i + 10);
+		}
+
+		mine1.printVector();
+		mine2.printVector();
+
+		LOG_YELLOW("size\t\t" << mine1.size());
+		LOG_YELLOW("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine2.size());
+		LOG_BLUE("capacity\t" << mine2.capacity());
+	}
+	#endif
+
+
 	return 0;
 }
-
-// int	main( void )
-// {
-// 	std::vector<int>	real(100000000, 42);
-
-// 	LOG_GREEN("capacity:	" << real.capacity());
-// 	LOG_GREEN("size:		" << real.size());
-	
-
-// 	std::cout << std::endl;
-
-// 	LOG_GREEN("capacity:	" << real.capacity());
-// 	LOG_GREEN("size:		" << real.size());
-// }

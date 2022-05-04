@@ -262,6 +262,48 @@ namespace ft {
 				}
 			}
 
+			void	swap( vector& x ) {
+				size_type	temp_size;
+				size_type	temp_capacity;
+				pointer		temp_ptr;
+				Alloc		temp_v;
+
+				temp_size = this->_size;
+				temp_capacity = this->_capacity;
+				temp_ptr = this->_ptr;
+				temp_v = this->_v;
+
+				this->_size = x._size;
+				this->_capacity = x._capacity;
+				this->_ptr = x._ptr;
+				this->_v = x._v;
+
+				x._size = temp_size;
+				x._capacity = temp_capacity;
+				x._ptr = temp_ptr;
+				x._v = temp_v;
+			}
+
+			reference	operator[]( size_type n ) {
+				return (this->_ptr[n]);
+			}
+
+			const_reference	operator[]( size_type n ) const {
+				return (this->_ptr[n]);
+			}
+
+			// https://www.cplusplus.com/reference/vector/vector/operator=/
+			// TODO: tests
+			// it says: The container preserves its current allocator, which is used to allocate storage in case of reallocation.
+			// call get_allocator?
+			vector &	operator=( const vector& x ) {
+				// TODO: size or capacity ?
+				for (size_t i = 0; i < this->_size; i++) {
+					this->_v.destroy(&this->_ptr[i]);
+				}
+			}
+
+
 			private:
 				size_type		_size;
 				// size_type		_max_size;
