@@ -56,7 +56,7 @@ namespace ft {
 			typedef typename	allocator_type::size_type		size_type;
 
 			typedef typename	ft::vector_iterator<value_type>			iterator;
-			typedef typename	ft::vector_iterator<const value_type>	const_iterator;
+			typedef 			ft::vector_iterator<const value_type>	const_iterator;
 
 
 
@@ -382,7 +382,7 @@ namespace ft {
 
 			// TODO: no const iterators
 			const_iterator begin() const {
-				return this->_first;
+				return (const_iterator(this->_first.base()));
 			}
 
 			iterator	end() {
@@ -396,7 +396,7 @@ namespace ft {
 			const_iterator end() const {
 				iterator	temp = this->_last;
 				temp++;
-				return temp;
+				return (const_iterator(temp.base()));
 			}
 
 			reference	front() {

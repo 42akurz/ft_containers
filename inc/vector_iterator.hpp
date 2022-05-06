@@ -19,10 +19,19 @@ namespace ft {
 			pointer	_ptr;
 
 		public:
+
+			pointer	base() const {
+				return this->_ptr;
+			}
+
 			// TODO: why is iterator constructor called 4 times
 			vector_iterator( pointer ptr = nullptr ) : _ptr(ptr) {
 				// std::cout << "iterator constrcutor called" << std::endl;
 			}
+
+			// vector_iterator( pointer ptr ) : _ptr(ptr) {
+			// 	// std::cout << "iterator constrcutor called" << std::endl;
+			// }
 
 			// TODO: i freestyled this
 			value_type &	operator*() {
@@ -52,7 +61,12 @@ namespace ft {
 			}
 	};
 
-	
+	template <class T>
+	bool	operator!=( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) {
+		if (lhs.base() != rhs.base())
+			return true;
+		return false;
+	}
 }
 
 #endif
