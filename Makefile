@@ -7,7 +7,9 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98
 SRC =	./src/main.cpp		\
 		./src/test.cpp		\
 
-INC = ./inc/vector.hpp		\
+INC =	./inc/vector.hpp	\
+		./inc/iterator.hpp	\
+		./inc/iterator_traits.hpp	\
 
 RM = rm -f
 

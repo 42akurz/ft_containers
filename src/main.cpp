@@ -33,7 +33,9 @@
 #define FOURTEEN 0 // non member operators
 #define FIVETEEN 0 // non member operators part 2
 #define SIXTEEN 0 // non member operators part 3
-#define SEVENTEEN 1 // non member swap
+#define SEVENTEEN 0 // non member swap
+#define EIGHTEEN 0 // iterator
+#define NINETEEN 1 // test at
 
 int	main( void )
 {
@@ -549,6 +551,92 @@ int	main( void )
 	}
 	#endif
 
+	#if EIGHTEEN
+	{
+		ft::vector<int>	myVec(5, 42);
+		std::vector<int>	rVec(5, 42);
+	
+		rVec.push_back(10);
+		myVec.push_back(10);
+
+		ft::vector<int>::iterator	it = myVec.begin();
+		std::vector<int>::iterator	it2 = rVec.begin();
+
+
+		printVectors(rVec, myVec);
+
+		LOG(std::endl << "mine:");
+
+		LOG(*it);
+		++it;
+		LOG(*it);
+		++it;
+		LOG(*it);
+		++it;
+		LOG(*it);
+		++it;
+		LOG(*it);
+		++it;
+		LOG(*it);
+
+		LOG(std::endl << "real:");
+
+		LOG(*it2);
+		++it2;
+		LOG(*it2);
+		++it2;
+		LOG(*it2);
+		++it2;
+		LOG(*it2);
+		++it2;
+		LOG(*it2);
+		++it2;
+		LOG(*it2);
+
+		ft::vector<int>::iterator	itend = myVec.end();
+		LOG_RED(*(--itend));
+
+	}
+	#endif
+
+	#if NINETEEN
+	{
+		ft::vector<int> vct(7);
+		std::vector<int> real(7);
+
+		for (unsigned long int i = 0; i < vct.size(); ++i)
+		{
+			vct.at(i) = (vct.size() - i) * 3;
+			std::cout << "vct.at(): " << vct.at(i) << " | ";
+			std::cout << "vct[]: " << vct[i] << std::endl;
+			real.at(i) = (real.size() - i) * 3;
+			std::cout << "real.at(): " << real.at(i) << " | ";
+			std::cout << "real[]: " << real[i] << std::endl;
+		}
+		LOG_GREEN(vct.size());
+		LOG_GREEN(real.size());
+
+		ft::vector<int> const vct_c(vct);
+		std::vector<int> const real_c(real);
+
+		std::cout << "front(): " << vct.front() << " " << vct_c.front() << std::endl;
+		std::cout << "back(): " << vct.back() << " " <<  vct_c.back() << std::endl;
+		std::cout << "front(): " << real.front() << " " << real_c.front() << std::endl;
+		std::cout << "back(): " << real.back() << " " <<  real_c.back() << std::endl;
+
+		try {
+			vct.at(10) = 42;
+			// real.at(10) = 42;
+		}
+		catch (std::out_of_range &e) {
+			std::cout << "Catch out_of_range exception!" << std::endl;
+		}
+		catch (std::exception &e) {
+			std::cout << "Catch exception: " << e.what() << std::endl;
+		}
+
+	}
+	#endif
 
 	return 0;
 }

@@ -8,6 +8,8 @@
 # include <exception>
 // # include <iterator>
 
+# include "vector_iterator.hpp"
+
 # define LOG(x) (std::cout << x << std::endl)
 
 # define LOG_RED(x) (std::cout << "\033[1;31m" << x << "\033[0m" << std::endl)
@@ -53,6 +55,9 @@ namespace ft {
 			typedef typename	allocator_type::const_pointer	const_pointer;
 			typedef typename	allocator_type::size_type		size_type;
 
+			typedef typename	ft::vector_iterator<value_type>			iterator;
+			typedef typename	ft::vector_iterator<const value_type>	const_iterator;
+
 
 
 			explicit vector ( const allocator_type& alloc = allocator_type() ) {
@@ -81,6 +86,10 @@ namespace ft {
 				this->_capacity = n;
 				this->_ptr = vPtr;
 				this->_v = v;
+
+				// iterators // TODO: not tested
+				this->_first = this->_ptr;
+				this->_last = &this->_ptr[this->_size - 1];
 			}
 
 			// range constructor
@@ -101,6 +110,10 @@ namespace ft {
 				this->_capacity = x._capacity;
 				this->_size = x._size;
 				this->_v = v;
+
+				// iterators // TODO: not tested
+				this->_first = this->_ptr;
+				this->_last = &this->_ptr[this->_size - 1];
 			}
 
 			size_type size() const {
@@ -147,6 +160,10 @@ namespace ft {
 				this->_v = newV;
 				this->_ptr = newPtr;
 				this->_capacity = n;
+
+				// iterators // TODO: not tested
+				this->_first = this->_ptr;
+				this->_last = &this->_ptr[this->_size - 1];
 			}
 
 			void	printVector( void ) {
@@ -163,6 +180,9 @@ namespace ft {
 				if (this->_capacity > this->_size) {
 					this->_v.construct(&this->_ptr[this->_size], val);
 					this->_size++;
+					
+					// iterator
+					this->_last++;
 				}
 				else if (!this->_capacity && !this->_size) {
 					Alloc	newV = allocator_type();
@@ -173,6 +193,10 @@ namespace ft {
 					this->_v.construct(&this->_ptr[this->_size], val);
 					this->_capacity++;
 					this->_size++;
+
+					// iterators
+					this->_first = this->_ptr;
+					this->_last = this->_ptr;
 				}
 				else if (this->_capacity == this->_size) {
 					Alloc	newV = allocator_type();
@@ -188,6 +212,10 @@ namespace ft {
 					this->_v.construct(&this->_ptr[this->_size], val);
 					this->_capacity *= 2;
 					this->_size++;
+
+					// iterators
+					this->_first = this->_ptr;
+					this->_last = &this->_ptr[this->_size - 1];
 				}
 			}
 
@@ -206,10 +234,15 @@ namespace ft {
 				return this->_ptr[n];
 			}
 
+			// TODO: what happens to allocator ?
 			void	clear() {
 				for (size_t i = 0; i < this->_size; i++)
 					this->_v.destroy(&(this->_ptr[i]));
 				this->_size = 0;
+
+				// iterators TODO: not tested
+				// this->_first = nullptr;
+				// this->_last = nullptr;
 			}
 
 			allocator_type	get_allocator() const {
@@ -224,6 +257,9 @@ namespace ft {
 					return ;
 				this->_v.destroy(&this->_ptr[this->_size - 1]);
 				this->_size--;
+
+				// iterators TODO: not tested
+				this->_last = &this->_ptr[this->_size - 1];
 			}
 
 			void	resize( size_type n, value_type val = value_type() ) {
@@ -231,6 +267,9 @@ namespace ft {
 					for (size_t i = n; i < this->_size; i++)
 						this->_v.destroy(&this->_ptr[i]);
 					this->_size = n;
+
+					// iterator
+					this->_last = &this->_ptr[this->_size - 1];
 				}
 				else if (n > this->_size && n > this->_capacity) { // TODO: tests
 					Alloc	newV = allocator_type();
@@ -246,11 +285,18 @@ namespace ft {
 					this->_ptr = newPtr;
 					this->_capacity = n;
 					this->_size = n;
+
+					// iterator
+					this->_first = this->_ptr;
+					this->_last = &this->_ptr[this->_size - 1];
 				}
 				else if (n > this->_size && n <= this->_capacity) { // TODO: tests
 					for (size_t i = this->_size; i < n; i++)
 						this->_v.construct(&this->_ptr[i], val);
 					this->_size = n;
+
+					// iterator
+					this->_last = &this->_ptr[this->_size - 1];
 				}
 			}
 
@@ -259,21 +305,29 @@ namespace ft {
 				size_type	temp_capacity;
 				pointer		temp_ptr;
 				Alloc		temp_v;
+				iterator	temp_first;
+				iterator	temp_last;
 
 				temp_size = this->_size;
 				temp_capacity = this->_capacity;
 				temp_ptr = this->_ptr;
 				temp_v = this->_v;
+				temp_first = this->_first;
+				temp_last = this->_last;
 
 				this->_size = x._size;
 				this->_capacity = x._capacity;
 				this->_ptr = x._ptr;
 				this->_v = x._v;
+				this->_first = x._first;
+				this->_last = x._last;
 
 				x._size = temp_size;
 				x._capacity = temp_capacity;
 				x._ptr = temp_ptr;
 				x._v = temp_v;
+				x._first = temp_first;
+				x._last = temp_last;
 			}
 
 			// TODO: when doing assignations, like mine[i] = i; something doesnt work!!!
@@ -299,6 +353,10 @@ namespace ft {
 					for (size_t i = 0; i < x._size; i++)
 						this->_v.construct(&this->_ptr[i], x._ptr[i]);
 					this->_size = x._size;
+
+					// iterator
+					this->_first = this->_ptr;
+					this->_last = &this->_ptr[this->_size - 1];
 				}
 				else if (this->_capacity < x._capacity) {
 					// TODO: size or capacity ?
@@ -310,17 +368,65 @@ namespace ft {
 						this->_v.construct(&this->_ptr[i], x._ptr[i]);
 					this->_size = x._size;
 					this->_capacity = x._size;
+					
+					// iterator
+					this->_first = this->_ptr;
+					this->_last = &this->_ptr[this->_size - 1];
 				}
 				return *this;
 			}
 
+			iterator	begin() {
+				return this->_first;
+			}
+
+			// TODO: no const iterators
+			const_iterator begin() const {
+				return this->_first;
+			}
+
+			iterator	end() {
+				iterator	temp = this->_last;
+				temp++;
+				return temp;
+				// return this->_last;
+			}
+
+			// TODO: no const iterators
+			const_iterator end() const {
+				iterator	temp = this->_last;
+				temp++;
+				return temp;
+			}
+
+			reference	front() {
+				return (this->_ptr[0]);
+			}
+
+			// TODO: no const iterators
+			const_reference front() const {
+				return (this->_ptr[0]);
+			}
+
+			reference	back() {
+				return (this->_ptr[this->_size - 1]);
+			}
+
+			// TODO: no const iterators
+			const_reference back() const {
+				return (this->_ptr[this->_size - 1]);
+			}
+
+
 
 			private:
 				size_type		_size;
-				// size_type		_max_size;
 				size_type		_capacity;
 				pointer			_ptr;
 				Alloc			_v;
+
+				iterator		_first;
+				iterator		_last;
 
 	};
 
