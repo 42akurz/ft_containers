@@ -1,3 +1,4 @@
 .vscode
 .containers
 /containers_test
+*DS_Store

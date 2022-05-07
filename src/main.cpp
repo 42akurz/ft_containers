@@ -37,7 +37,8 @@
 #define EIGHTEEN 0 // iterator
 #define NINETEEN 0 // test at
 #define TWENTY 0 // assign range
-#define TWENTYONE 1 // assign fill
+#define TWENTYONE 0 // assign fill
+#define TWENTYTWO 1 // erase position
 
 int	main( void )
 {
@@ -714,6 +715,39 @@ int	main( void )
 	}
 	#endif
 
+	// assign fill
+	#if TWENTYTWO
+	{
+		std::vector<int>	real1;
+		ft::vector<int>		mine1;
+
+			for (size_t i = 0; i < 30; i += 3) {
+			mine1.push_back(i);
+			real1.push_back(i);
+		}
+
+		printVectors(real1, mine1);
+
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_BLUE("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine1.size());
+
+		// real1.assign((ft::vector<int>::size_type)0, (ft::vector<int>::value_type)69);
+		// mine1.assign((ft::vector<int>::size_type)0, (ft::vector<int>::value_type)69);
+
+		// LOG_YELLOW("AFTER ASSIGN");
+
+		// printVectors(real1, mine1);
+
+		// LOG_YELLOW("capacity\t" << real1.capacity());
+		// LOG_YELLOW("size\t\t" << real1.size());
+		// LOG_BLUE("capacity\t" << mine1.capacity());
+		// LOG_BLUE("size\t\t" << mine1.size());
+	}
+	#endif
+
+	// TODO: komplett unnoetig, dass ich immer einen neuen allocator hole
 
 	return 0;
 }

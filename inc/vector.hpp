@@ -515,6 +515,32 @@ namespace ft {
 				}
 			}
 
+			// TODO: gibt safe efiizienter methoden, also bius zu position zu loopen
+			iterator	erase( iterator position ) {
+				pointer	newPtr = this->_v.allocate(this->size() - 1); // TODO: check if this makes sense!!
+				for (size_t i = 0; i < this->size(); i++) {
+					if (position != &this->_ptr[i])
+						this->_v.construct(&this->newPtr[i], this->_ptr[i]);
+				}
+				//TODO: size or capacity ?
+				for (size_t i = 0; i < this->capacity(); i++) {
+					this->_v.destroy(&this->_ptr[i]);
+				}
+				this->_v.deallocate(this->_ptr, this->capacity());
+
+				this->_ptr = newPtr;
+				this->_size--;
+				this->_capacity = this->_size;
+				this->_first = this->_ptr;
+				this->_last = &this->_ptr[this->_size - 1];
+
+				return (this->_last); // TODO: wrong, look here: https://www.cplusplus.com/reference/vector/vector/erase/
+			}
+
+			// iterator	erase( iterator first, iterator last ) {
+
+			// }
+
 
 
 			private:
