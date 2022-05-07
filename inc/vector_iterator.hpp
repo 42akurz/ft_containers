@@ -38,32 +38,43 @@ namespace ft {
 				return (*_ptr);
 			}
 
-			pointer	operator++() {
+			vector_iterator	operator++() {
 				++this->_ptr;
 				return (this->_ptr);
 			}
 
-			pointer	operator++(int) {
+			vector_iterator	operator++(int) {
 				pointer	temp = this->_ptr;
 				++this->_ptr;
 				return (temp);
 			}
 
-			pointer	operator--() {
+			vector_iterator	operator--() {
 				--this->_ptr;
 				return (this->_ptr);
 			}
 
-			pointer	operator--(int) {
+			vector_iterator	operator--(int) {
 				pointer	temp = this->_ptr;
 				--this->_ptr;
 				return (temp);
 			}
+
+			// value_type	operator[]( int pos ) {
+			// 	return _ptr[pos];
+			// }
 	};
 
 	template <class T>
 	bool	operator!=( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) {
 		if (lhs.base() != rhs.base())
+			return true;
+		return false;
+	}
+
+	template <class T>
+	bool	operator==( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) {
+		if (lhs.base() == rhs.base())
 			return true;
 		return false;
 	}

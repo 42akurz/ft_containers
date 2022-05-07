@@ -35,7 +35,9 @@
 #define SIXTEEN 0 // non member operators part 3
 #define SEVENTEEN 0 // non member swap
 #define EIGHTEEN 0 // iterator
-#define NINETEEN 1 // test at
+#define NINETEEN 0 // test at
+#define TWENTY 0 // assign range
+#define TWENTYONE 1 // assign fill
 
 int	main( void )
 {
@@ -637,6 +639,81 @@ int	main( void )
 
 	}
 	#endif
+
+	// assign range
+	#if TWENTY
+	{
+		std::vector<int>	real1;
+		std::vector<int>	real2(20, 42);
+
+		for (size_t i = 0; i < 30; i += 3) {
+			real1.push_back(i);
+		}
+
+		printRealVector(real1);
+		printRealVector(real2);
+
+		real2.assign((++real1.begin()), (--real1.end()));
+
+		LOG_YELLOW("AFTER ASSIGN");
+
+		printRealVector(real1);
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_BLUE("size\t\t" << real1.size());
+		printRealVector(real2);
+		LOG_YELLOW("capacity\t" << real2.capacity());
+		LOG_BLUE("size\t\t" << real2.size());
+
+		ft::vector<int>	mine1;
+		ft::vector<int>	mine2(20, 42);
+
+		for (size_t i = 0; i < 30; i += 3) {
+			mine1.push_back(i);
+		}
+
+		mine1.printVector();
+		mine2.printVector();
+
+		mine2.assign((++mine1.begin()), (--mine1.end()));
+
+		LOG_YELLOW("AFTER ASSIGN");
+
+		mine1.printVector();
+		LOG_YELLOW("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine1.size());
+		mine2.printVector();
+		LOG_YELLOW("capacity\t" << mine2.capacity());
+		LOG_BLUE("size\t\t" << mine2.size());
+	}
+	#endif
+
+	// assign fill
+	#if TWENTYONE
+	{
+		std::vector<int>	real1(5, 42);
+		ft::vector<int>		mine1(5, 42);
+
+		printVectors(real1, mine1);
+
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_BLUE("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine1.size());
+
+		real1.assign((ft::vector<int>::size_type)0, (ft::vector<int>::value_type)69);
+		mine1.assign((ft::vector<int>::size_type)0, (ft::vector<int>::value_type)69);
+
+		LOG_YELLOW("AFTER ASSIGN");
+
+		printVectors(real1, mine1);
+
+		LOG_YELLOW("capacity\t" << real1.capacity());
+		LOG_YELLOW("size\t\t" << real1.size());
+		LOG_BLUE("capacity\t" << mine1.capacity());
+		LOG_BLUE("size\t\t" << mine1.size());
+	}
+	#endif
+
 
 	return 0;
 }

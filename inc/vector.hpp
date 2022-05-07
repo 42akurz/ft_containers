@@ -380,8 +380,7 @@ namespace ft {
 				return this->_first;
 			}
 
-			// TODO: no const iterators
-			const_iterator begin() const {
+			const_iterator	begin() const {
 				return (const_iterator(this->_first.base()));
 			}
 
@@ -389,11 +388,9 @@ namespace ft {
 				iterator	temp = this->_last;
 				temp++;
 				return temp;
-				// return this->_last;
 			}
 
-			// TODO: no const iterators
-			const_iterator end() const {
+			const_iterator	end() const {
 				iterator	temp = this->_last;
 				temp++;
 				return (const_iterator(temp.base()));
@@ -403,8 +400,7 @@ namespace ft {
 				return (this->_ptr[0]);
 			}
 
-			// TODO: no const iterators
-			const_reference front() const {
+			const_reference	front() const {
 				return (this->_ptr[0]);
 			}
 
@@ -412,9 +408,111 @@ namespace ft {
 				return (this->_ptr[this->_size - 1]);
 			}
 
-			// TODO: no const iterators
-			const_reference back() const {
+			const_reference	back() const {
 				return (this->_ptr[this->_size - 1]);
+			}
+
+			// range // TODO: something aint right bro
+			template <class InputIterator>
+			void	assign( InputIterator first, InputIterator last ) {
+				size_t	distance = 0;
+				// improvised get distance
+				for (InputIterator temp = first; temp != last; temp++) {
+					distance++;
+				}
+
+				LOG_GREEN_INFO("distance: " << distance);
+
+				if (distance > this->capacity()) {
+					// TODO: i should probably reuse the existing allocator instead of creating a new one (everywhere)
+					Alloc	newV = allocator_type();
+					pointer	newPtr = newV.allocate(distance);
+
+					InputIterator	it = first;
+					for (size_t i = 0; i < distance; i++) {
+						newV.construct(&newPtr[i], (*it));
+						it++;
+					}
+
+					// TODO: size or capacity
+					for (size_t i = 0; i < this->capacity(); i++) {
+						this->_v.destroy(&this->_ptr[i]);
+					}
+					this->_v.deallocate(this->_ptr, this->capacity());
+
+					this->_v = newV;
+					this->_ptr = newPtr;
+
+					// TODO: not sure if this is true, test distances
+					this->_size = distance;
+					this->_capacity = distance;
+
+					// iterators
+					this->_first = first;
+					this->_last = last;
+					--this->_last;
+				}
+				else {
+					for (size_t i = 0; i < this->size(); i++) {
+						this->_v.destroy(&this->_ptr[i]);
+					}
+
+					InputIterator	it = first;
+					for (size_t i = 0; i < distance; i++) {
+						this->_v.construct(&this->_ptr[i], (*it));
+						it++;
+					}
+
+					this->_size = distance;
+
+					// iterators
+					this->_first = first;
+					this->_last = last;
+					--this->_last;
+				}
+			}
+			
+			// fill // TODO: something aint right
+			void	assign( size_type n, const value_type& val ) {
+				if (n > this->capacity()) {
+					Alloc	newV = allocator_type();
+					pointer	newPtr = newV.allocate(n);
+
+					for (size_t i = 0; i < n; i++) {
+						newV.construct(&newPtr[i], val);
+					}
+					
+					// TODO: size or capacity ?
+					for (size_t i = 0; i < this->capacity(); i++) {
+						this->_v.destroy(&this->_ptr[i]);
+					}
+					this->_v.deallocate(this->_ptr, this->capacity());
+
+					this->_v = newV;
+					this->_ptr = newPtr;
+					this->_size = n;
+					this->_capacity = n;
+
+					// iterators
+					this->_first = this->_ptr;
+					this->_last = &this->_ptr[this->_size - 1];
+				}
+				else {
+					// TODO: size or capacity ?
+					for (size_t i = 0; i < this->size(); i++) {
+						this->_v.destroy(&this->_ptr[i]);
+					}
+
+					for (size_t i = 0; i < n; i++) {
+						this->_v.construct(&this->_ptr[i], val);
+					}
+
+					this->_size = n;
+
+					// iterators
+					this->_first = this->_ptr;
+					this->_last = &this->_ptr[this->_size - 1];
+				}
 			}
 
 
