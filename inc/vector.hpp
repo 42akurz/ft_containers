@@ -32,34 +32,41 @@
 
 namespace ft {
 
-	// struct input_iterator_tag {};
-	// struct output_iterator_tag {};
-	// struct forward_iterator_tag {};
-	// struct bidirectional_iterator_tag {};
-	// struct random_access_iterator_tag {};
-
 	template < class T, class Alloc = std::allocator<T> >
 	class vector {
 
-		// class iterator {
-		// 	private:
-		// 		T*	;
-		// };
-
 		public:
-			typedef				T								value_type;
-			typedef				Alloc							allocator_type;
-			typedef typename	allocator_type::reference		reference;
-			typedef typename	allocator_type::const_reference	const_reference;
-			typedef typename	allocator_type::pointer			pointer; // T*
-			typedef typename	allocator_type::const_pointer	const_pointer;
-			typedef typename	allocator_type::size_type		size_type;
+			typedef				T										value_type;
+			typedef				Alloc									allocator_type;
+			typedef typename	allocator_type::reference				reference;
+			typedef typename	allocator_type::const_reference			const_reference;
+			typedef typename	allocator_type::pointer					pointer; // T*
+			typedef typename	allocator_type::const_pointer			const_pointer;
+			typedef typename	allocator_type::size_type				size_type;
 
 			typedef typename	ft::vector_iterator<value_type>			iterator;
 			typedef 			ft::vector_iterator<const value_type>	const_iterator;
 
+		private:
+			// TODO: im not even using it yet
+			pointer	reallocate( size_type new_capacity ) {
+				for (size_t i = 0; i < this->size(); i++)
+					this->_v.destroy(&this->_ptr[i]);
+				this->_v.deallocate(this->_ptr, this->_capacity);
+				pointer	newPtr = this->_v.allocate(new_capacity);
+				return (newPtr);
+			}
 
+		private:
+			size_type		_size;
+			size_type		_capacity;
+			pointer			_ptr;
+			Alloc			_v;
 
+			iterator		_first;
+			iterator		_last;
+
+		public:
 			explicit vector ( const allocator_type& alloc = allocator_type() ) {
 
 				pointer						vPtr;
@@ -144,20 +151,15 @@ namespace ft {
 				if (n <= this->_capacity)
 					return ;
 
-				Alloc	newV = allocator_type();
-				pointer	newPtr = newV.allocate(n);
+				pointer	newPtr = this->_v.allocate(n);
 
 				for (size_t i = 0; i < this->_size; i++)
-					newV.construct(&newPtr[i], this->_ptr[i]);
+					this->_v.construct(&newPtr[i], this->_ptr[i]);
 
-				// TODO: destroy pointer or objects?
-				// TODO: destroy length or capacity?
-				// TODO: deos this even make sense?
 				for (size_t i = 0; i < this->_capacity; i++)
 					this->_v.destroy(&(this->_ptr[i]));
 				this->_v.deallocate(this->_ptr, this->_capacity);
 
-				this->_v = newV;
 				this->_ptr = newPtr;
 				this->_capacity = n;
 
@@ -173,9 +175,6 @@ namespace ft {
 				LOG_CYAN("-----------------");
 			}
 
-			// TODO: i can use construct on _v to copy the content
-			// TODO: maybe have to use contruct to write elements into vector
-			// TODO: maybe destroy objects when deallocating, or reuse them
 			void	push_back( const value_type& val ) {
 				if (this->_capacity > this->_size) {
 					this->_v.construct(&this->_ptr[this->_size], val);
@@ -185,10 +184,8 @@ namespace ft {
 					this->_last++;
 				}
 				else if (!this->_capacity && !this->_size) {
-					Alloc	newV = allocator_type();
-					pointer	newPtr = newV.allocate(1);
+					pointer	newPtr = this->_v.allocate(1);
 					this->_v.deallocate(this->_ptr, this->_capacity);
-					this->_v = newV;
 					this->_ptr = newPtr;
 					this->_v.construct(&this->_ptr[this->_size], val);
 					this->_capacity++;
@@ -199,15 +196,13 @@ namespace ft {
 					this->_last = this->_ptr;
 				}
 				else if (this->_capacity == this->_size) {
-					Alloc	newV = allocator_type();
-					pointer	newPtr = newV.allocate(this->_capacity * 2);
+					pointer	newPtr = this->_v.allocate(this->_capacity * 2);
 					for (size_t i = 0; i < this->_size; i++)
-						newV.construct(&newPtr[i], this->_ptr[i]);
+						this->_v.construct(&newPtr[i], this->_ptr[i]);
 					// TODO: capacity or size for destroying length
 					for (size_t i = 0; i < this->_capacity; i++)
 						this->_v.destroy(&(this->_ptr[i]));
 					this->_v.deallocate(this->_ptr, this->_capacity);
-					this->_v = newV;
 					this->_ptr = newPtr;
 					this->_v.construct(&this->_ptr[this->_size], val);
 					this->_capacity *= 2;
@@ -272,16 +267,14 @@ namespace ft {
 					this->_last = &this->_ptr[this->_size - 1];
 				}
 				else if (n > this->_size && n > this->_capacity) { // TODO: tests
-					Alloc	newV = allocator_type();
-					pointer	newPtr = newV.allocate(n); // TODO: guess i can usepush_back instead of doing perfect alloc
+					pointer	newPtr = this->_v.allocate(n); // TODO: guess i can usepush_back instead of doing perfect alloc
 					for (size_t i = 0; i < this->_size; i++)
-						newV.construct(&newPtr[i], this->_ptr[i]);
+						this->_v.construct(&newPtr[i], this->_ptr[i]);
 					for (size_t i = this->_size; i < n; i++)
-						newV.construct(&newPtr[i], val);
+						this->_v.construct(&newPtr[i], val);
 					for (size_t i = 0; i < this->_capacity; i++)
 						this->_v.destroy(&this->_ptr[i]);
 					this->_v.deallocate(this->_ptr, this->_capacity);
-					this->_v = newV;
 					this->_ptr = newPtr;
 					this->_capacity = n;
 					this->_size = n;
@@ -424,13 +417,11 @@ namespace ft {
 				LOG_GREEN_INFO("distance: " << distance);
 
 				if (distance > this->capacity()) {
-					// TODO: i should probably reuse the existing allocator instead of creating a new one (everywhere)
-					Alloc	newV = allocator_type();
-					pointer	newPtr = newV.allocate(distance);
+					pointer	newPtr = this->_v.allocate(distance);
 
 					InputIterator	it = first;
 					for (size_t i = 0; i < distance; i++) {
-						newV.construct(&newPtr[i], (*it));
+						this->_v.construct(&newPtr[i], (*it));
 						it++;
 					}
 
@@ -440,7 +431,6 @@ namespace ft {
 					}
 					this->_v.deallocate(this->_ptr, this->capacity());
 
-					this->_v = newV;
 					this->_ptr = newPtr;
 
 					// TODO: not sure if this is true, test distances
@@ -475,11 +465,9 @@ namespace ft {
 			// fill // TODO: something aint right
 			void	assign( size_type n, const value_type& val ) {
 				if (n > this->capacity()) {
-					Alloc	newV = allocator_type();
-					pointer	newPtr = newV.allocate(n);
-
+					pointer	newPtr = this->_v.allocate(n);
 					for (size_t i = 0; i < n; i++) {
-						newV.construct(&newPtr[i], val);
+						this->_v.construct(&newPtr[i], val);
 					}
 					
 					// TODO: size or capacity ?
@@ -488,7 +476,6 @@ namespace ft {
 					}
 					this->_v.deallocate(this->_ptr, this->capacity());
 
-					this->_v = newV;
 					this->_ptr = newPtr;
 					this->_size = n;
 					this->_capacity = n;
@@ -540,17 +527,6 @@ namespace ft {
 			// iterator	erase( iterator first, iterator last ) {
 
 			// }
-
-
-
-			private:
-				size_type		_size;
-				size_type		_capacity;
-				pointer			_ptr;
-				Alloc			_v;
-
-				iterator		_first;
-				iterator		_last;
 
 	};
 
