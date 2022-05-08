@@ -1,6 +1,6 @@
 #include "../inc/vector.hpp"
 
-#define TESTED_NAMESPACE ft
+#define TESTED_NAMESPACE std
 
 #define ONE			1 // push_back
 #define TWO			1 // reserve

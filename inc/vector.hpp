@@ -6,7 +6,6 @@
 # include <memory>
 # include <vector>
 # include <exception>
-// # include <iterator>
 
 # include "vector_iterator.hpp"
 
@@ -29,6 +28,22 @@
 # define LOG_PINK_INFO(x) (std::cout << __FILE__ << ":" << __LINE__ << " " << "\033[1;35m" << x << "\033[0m" << std::endl)
 # define LOG_CYAN_INFO(x) (std::cout << __FILE__ << ":" << __LINE__ << " " <<  "\033[1;36m" << x << "\033[0m" << std::endl)
 # define LOG_WHITE_INFO(x) (std::cout << __FILE__ << ":" << __LINE__ << " " << "\033[1;37m" << x << "\033[0m" << std::endl)
+
+// template< typename T >
+// void	printVectors( std::vector<T> &real, ft::vector<T> &mine ) {
+// 	LOG(std::endl << "\033[1;31m" << "Real Vector -----\t" << "\033[0m" << "\033[1;36m" << "My Vector -------" << "\033[0m");
+// 	for(size_t i = 0; ((i < real.size()) && (i < mine.size())); i++) {
+// 		LOG("\033[1;31m" << real[i] << "                \t" << "\033[0m" << "\033[1;36m" << mine[i] << "                " << "\033[0m");
+// 	}
+// 	LOG("\033[1;31m" << "-----------------\t" << "\033[0m" << "\033[1;36m" << "----------------- " << "\033[0m");
+// }
+
+// void	printRealVector( std::vector<int> &real ) {
+// 	LOG_RED(std::endl << "Real Vector -----");
+// 	for(std::vector<int>::iterator it = real.begin(); it != real.end(); it++)
+// 		LOG_RED(*it);
+// 	LOG_RED("-----------------");
+// }
 
 namespace ft {
 
