@@ -48,6 +48,15 @@ namespace ft {
 			typedef 			ft::vector_iterator<const value_type>	const_iterator;
 
 		private:
+			size_type		_size;
+			size_type		_capacity;
+			pointer			_ptr;
+			Alloc			_v;
+
+			iterator		_first;
+			iterator		_last;
+
+		private:
 			// TODO: im not even using it yet
 			pointer	reallocate( size_type new_capacity ) {
 				for (size_t i = 0; i < this->size(); i++)
@@ -57,42 +66,30 @@ namespace ft {
 				return (newPtr);
 			}
 
-		private:
-			size_type		_size;
-			size_type		_capacity;
-			pointer			_ptr;
-			Alloc			_v;
-
-			iterator		_first;
-			iterator		_last;
-
 		public:
+			// TODO: delete this function
+			void	printVector( void ) {
+				LOG_CYAN(std::endl << "My Vector -------");
+				for (size_t i = 0; i < this->_size; i++)
+					LOG_CYAN(this->_ptr[i]);
+				LOG_CYAN("-----------------");
+			}
+
 			explicit vector ( const allocator_type& alloc = allocator_type() ) {
-
-				pointer						vPtr;
-				Alloc						v = alloc;
-
-				vPtr = v.allocate(0);
-
+				this->_v = alloc;
+				this->_ptr = this->_v.allocate(0);
 				this->_size = 0;
 				this->_capacity = 0;
-				this->_ptr = vPtr;
-				this->_v = v;
+				// TODO: whats going on with the iterators here?
 			}
 
 			explicit vector ( size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type() ) {
-
-				pointer		vPtr;
-				Alloc		v = alloc;
-
-				vPtr = v.allocate(n);
+				this->_v = alloc;
+				this->_ptr = this->_v.allocate(n);
 				for (size_t i = 0; i < n; i++)
-					v.construct(&vPtr[i], val);
-
+					this->_v.construct(&this->_ptr[i], val);
 				this->_size = n;
 				this->_capacity = n;
-				this->_ptr = vPtr;
-				this->_v = v;
 
 				// iterators // TODO: not tested
 				this->_first = this->_ptr;
@@ -105,18 +102,12 @@ namespace ft {
 			// }
 
 			vector ( const vector& x ) {
-
-				pointer	vPtr;
-				Alloc	v = allocator_type();
-
-				vPtr = v.allocate(x._size);
+				this->_v = x.get_allocator();
+				this->_ptr = this->_v.allocate(x._capacity); // TODO: test if size or capacity is used?
 				for (size_t i = 0; i < x._size; i++)
-					v.construct(&vPtr[i], x._ptr[i]);
-
-				this->_ptr = vPtr;
+					this->_v.construct(&this->_ptr[i], x._ptr[i]);
 				this->_capacity = x._capacity;
 				this->_size = x._size;
-				this->_v = v;
 
 				// iterators // TODO: not tested
 				this->_first = this->_ptr;
@@ -152,27 +143,17 @@ namespace ft {
 					return ;
 
 				pointer	newPtr = this->_v.allocate(n);
-
 				for (size_t i = 0; i < this->_size; i++)
 					this->_v.construct(&newPtr[i], this->_ptr[i]);
-
-				for (size_t i = 0; i < this->_capacity; i++)
+				for (size_t i = 0; i < this->_size; i++)
 					this->_v.destroy(&(this->_ptr[i]));
 				this->_v.deallocate(this->_ptr, this->_capacity);
-
 				this->_ptr = newPtr;
 				this->_capacity = n;
 
 				// iterators // TODO: not tested
 				this->_first = this->_ptr;
 				this->_last = &this->_ptr[this->_size - 1];
-			}
-
-			void	printVector( void ) {
-				LOG_CYAN(std::endl << "My Vector -------");
-				for (size_t i = 0; i < this->_size; i++)
-					LOG_CYAN(this->_ptr[i]);
-				LOG_CYAN("-----------------");
 			}
 
 			void	push_back( const value_type& val ) {
@@ -185,7 +166,7 @@ namespace ft {
 				}
 				else if (!this->_capacity && !this->_size) {
 					pointer	newPtr = this->_v.allocate(1);
-					this->_v.deallocate(this->_ptr, this->_capacity);
+					this->_v.deallocate(this->_ptr, this->_capacity); // TODO: capacity is zero, so do nothing?
 					this->_ptr = newPtr;
 					this->_v.construct(&this->_ptr[this->_size], val);
 					this->_capacity++;
@@ -199,9 +180,8 @@ namespace ft {
 					pointer	newPtr = this->_v.allocate(this->_capacity * 2);
 					for (size_t i = 0; i < this->_size; i++)
 						this->_v.construct(&newPtr[i], this->_ptr[i]);
-					// TODO: capacity or size for destroying length
-					for (size_t i = 0; i < this->_capacity; i++)
-						this->_v.destroy(&(this->_ptr[i]));
+					for (size_t i = 0; i < this->_size; i++)
+						this->_v.destroy(&this->_ptr[i]);
 					this->_v.deallocate(this->_ptr, this->_capacity);
 					this->_ptr = newPtr;
 					this->_v.construct(&this->_ptr[this->_size], val);
@@ -229,10 +209,10 @@ namespace ft {
 				return this->_ptr[n];
 			}
 
-			// TODO: what happens to allocator ?
+			// TODO: what happens to allocator and capacity?
 			void	clear() {
 				for (size_t i = 0; i < this->_size; i++)
-					this->_v.destroy(&(this->_ptr[i]));
+					this->_v.destroy(&this->_ptr[i]);
 				this->_size = 0;
 
 				// iterators TODO: not tested
@@ -272,7 +252,7 @@ namespace ft {
 						this->_v.construct(&newPtr[i], this->_ptr[i]);
 					for (size_t i = this->_size; i < n; i++)
 						this->_v.construct(&newPtr[i], val);
-					for (size_t i = 0; i < this->_capacity; i++)
+					for (size_t i = 0; i < this->_size; i++)
 						this->_v.destroy(&this->_ptr[i]);
 					this->_v.deallocate(this->_ptr, this->_capacity);
 					this->_ptr = newPtr;
@@ -408,28 +388,24 @@ namespace ft {
 			// range // TODO: something aint right bro
 			template <class InputIterator>
 			void	assign( InputIterator first, InputIterator last ) {
+				// TODO: improvised get distance
 				size_t	distance = 0;
-				// improvised get distance
-				for (InputIterator temp = first; temp != last; temp++) {
+				for (InputIterator temp = first; temp != last; temp++)
 					distance++;
-				}
 
-				LOG_GREEN_INFO("distance: " << distance);
-
-				if (distance > this->capacity()) {
+				if (distance > this->_capacity) {
 					pointer	newPtr = this->_v.allocate(distance);
 
 					InputIterator	it = first;
 					for (size_t i = 0; i < distance; i++) {
-						this->_v.construct(&newPtr[i], (*it));
+						this->_v.construct(&newPtr[i], (*it)); // todo something here sucks hard
 						it++;
 					}
 
-					// TODO: size or capacity
-					for (size_t i = 0; i < this->capacity(); i++) {
+					for (size_t i = 0; i < this->_size; i++) {
 						this->_v.destroy(&this->_ptr[i]);
 					}
-					this->_v.deallocate(this->_ptr, this->capacity());
+					this->_v.deallocate(this->_ptr, this->_capacity);
 
 					this->_ptr = newPtr;
 
@@ -443,13 +419,13 @@ namespace ft {
 					--this->_last;
 				}
 				else {
-					for (size_t i = 0; i < this->size(); i++) {
+					for (size_t i = 0; i < this->_size; i++) {
 						this->_v.destroy(&this->_ptr[i]);
 					}
 
 					InputIterator	it = first;
 					for (size_t i = 0; i < distance; i++) {
-						this->_v.construct(&this->_ptr[i], (*it));
+						this->_v.construct(&this->_ptr[i], (*it)); // TODO: sucks as well most likely
 						it++;
 					}
 
@@ -464,18 +440,13 @@ namespace ft {
 			
 			// fill // TODO: something aint right
 			void	assign( size_type n, const value_type& val ) {
-				if (n > this->capacity()) {
+				if (n > this->_capacity) {
 					pointer	newPtr = this->_v.allocate(n);
-					for (size_t i = 0; i < n; i++) {
+					for (size_t i = 0; i < n; i++)
 						this->_v.construct(&newPtr[i], val);
-					}
-					
-					// TODO: size or capacity ?
-					for (size_t i = 0; i < this->capacity(); i++) {
+					for (size_t i = 0; i < this->_size; i++)
 						this->_v.destroy(&this->_ptr[i]);
-					}
-					this->_v.deallocate(this->_ptr, this->capacity());
-
+					this->_v.deallocate(this->_ptr, this->_capacity);
 					this->_ptr = newPtr;
 					this->_size = n;
 					this->_capacity = n;
@@ -485,15 +456,10 @@ namespace ft {
 					this->_last = &this->_ptr[this->_size - 1];
 				}
 				else {
-					// TODO: size or capacity ?
-					for (size_t i = 0; i < this->size(); i++) {
+					for (size_t i = 0; i < this->_size; i++)
 						this->_v.destroy(&this->_ptr[i]);
-					}
-
-					for (size_t i = 0; i < n; i++) {
+					for (size_t i = 0; i < n; i++)
 						this->_v.construct(&this->_ptr[i], val);
-					}
-
 					this->_size = n;
 
 					// iterators
@@ -505,15 +471,13 @@ namespace ft {
 			// TODO: gibt safe efiizienter methoden, also bius zu position zu loopen
 			iterator	erase( iterator position ) {
 				pointer	newPtr = this->_v.allocate(this->size() - 1); // TODO: check if this makes sense!!
-				for (size_t i = 0; i < this->size(); i++) {
+				for (size_t i = 0; i < this->_size; i++) {
 					if (position != &this->_ptr[i])
 						this->_v.construct(&this->newPtr[i], this->_ptr[i]);
 				}
-				//TODO: size or capacity ?
-				for (size_t i = 0; i < this->capacity(); i++) {
+				for (size_t i = 0; i < this->_size; i++)
 					this->_v.destroy(&this->_ptr[i]);
-				}
-				this->_v.deallocate(this->_ptr, this->capacity());
+				this->_v.deallocate(this->_ptr, this->_capacity);
 
 				this->_ptr = newPtr;
 				this->_size--;
