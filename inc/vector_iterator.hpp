@@ -33,10 +33,8 @@ namespace ft {
 			// 	// std::cout << "iterator constrcutor called" << std::endl;
 			// }
 
-			// TODO: i freestyled this
-			value_type &	operator*() {
-				return (*_ptr);
-			}
+
+			value_type &	operator*() { return (*_ptr); }
 
 			vector_iterator	operator++() {
 				++this->_ptr;
@@ -60,24 +58,47 @@ namespace ft {
 				return (temp);
 			}
 
-			// value_type	operator[]( int pos ) {
-			// 	return _ptr[pos];
-			// }
+			vector_iterator &	operator=( const vector_iterator & in ) {
+				this->_ptr = in._ptr;
+				return *this;
+			}
+
+			vector_iterator &	operator+=( int offset ) {
+				this->_ptr += offset;
+				return *this;
+			}
+
+			vector_iterator &	operator-=( int offset ) {
+				this->_ptr -= offset;
+				return *this;
+			}
+
+			difference_type	operator-( const vector_iterator &in ) { return (this->_ptr - in.base()); }
+
+			vector_iterator	operator-( int offset ) { return (this->_ptr - offset); }
+
+
+			vector_iterator	operator+( int offset ) { return (this->_ptr + offset); }
+
 	};
 
 	template <class T>
-	bool	operator!=( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) {
-		if (lhs.base() != rhs.base())
-			return true;
-		return false;
-	}
+	bool	operator!=( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() != rhs.base()); }
 
 	template <class T>
-	bool	operator==( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) {
-		if (lhs.base() == rhs.base())
-			return true;
-		return false;
-	}
+	bool	operator==( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() == rhs.base()); }
+
+	template <class T>
+	bool	operator<=( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() <= rhs.base()); }
+
+	template <class T>
+	bool	operator>=( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() >= rhs.base()); }
+
+	template <class T>
+	bool	operator<( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() < rhs.base()); }
+
+	template <class T>
+	bool	operator>( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() > rhs.base()); }
 }
 
 #endif

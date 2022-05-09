@@ -8,6 +8,7 @@
 # include <exception>
 
 # include "vector_iterator.hpp"
+# include "enable_if.hpp"
 
 # define LOG(x) (std::cout << x << std::endl)
 
@@ -51,16 +52,17 @@ namespace ft {
 	class vector {
 
 		public:
-			typedef				T										value_type;
-			typedef				Alloc									allocator_type;
-			typedef typename	allocator_type::reference				reference;
-			typedef typename	allocator_type::const_reference			const_reference;
-			typedef typename	allocator_type::pointer					pointer; // T*
-			typedef typename	allocator_type::const_pointer			const_pointer;
-			typedef typename	allocator_type::size_type				size_type;
+			typedef				T													value_type;
+			typedef				Alloc												allocator_type;
+			typedef typename	allocator_type::reference							reference;
+			typedef typename	allocator_type::const_reference						const_reference;
+			typedef typename	allocator_type::pointer								pointer; // T*
+			typedef typename	allocator_type::const_pointer						const_pointer;
+			typedef typename	allocator_type::size_type							size_type;
 
-			typedef typename	ft::vector_iterator<value_type>			iterator;
-			typedef 			ft::vector_iterator<const value_type>	const_iterator;
+			typedef typename	ft::vector_iterator<value_type>						iterator;
+			typedef 			ft::vector_iterator<const value_type>				const_iterator;
+			typedef typename	ft::vector_iterator<value_type>::difference_type	difference_type; // TOD: check if tghis is even allowed
 
 		private:
 			size_type		_size;
@@ -177,7 +179,7 @@ namespace ft {
 					this->_size++;
 					
 					// iterator
-					this->_last++;
+					this->_last = &this->_ptr[this->_size - 1];
 				}
 				else if (!this->_capacity && !this->_size) {
 					pointer	newPtr = this->_v.allocate(1);
@@ -230,9 +232,7 @@ namespace ft {
 					this->_v.destroy(&this->_ptr[i]);
 				this->_size = 0;
 
-				// iterators TODO: not tested
-				// this->_first = nullptr;
-				// this->_last = nullptr;
+				// iterators TODO: ??
 			}
 
 			allocator_type	get_allocator() const {
@@ -400,9 +400,10 @@ namespace ft {
 				return (this->_ptr[this->_size - 1]);
 			}
 
-			// range // TODO: something aint right bro
+			// range
 			template <class InputIterator>
-			void	assign( InputIterator first, InputIterator last ) {
+			void	assign( InputIterator first, InputIterator last,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0 ) {
 				// TODO: improvised get distance
 				size_t	distance = 0;
 				for (InputIterator temp = first; temp != last; temp++)
@@ -413,7 +414,7 @@ namespace ft {
 
 					InputIterator	it = first;
 					for (size_t i = 0; i < distance; i++) {
-						this->_v.construct(&newPtr[i], (*it)); // todo something here sucks hard
+						this->_v.construct(&newPtr[i], (*it));
 						it++;
 					}
 
@@ -440,7 +441,7 @@ namespace ft {
 
 					InputIterator	it = first;
 					for (size_t i = 0; i < distance; i++) {
-						this->_v.construct(&this->_ptr[i], (*it)); // TODO: sucks as well most likely
+						this->_v.construct(&this->_ptr[i], (*it));
 						it++;
 					}
 
@@ -453,8 +454,8 @@ namespace ft {
 				}
 			}
 			
-			// fill // TODO: something aint right
-			void	assign( size_type n, const value_type& val ) {
+			// fill
+			void	assign( size_type n, const T& val ) {
 				if (n > this->_capacity) {
 					pointer	newPtr = this->_v.allocate(n);
 					for (size_t i = 0; i < n; i++)
@@ -483,12 +484,18 @@ namespace ft {
 				}
 			}
 
-			// TODO: gibt safe efiizienter methoden, also bius zu position zu loopen
+			// TODO: gibt safe efiizienter methoden, als bis zu position loopen
+			// TODO: real one segfauts, when end is passed
+			// TODO: when last element of vector, i should return the one i removed
 			iterator	erase( iterator position ) {
-				pointer	newPtr = this->_v.allocate(this->size() - 1); // TODO: check if this makes sense!!
-				for (size_t i = 0; i < this->_size; i++) {
-					if (position != &this->_ptr[i])
-						this->_v.construct(&this->newPtr[i], this->_ptr[i]);
+				pointer		newPtr = this->_v.allocate(this->_capacity);
+				iterator	beg = this->_first;
+				iterator	temp = this->_last;
+				for (size_t i = 0; beg != this->end(); beg++) {
+					if (position != beg) {
+						this->_v.construct(&newPtr[i], (*beg));
+						i++;
+					}
 				}
 				for (size_t i = 0; i < this->_size; i++)
 					this->_v.destroy(&this->_ptr[i]);
@@ -496,16 +503,61 @@ namespace ft {
 
 				this->_ptr = newPtr;
 				this->_size--;
-				this->_capacity = this->_size;
 				this->_first = this->_ptr;
 				this->_last = &this->_ptr[this->_size - 1];
 
-				return (this->_last); // TODO: wrong, look here: https://www.cplusplus.com/reference/vector/vector/erase/
+				if (position == temp) {
+					return position;
+				}
+				else {
+					iterator	ret = position;
+					return (++ret); // TODO: are there edgecases?
+				}
 			}
 
-			// iterator	erase( iterator first, iterator last ) {
+			/*	range
+				the range includes all the elements between first and last,
+				including the element pointed by first but not the one pointed by last.
+			*/
+			// TODO: LEAKS
+			iterator	erase( iterator first, iterator last ) {
+				difference_type	distance = last - first;
 
-			// }
+				pointer	newPtr = this->_v.allocate(this->_capacity); // TODO: useless ?
+
+				vector<value_type>	temp1;
+				temp1.assign(this->begin(), first);
+				vector<value_type>	temp2;
+				temp2.assign(last, this->end());
+
+				size_t i = 0;
+				for (iterator it = temp1.begin(); it != temp1.end(); it++) {
+					this->_v.construct(&newPtr[i], (*it));
+					i++;
+				}
+				for (iterator it = temp2.begin(); it != temp2.end(); it++) {
+					this->_v.construct(&newPtr[i], (*it));
+					i++;
+				}
+
+				for (size_t x = 0; x < this->_size; x++)
+					this->_v.destroy(&this->_ptr[x]);
+
+				this->_v.deallocate(this->_ptr, this->_capacity); // TODO: useless ?
+
+				this->_ptr = newPtr;
+				this->_size -= distance;
+				this->_first = this->_ptr;
+				this->_last = &this->_ptr[this->_size - 1];
+
+				temp1.clear();
+				temp2.clear();
+
+				temp1.resize(0);
+				temp2.resize(0);
+
+				return last; // TODO: wrong return value
+			}
 
 	};
 

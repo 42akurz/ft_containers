@@ -1,6 +1,4 @@
-#include "../inc/vector.hpp"
-
-#define TESTED_NAMESPACE std
+#include "vector_tests.hpp"
 
 #define ONE			1 // push_back
 #define TWO			1 // reserve
@@ -20,15 +18,7 @@
 #define EIGHTEEN	1 // it operators
 #define TWENTY		1 // assign range
 #define TWENTYONE	1 // assign fill
-
-template <typename T>
-void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
-	std::cout << std::endl;
-	typename TESTED_NAMESPACE::vector<T>::iterator	it;
-	for (it = vector.begin(); it != vector.end(); it++)
-		std::cout << (*it) << std::endl;
-	std::cout << std::endl;
-}
+#define TWENTYTWO	1 // iterator tests
 
 int	main( void )
 {
@@ -40,11 +30,11 @@ int	main( void )
 
 		printVectorContent(vec);
 
-		LOG("");
-		LOG_YELLOW("size:		" << vec.size());
-		LOG_YELLOW("max_size:	" << vec.max_size());
-		LOG_YELLOW("empty:		" << vec.empty());
-		LOG_YELLOW("capacity:	" << vec.capacity());
+		std::cout << std::endl;
+		std::cout << "size:		" << vec.size() << std::endl;
+		std::cout << "max_size:	" << vec.max_size() << std::endl;
+		std::cout << "empty:		" << vec.empty() << std::endl;
+		std::cout << "capacity:	" << vec.capacity() << std::endl;
 
 		vec.push_back(42);
 		vec.push_back(43);
@@ -52,11 +42,11 @@ int	main( void )
 
 		printVectorContent(vec);
 
-		LOG("");
-		LOG_YELLOW("size:		" << vec.size());
-		LOG_YELLOW("max_size:	" << vec.max_size());
-		LOG_YELLOW("empty:		" << vec.empty());
-		LOG_YELLOW("capacity:	" << vec.capacity());
+		std::cout << std::endl;
+		std::cout << "size:		" << vec.size() << std::endl;
+		std::cout << "max_size:	" << vec.max_size() << std::endl;
+		std::cout << "empty:		" << vec.empty() << std::endl;
+		std::cout << "capacity:	" << vec.capacity() << std::endl;
 	}
 	#endif
 
@@ -66,15 +56,15 @@ int	main( void )
 		std::cout << std::endl << "TWO" << std::endl;
 		TESTED_NAMESPACE::vector<int>	vec(5, 1);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 
 		vec.reserve(10);
 
-		LOG("");
+		std::cout << std::endl;
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 	}
 	#endif
 
@@ -112,23 +102,21 @@ int	main( void )
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 
 		vec.clear();
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
-
-		printVectorContent(vec);
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 
 		for (size_t i = 0; i < 5; i++)
 			vec.push_back(i);
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 	}
 	#endif
 
@@ -150,7 +138,7 @@ int	main( void )
 		for (int i = 0; i < 5; i++)
 			vecA.construct(&vecP[i], i + 10);
 		for (int i = 0; i < 5; i++)
-			LOG_BLACK(vecP[i]);
+			std::cout << vecP[i] << std::endl;
 		printVectorContent(vec);
 	}
 	#endif
@@ -166,16 +154,16 @@ int	main( void )
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 
 		vec.pop_back();
-		LOG_GREEN(std::endl << "AFTER POP");
+		std::cout << std::endl << "AFTER POP" << std::endl;
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 	}
 	#endif
 
@@ -190,17 +178,17 @@ int	main( void )
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 
 		vec.resize(44);
 
-		LOG_GREEN(std::endl << "AFTER RESIZE");
+		std::cout << std::endl << "AFTER RESIZE" << std::endl;
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 	}
 	#endif
 
@@ -215,17 +203,17 @@ int	main( void )
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 
 		vec.resize(18, 42);
 
-		LOG_GREEN(std::endl << "AFTER RESIZE");
+		std::cout << std::endl << "AFTER RESIZE" << std::endl;
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 	}
 	#endif
 
@@ -245,20 +233,20 @@ int	main( void )
 		printVectorContent(vec1);
 		printVectorContent(vec2);
 
-		LOG_YELLOW("size\t\t" << vec1.size());
-		LOG_YELLOW("capacity\t" << vec1.capacity());
-		LOG_BLUE("size\t\t" << vec2.size());
-		LOG_BLUE("capacity\t" << vec2.capacity());
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec2.size() << std::endl;
+		std::cout << "capacity\t" << vec2.capacity() << std::endl;
 
 		vec1.swap(vec2);
 
 		printVectorContent(vec1);
 		printVectorContent(vec2);
 
-		LOG_YELLOW("size\t\t" << vec1.size());
-		LOG_YELLOW("capacity\t" << vec1.capacity());
-		LOG_BLUE("size\t\t" << vec2.size());
-		LOG_BLUE("capacity\t" << vec2.capacity());
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec2.size() << std::endl;
+		std::cout << "capacity\t" << vec2.capacity() << std::endl;
 	}
 	#endif
 
@@ -273,13 +261,13 @@ int	main( void )
 
 		printVectorContent(vec);
 
-		LOG_YELLOW("size\t\t" << vec.size());
-		LOG_YELLOW("capacity\t" << vec.capacity());
+		std::cout << "size\t\t" << vec.size() << std::endl;
+		std::cout << "capacity\t" << vec.capacity() << std::endl;
 
-		LOG_GREEN(std::endl << "PRINT VALUES" << std::endl);
+		std::cout << std::endl << "PRINT VALUES" << std::endl << std::endl;
 
 		for (int i = 0; i < 5; i++)
-			LOG_GREEN("vec["<< i << "]\t" << vec[i]);
+			std::cout << "vec["<< i << "]\t" << vec[i] << std::endl;
 	}
 	#endif
 
@@ -302,23 +290,23 @@ int	main( void )
 		printVectorContent(vec1);
 		printVectorContent(vec2);
 
-		LOG_YELLOW("size\t\t" << vec1.size());
-		LOG_YELLOW("capacity\t" << vec1.capacity());
-		LOG_BLUE("size\t\t" << vec2.size());
-		LOG_BLUE("capacity\t" << vec2.capacity());
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec2.size() << std::endl;
+		std::cout << "capacity\t" << vec2.capacity() << std::endl;
 
 		vec2 = vec1;
 		// vec1 = vec2;
 
-		LOG_GREEN(std::endl << "AFTER ASSIGN" << std::endl);
+		std::cout << std::endl << "AFTER ASSIGN" << std::endl << std::endl;
 		
 		printVectorContent(vec1);
 		printVectorContent(vec2);
 
-		LOG_YELLOW("size\t\t" << vec1.size());
-		LOG_YELLOW("capacity\t" << vec1.capacity());
-		LOG_BLUE("size\t\t" << vec2.size());
-		LOG_BLUE("capacity\t" << vec2.capacity());
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec2.size() << std::endl;
+		std::cout << "capacity\t" << vec2.capacity() << std::endl;
 	}
 	#endif
 
@@ -335,8 +323,8 @@ int	main( void )
 			real1.push_back(i);
 		for (size_t i = 0; i < 10; i++)
 			real2.push_back(i + 10);
-		LOG_YELLOW((real1 == real2));
-		LOG_YELLOW((real1 != real2));
+		std::cout << (real1 == real2) << std::endl;
+		std::cout << (real1 != real2) << std::endl;
 
 		// TEST2
 		std::cout << std::endl << "TEST2" << std::endl;
@@ -348,36 +336,36 @@ int	main( void )
 			real2.push_back(i);
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_YELLOW("size1\t\t" << real1.size());
-		LOG_YELLOW("capacity1\t" << real1.capacity());
-		LOG_YELLOW("size2\t\t" << real2.size());
-		LOG_YELLOW("capacity2\t" << real2.capacity());
-		LOG_YELLOW((real1 == real2));
-		LOG_YELLOW((real1 != real2));
+		std::cout << "size1\t\t" << real1.size() << std::endl;
+		std::cout << "capacity1\t" << real1.capacity() << std::endl;
+		std::cout << "size2\t\t" << real2.size() << std::endl;
+		std::cout << "capacity2\t" << real2.capacity() << std::endl;
+		std::cout << (real1 == real2) << std::endl;
+		std::cout << (real1 != real2) << std::endl;
 
 		// TEST3
 		std::cout << std::endl << "TEST3" << std::endl;
 		real1.resize(9);
-		LOG_YELLOW((real1 == real2));
-		LOG_YELLOW((real1 != real2));
+		std::cout << (real1 == real2) << std::endl;
+		std::cout << (real1 != real2) << std::endl;
 
 		// TEST4
 		std::cout << std::endl << "TEST4" << std::endl;
 		real2.resize(9);
-		LOG_YELLOW((real1 == real2));
-		LOG_YELLOW((real1 != real2));
+		std::cout << (real1 == real2) << std::endl;
+		std::cout << (real1 != real2) << std::endl;
 
 		// TEST5
 		std::cout << std::endl << "TEST5" << std::endl;
 		real2.resize(15);
-		LOG_YELLOW((real1 == real2));
-		LOG_YELLOW((real1 != real2));
+		std::cout << (real1 == real2) << std::endl;
+		std::cout << (real1 != real2) << std::endl;
 
 		// TEST6
 		std::cout << std::endl << "TEST6" << std::endl;
 		real1.resize(15);
-		LOG_YELLOW((real1 == real2));
-		LOG_YELLOW((real1 != real2));
+		std::cout << (real1 == real2) << std::endl;
+		std::cout << (real1 != real2) << std::endl;
 	}
 	#endif
 
@@ -404,24 +392,24 @@ int	main( void )
 		std::cout << std::endl << "TEST1" << std::endl;
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_GREEN((real1 <= real2));
-		LOG_GREEN((real1 < real2));
+		std::cout << (real1 <= real2) << std::endl;
+		std::cout << (real1 < real2) << std::endl;
 
 		// TEST2
 		std::cout << std::endl << "TEST2" << std::endl;
 		real1.pop_back();
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_GREEN((real1 <= real2));
-		LOG_GREEN((real1 < real2));
+		std::cout << (real1 <= real2) << std::endl;
+		std::cout << (real1 < real2) << std::endl;
 
 		// TEST3
 		std::cout << std::endl << "TEST3" << std::endl;
 		real1.push_back("b");
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_GREEN((real1 <= real2));
-		LOG_GREEN((real1 < real2));
+		std::cout << (real1 <= real2) << std::endl;
+		std::cout << (real1 < real2) << std::endl;
 
 		// TEST4
 		std::cout << std::endl << "TEST4" << std::endl;
@@ -429,8 +417,8 @@ int	main( void )
 		real1.push_back("d");
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_GREEN((real1 <= real2));
-		LOG_GREEN((real1 < real2));
+		std::cout << (real1 <= real2) << std::endl;
+		std::cout << (real1 < real2) << std::endl;
 	}
 	#endif
 
@@ -457,24 +445,24 @@ int	main( void )
 		std::cout << std::endl << "TEST1" << std::endl;
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_GREEN((real1 >= real2));
-		LOG_GREEN((real1 > real2));
+		std::cout << (real1 >= real2) << std::endl;
+		std::cout << (real1 > real2) << std::endl;
 
 		// TEST2
 		std::cout << std::endl << "TEST2" << std::endl;
 		real1.pop_back();
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_GREEN((real1 >= real2));
-		LOG_GREEN((real1 > real2));
+		std::cout << (real1 >= real2) << std::endl;
+		std::cout << (real1 > real2) << std::endl;
 
 		// TEST3
 		std::cout << std::endl << "TEST3" << std::endl;
 		real1.push_back("b");
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_GREEN((real1 >= real2));
-		LOG_GREEN((real1 > real2));
+		std::cout << (real1 >= real2) << std::endl;
+		std::cout << (real1 > real2) << std::endl;
 
 		// TEST4
 		std::cout << std::endl << "TEST4" << std::endl;
@@ -482,8 +470,8 @@ int	main( void )
 		real1.push_back("d");
 		printVectorContent(real1);
 		printVectorContent(real2);
-		LOG_GREEN((real1 >= real2));
-		LOG_GREEN((real1 > real2));
+		std::cout << (real1 >= real2) << std::endl;
+		std::cout << (real1 > real2) << std::endl;
 	}
 	#endif
 
@@ -502,22 +490,22 @@ int	main( void )
 		}
 
 		printVectorContent(vec1);
-		LOG_YELLOW("size\t\t" << vec1.size());
-		LOG_YELLOW("capacity\t" << vec1.capacity());
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
 		printVectorContent(vec2);
-		LOG_YELLOW("size\t\t" << vec2.size());
-		LOG_YELLOW("capacity\t" << vec2.capacity());
+		std::cout << "size\t\t" << vec2.size() << std::endl;
+		std::cout << "capacity\t" << vec2.capacity() << std::endl;
 
 		swap(vec1, vec2);
 
-		LOG_GREEN(std::endl << "AFTER SWAP" << std::endl);
+		std::cout << std::endl << "AFTER SWAP" << std::endl << std::endl;
 
 		printVectorContent(vec1);
-		LOG_YELLOW("size\t\t" << vec1.size());
-		LOG_YELLOW("capacity\t" << vec1.capacity());
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
 		printVectorContent(vec2);
-		LOG_YELLOW("size\t\t" << vec2.size());
-		LOG_YELLOW("capacity\t" << vec2.capacity());
+		std::cout << "size\t\t" << vec2.size() << std::endl;
+		std::cout << "capacity\t" << vec2.capacity() << std::endl;
 	}
 	#endif
 
@@ -533,20 +521,20 @@ int	main( void )
 
 		TESTED_NAMESPACE::vector<int>::iterator	it2 = rVec.begin();
 
-		LOG(*it2);
+		std::cout << *it2 << std::endl;
 		++it2;
-		LOG(*it2);
+		std::cout << *it2 << std::endl;
 		++it2;
-		LOG(*it2);
+		std::cout << *it2 << std::endl;
 		++it2;
-		LOG(*it2);
+		std::cout << *it2 << std::endl;
 		++it2;
-		LOG(*it2);
+		std::cout << *it2 << std::endl;
 		++it2;
-		LOG(*it2);
+		std::cout << *it2 << std::endl;
 
 		TESTED_NAMESPACE::vector<int>::iterator	itend = rVec.end();
-		LOG_RED(*(--itend));
+		std::cout << *(--itend) << std::endl;
 
 	}
 	#endif
@@ -566,14 +554,14 @@ int	main( void )
 
 		vec2.assign((++vec1.begin()), (--vec1.end()));
 
-		LOG_YELLOW("AFTER ASSIGN");
+		std::cout << "AFTER ASSIGN" << std::endl;
 
 		printVectorContent(vec1);
-		LOG_YELLOW("capacity\t" << vec1.capacity());
-		LOG_BLUE("size\t\t" << vec1.size());
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec1.size() << std::endl;
 		printVectorContent(vec2);
-		LOG_YELLOW("capacity\t" << vec2.capacity());
-		LOG_BLUE("size\t\t" << vec2.size());
+		std::cout << "capacity\t" << vec2.capacity() << std::endl;
+		std::cout << "size\t\t" << vec2.size() << std::endl;
 	}
 	#endif
 
@@ -585,17 +573,97 @@ int	main( void )
 
 		printVectorContent(vec1);
 
-		LOG_YELLOW("capacity\t" << vec1.capacity());
-		LOG_YELLOW("size\t\t" << vec1.size());
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec1.size() << std::endl;
 
 		vec1.assign((TESTED_NAMESPACE::vector<int>::size_type)0, (TESTED_NAMESPACE::vector<int>::value_type)69); // TODO: fix this issue
 
-		LOG_YELLOW("AFTER ASSIGN");
+		std::cout << "AFTER ASSIGN" << std::endl;
 
 		printVectorContent(vec1);
 
-		LOG_YELLOW("capacity\t" << vec1.capacity());
-		LOG_YELLOW("size\t\t" << vec1.size());
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+	}
+	#endif
+
+	// iterator tests
+	#if TWENTYTWO
+	{
+		std::cout << std::endl << "TWENTYTWO" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+
+		for (size_t i = 0; i < 33; i++) {
+			vec1.push_back(i);
+		}
+
+		printVectorContent(vec1);
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+		
+
+		TESTED_NAMESPACE::vector<int>::iterator	it1 = vec1.begin();
+		TESTED_NAMESPACE::vector<int>::iterator	it2 = vec1.begin();
+
+		std::cout << std::endl << "TEST1" << std::endl;
+		std::cout << (it1 == it2) << std::endl;
+		std::cout << (it1 != it2) << std::endl;
+		std::cout << (it1 <= it2) << std::endl;
+		std::cout << (it1 >= it2) << std::endl;
+		std::cout << (it1 < it2) << std::endl;
+		std::cout << (it1 > it2) << std::endl;
+
+		it1 += 1;
+		it2++;
+
+		std::cout << std::endl << "TEST2" << std::endl;
+		std::cout << (it1 == it2) << std::endl;
+		std::cout << (it1 != it2) << std::endl;
+		std::cout << (it1 <= it2) << std::endl;
+		std::cout << (it1 >= it2) << std::endl;
+		std::cout << (it1 < it2) << std::endl;
+		std::cout << (it1 > it2) << std::endl;
+
+		it2 += 1;
+
+		std::cout << std::endl << "TEST3" << std::endl;
+		std::cout << (it1 == it2) << std::endl;
+		std::cout << (it1 != it2) << std::endl;
+		std::cout << (it1 <= it2) << std::endl;
+		std::cout << (it1 >= it2) << std::endl;
+		std::cout << (it1 < it2) << std::endl;
+		std::cout << (it1 > it2) << std::endl;
+
+		std::cout << std::endl << "TEST4" << std::endl;
+		std::cout << it2 - it1 << std::endl;
+		std::cout << *(it2 + 5) << std::endl;
+
+		std::cout << std::endl << "TEST5" << std::endl;
+		std::cout << *(++it1) << std::endl;
+		std::cout << *(it1++) << std::endl;
+		std::cout << *(it1) << std::endl;
+		std::cout << (it1 == it2) << std::endl;
+		std::cout << (it1 != it2) << std::endl;
+		std::cout << (it1 <= it2) << std::endl;
+		std::cout << (it1 >= it2) << std::endl;
+		std::cout << (it1 < it2) << std::endl;
+		std::cout << (it1 > it2) << std::endl;
+
+		std::cout << std::endl << "TEST6" << std::endl;
+		it2 += 5;
+		std::cout << *(--it2) << std::endl;
+		std::cout << *(it2--) << std::endl;
+		std::cout << *(it2) << std::endl;
+		std::cout << *(--it2) << std::endl;
+		std::cout << *(--it2) << std::endl;
+		
+		std::cout << std::endl << "TEST7" << std::endl;
+		std::cout << (it1 == it2) << std::endl;
+		std::cout << (it1 != it2) << std::endl;
+		std::cout << (it1 <= it2) << std::endl;
+		std::cout << (it1 >= it2) << std::endl;
+		std::cout << (it1 < it2) << std::endl;
+		std::cout << (it1 > it2) << std::endl;
 	}
 	#endif
 
