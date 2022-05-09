@@ -1,24 +1,25 @@
 #include "vector_tests.hpp"
 
-#define ONE			1 // push_back
-#define TWO			1 // reserve
-#define THREE		1 // reserve more tests
-#define FOUR		1 // clear
-#define FIVE		1 // get_allocator
-#define SIX			1 // pop_back
-#define SEVEN		1 // resize
-#define EIGHT		1 // resize more tests
-#define NINE		1 // member swap
-#define ELEVEN		1 // operator[]
-#define TWELVE		1 // operator=
-#define FOURTEEN	1 // non member operators (==) (!=)
-#define FIVETEEN	1 // non member operators (<) (<=)
-#define SIXTEEN		1 // non member operators (>) (>=)
-#define SEVENTEEN	1 // non member swap
-#define EIGHTEEN	1 // it operators
-#define TWENTY		1 // assign range
-#define TWENTYONE	1 // assign fill
-#define TWENTYTWO	1 // iterator tests
+#define ONE			0 // push_back
+#define TWO			0 // reserve
+#define THREE		0 // reserve more tests
+#define FOUR		0 // clear
+#define FIVE		0 // get_allocator
+#define SIX			0 // pop_back
+#define SEVEN		0 // resize
+#define EIGHT		0 // resize more tests
+#define NINE		0 // member swap
+#define ELEVEN		0 // operator[]
+#define TWELVE		0 // operator=
+#define FOURTEEN	0 // non member operators (==) (!=)
+#define FIVETEEN	0 // non member operators (<) (<=)
+#define SIXTEEN		0 // non member operators (>) (>=)
+#define SEVENTEEN	0 // non member swap
+#define EIGHTEEN	0 // it operators
+#define TWENTY		0 // assign range
+#define TWENTYONE	0 // assign fill
+#define TWENTYTWO	0 // iterator tests
+#define TWENTYTHREE	1 // more iterator tests
 
 int	main( void )
 {
@@ -637,6 +638,7 @@ int	main( void )
 		std::cout << std::endl << "TEST4" << std::endl;
 		std::cout << it2 - it1 << std::endl;
 		std::cout << *(it2 + 5) << std::endl;
+		std::cout << *(it2 - 1) << std::endl;
 
 		std::cout << std::endl << "TEST5" << std::endl;
 		std::cout << *(++it1) << std::endl;
@@ -664,6 +666,60 @@ int	main( void )
 		std::cout << (it1 >= it2) << std::endl;
 		std::cout << (it1 < it2) << std::endl;
 		std::cout << (it1 > it2) << std::endl;
+
+		std::cout << std::endl << "TEST8" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec2(18, 42);
+		TESTED_NAMESPACE::vector<int>::iterator	it3 = vec2.begin();
+		std::cout << (it1 == it3) << std::endl;
+		std::cout << (it1 != it3) << std::endl;
+		std::cout << (it1 <= it3) << std::endl;
+		std::cout << (it1 >= it3) << std::endl;
+		std::cout << (it1 < it3) << std::endl;
+		std::cout << (it1 > it3) << std::endl;
+
+		std::cout << std::endl << "TEST9" << std::endl;
+		it3 = vec2.end();
+		std::cout << (it1 == it3) << std::endl;
+		std::cout << (it1 != it3) << std::endl;
+		std::cout << (it1 <= it3) << std::endl;
+		std::cout << (it1 >= it3) << std::endl;
+		std::cout << (it1 < it3) << std::endl;
+		std::cout << (it1 > it3) << std::endl;
+
+		std::cout << std::endl << "TEST10" << std::endl;
+		std::cout << *(--(vec1.end())) << std::endl;
+	}
+	#endif
+
+	// more iterator tests
+	#if TWENTYTHREE
+	{
+		std::cout << std::endl << "TWENTYTHREE" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+
+		for (size_t i = 0; i < 33; i++) {
+			vec1.push_back(i);
+		}
+
+		printVectorContent(vec1);
+		std::cout << "capacity\t" << vec1.capacity() << std::endl;
+		std::cout << "size\t\t" << vec1.size() << std::endl;
+		
+
+		TESTED_NAMESPACE::vector<int>::iterator	it1 = vec1.begin();
+		TESTED_NAMESPACE::vector<int>::iterator	it2 = vec1.end();
+
+		std::cout << std::endl << "TEST1" << std::endl;
+		std::cout << *(it1) << std::endl;
+		std::cout << *(--it2) << std::endl;
+
+		std::cout << std::endl << "TEST2" << std::endl;
+		std::cout << it1[9] << std::endl;
+		std::cout << it1[32] << std::endl;
+		it1[0] = 42;
+		std::cout << it1[0] << std::endl;
+		std::cout << *it1 << std::endl;
+		std::cout << *(it1 += 1) << std::endl;
 	}
 	#endif
 

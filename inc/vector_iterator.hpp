@@ -20,21 +20,16 @@ namespace ft {
 
 		public:
 
-			pointer	base() const {
-				return this->_ptr;
-			}
+			pointer	base() const { return this->_ptr;} 
 
 			// TODO: why is iterator constructor called 4 times
-			vector_iterator( pointer ptr = nullptr ) : _ptr(ptr) {
-				// std::cout << "iterator constrcutor called" << std::endl;
-			}
+			vector_iterator( pointer ptr = nullptr ) : _ptr(ptr) {}
 
-			// vector_iterator( pointer ptr ) : _ptr(ptr) {
-			// 	// std::cout << "iterator constrcutor called" << std::endl;
-			// }
+			vector_iterator( const vector_iterator &in ) : _ptr(in._ptr) {}
 
+			~vector_iterator() {}
 
-			value_type &	operator*() { return (*_ptr); }
+			reference	operator*() { return (*_ptr); }
 
 			vector_iterator	operator++() {
 				++this->_ptr;
@@ -76,9 +71,10 @@ namespace ft {
 			difference_type	operator-( const vector_iterator &in ) { return (this->_ptr - in.base()); }
 
 			vector_iterator	operator-( int offset ) { return (this->_ptr - offset); }
-
-
+\
 			vector_iterator	operator+( int offset ) { return (this->_ptr + offset); }
+
+			reference	operator[]( int pos ) { return *(operator+(pos)); }
 
 	};
 
