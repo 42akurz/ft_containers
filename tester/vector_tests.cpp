@@ -24,9 +24,9 @@
 #define TWENTYFIVE	1 // erase
 #define TWENTYSIX	1 // erase 2
 #define TWENTYSEVEN	1 // erase 3
-#define TWENTYEIGHT	1 // insert single element
-#define TWENTYNINE	1 // insert fill
-#define THIRTY		1 // insert range
+#define TWENTYEIGHT	0 // insert single element
+#define TWENTYNINE	0 // insert fill
+#define THIRTY		0 // insert range
 
 int	main( void )
 {
