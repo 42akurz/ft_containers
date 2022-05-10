@@ -2,7 +2,7 @@
 
 #define TESTED_NAMESPACE ft
 
-#define INSERT	1
+#define THIRTYONE		1 // insert range
 
 template <typename T>
 void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
@@ -16,39 +16,26 @@ void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
 
 int	main( void )
 {
-	// insert single element
-	#if INSERT
+	// 
+	#if THIRTYONE
 	{
 		TESTED_NAMESPACE::vector<int>	vec1;
-
+		TESTED_NAMESPACE::vector<int>	vec2;
 		vec1.reserve(11);
-
 		for (size_t i = 0; i <= 30; i += 3)
 			vec1.push_back(i);
 		printVectorContent(vec1);
 		std::cout << "size:\t\t" << vec1.size() << std::endl;
 		std::cout << "capacity:\t" << vec1.capacity() << std::endl << std::endl;
+		for (size_t i = 100; i <= 110; i++)
+			vec2.push_back(i);
+		printVectorContent(vec2);
+		std::cout << "size:\t\t" << vec2.size() << std::endl;
+		std::cout << "capacity:\t" << vec2.capacity() << std::endl << std::endl;
 
 		std::cout << std::endl << "TEST1" << std::endl << std::endl;
-		TESTED_NAMESPACE::vector<int>::iterator	pos = vec1.end();
-		pos -= 4;
-		LOG_RED("pos:\t" << *pos);
-		LOG_GREEN("ret:\t" << *(vec1.insert(pos, 69)));
-		std::cout << std::endl << "AFTER INSERT" << std::endl;
-		printVectorContent(vec1);
-		std::cout << "size:\t\t" << vec1.size() << std::endl;
-		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
-
-		std::cout << std::endl << "TEST2	" << std::endl << std::endl;
-		LOG_GREEN("ret:\t" << *(vec1.insert(vec1.end(), 42)));
-		LOG_GREEN("ret:\t" << *(vec1.insert(vec1.end(), 99)));
-		LOG_GREEN("ret:\t" << *(vec1.insert(--vec1.end(), 102)));
-		std::cout << std::endl << "AFTER INSERT" << std::endl;
-		printVectorContent(vec1);
-		std::cout << "size:\t\t" << vec1.size() << std::endl;
-		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
-
 	}
 	#endif
+
 	return 0;
 }

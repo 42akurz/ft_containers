@@ -526,6 +526,10 @@ namespace ft {
 				}
 			}
 
+			/*
+				This causes an automatic reallocation of the allocated storage space
+				if -and only if- the new vector size surpasses the current vector capacity.
+			*/ // --> TODO: fix stupid reallocations (everywhere)
 			// single element
 			iterator	insert( iterator position, const value_type& val ) {
 				pointer		newPtr;
@@ -540,7 +544,7 @@ namespace ft {
 				size_t	i = 0;
 				for (; &this->_ptr[i] != &(*position); i++)
 					this->_alloc.construct(&newPtr[i], this->_ptr[i]);
-				// i++;
+
 				this->_alloc.construct(&newPtr[i], val);
 				iterator	ret = iterator(&newPtr[i]);
 				i++;
@@ -560,15 +564,79 @@ namespace ft {
 			}
 
 			// fill
-			// void	insert( iterator position, size_type n, const value_type& val ) {
+			void	insert( iterator position, size_type n, const value_type& val ) {
+				pointer		newPtr;
+				size_type	sizeToAllocate = this->_capacity;
+				if (this->_size + n > sizeToAllocate) {
+					while (sizeToAllocate < this->_size + n)
+						sizeToAllocate *= 2;
+				}
+				else
+					sizeToAllocate = this->_capacity; // TODO: wieso allocate ich uerbhaupt neu??? ich kann einfach clearen in solchen cases
+			
+				newPtr = this->_alloc.allocate(sizeToAllocate);
 
-			// }
+				size_t	i = 0;
+				for (; &this->_ptr[i] != &(*position); i++)
+					this->_alloc.construct(&newPtr[i], this->_ptr[i]);
 
-			// // range
-			// template <class InputIterator>
-			// void	insert( iterator position, InputIterator first, InputIterator last ) {
+				for (size_t x = 0; x < n; x++) {
+					this->_alloc.construct(&newPtr[i], val);
+					i++;
+				}
 
-			// }
+				for (; i < this->_size + n; i++)
+					this->_alloc.construct(&newPtr[i], this->_ptr[i - n]);
+
+				size_type	newSize = this->_size + n;
+				this->clear();
+				this->_alloc.deallocate(this->_ptr, this->_capacity);
+				this->_ptr = newPtr;
+				this->_size = newSize;
+				this->_capacity = sizeToAllocate;
+
+				this->_front = this->_ptr;
+				this->_back = &this->_ptr[this->_size - 1];
+			}
+
+			// range TODO: continue here
+			template <class InputIterator>
+			void	insert( iterator position, InputIterator first, InputIterator last,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0 ) {
+				pointer			newPtr;
+				difference_type	n = last - first;
+				size_type	sizeToAllocate = this->_capacity;
+				if (this->_size + n > sizeToAllocate) {
+					while (sizeToAllocate < this->_size + n)
+						sizeToAllocate *= 2;
+				}
+				else
+					sizeToAllocate = this->_capacity; // TODO: wieso allocate ich uerbhaupt neu??? ich kann einfach clearen in solchen cases
+			
+				newPtr = this->_alloc.allocate(sizeToAllocate);
+
+				size_t	i = 0;
+				for (; &this->_ptr[i] != &(*position); i++)
+					this->_alloc.construct(&newPtr[i], this->_ptr[i]);
+
+				for (; first != last; first++) {
+					this->_alloc.construct(&newPtr[i], *first);
+					i++;
+				} // TODO: propably alsoo add last
+
+				for (; i < this->_size + n; i++)
+					this->_alloc.construct(&newPtr[i], this->_ptr[i - n]);
+
+				size_type	newSize = this->_size + n;
+				this->clear();
+				this->_alloc.deallocate(this->_ptr, this->_capacity);
+				this->_ptr = newPtr;
+				this->_size = newSize;
+				this->_capacity = sizeToAllocate;
+
+				this->_front = this->_ptr;
+				this->_back = &this->_ptr[this->_size - 1];
+			}
 
 	};
 

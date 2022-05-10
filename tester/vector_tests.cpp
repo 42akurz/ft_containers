@@ -24,6 +24,9 @@
 #define TWENTYFIVE	1 // erase
 #define TWENTYSIX	1 // erase 2
 #define TWENTYSEVEN	1 // erase 3
+#define TWENTYEIGHT	1 // insert single element
+#define TWENTYNINE	1 // insert fill
+#define THIRTY		1 // insert range
 
 int	main( void )
 {
@@ -878,6 +881,124 @@ int	main( void )
 		printVectorContent(vec3);
 		std::cout << "capacity:\t" << vec3.capacity() << std::endl;
 		std::cout << "size:\t\t" << vec3.size() << std::endl;
+	}
+	#endif
+
+	// insert single element
+	#if TWENTYEIGHT
+	{
+		std::cout << std::endl << "TWENTYEIGHT" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+		vec1.reserve(11);
+		for (size_t i = 0; i <= 30; i += 3)
+			vec1.push_back(i);
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl << std::endl;
+
+		std::cout << std::endl << "TEST1" << std::endl << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	pos = vec1.end();
+		pos -= 4;
+		std::cout << "pos:\t" << *pos << std::endl;
+		std::cout << "ret:\t" << *(vec1.insert(pos, 69)) << std::endl;
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+
+		std::cout << std::endl << "TEST2	" << std::endl << std::endl;
+		std::cout << "ret:\t" << *(vec1.insert(vec1.end(), 42)) << std::endl;
+		std::cout << "ret:\t" << *(vec1.insert(vec1.end(), 99)) << std::endl;
+		std::cout << "ret:\t" << *(vec1.insert(--vec1.end(), 102)) << std::endl;
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+	}
+	#endif
+
+	// insert fill
+	#if TWENTYNINE
+	{
+		std::cout << std::endl << "TWENTYNINE" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+		vec1.reserve(11);
+		for (size_t i = 0; i <= 30; i += 3)
+			vec1.push_back(i);
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl << std::endl;
+
+		std::cout << std::endl << "TEST1" << std::endl << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	pos = vec1.end();
+		--pos;
+		--pos;
+		--pos;
+		std::cout << "pos:\t" << *pos << std::endl;
+		vec1.insert(pos, 5, 69);
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+
+		std::cout << std::endl << "TEST2" << std::endl << std::endl;
+		vec1.insert(vec1.begin(), 5, 69);
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+
+		std::cout << std::endl << "TEST3" << std::endl << std::endl;
+		vec1.insert(vec1.end(), 3, 102);
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+
+		std::cout << std::endl << "TEST4" << std::endl << std::endl;
+		vec1.insert(--(vec1.end()), 2, 99);
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+	}
+	#endif
+
+	// insert range
+	#if THIRTY
+	{
+		std::cout << std::endl << "THIRTY" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+		TESTED_NAMESPACE::vector<int>	vec2;
+		vec1.reserve(11);
+		for (size_t i = 0; i <= 30; i += 3)
+			vec1.push_back(i);
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl << std::endl;
+		for (size_t i = 100; i <= 110; i++)
+			vec2.push_back(i);
+		printVectorContent(vec2);
+		std::cout << "size:\t\t" << vec2.size() << std::endl;
+		std::cout << "capacity:\t" << vec2.capacity() << std::endl << std::endl;
+
+		std::cout << std::endl << "TEST1" << std::endl << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	where = (vec1.end() - 4);
+		std::cout << "where:\t" << *where << std::endl;
+		vec1.insert(where, vec2.begin(), vec2.end());
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+
+		std::cout << std::endl << "TEST2" << std::endl << std::endl;
+		std::cout << "where:\t" << *where << std::endl;
+		vec1.insert(vec1.end(), vec2.begin(), vec2.end());
+		vec1.insert(vec1.begin(), vec2.begin(), vec2.end());
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
 	}
 	#endif
 
