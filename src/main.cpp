@@ -2,9 +2,7 @@
 
 #define TESTED_NAMESPACE ft
 
-#define ASSIGN	0
-#define ERASE	0
-#define ERASE_2	1
+#define INSERT	1
 
 template <typename T>
 void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
@@ -18,91 +16,39 @@ void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
 
 int	main( void )
 {
-	#if ASSIGN
+	// insert single element
+	#if INSERT
 	{
 		TESTED_NAMESPACE::vector<int>	vec1;
+
+		vec1.reserve(11);
 
 		for (size_t i = 0; i <= 30; i += 3)
 			vec1.push_back(i);
 		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl << std::endl;
 
-		TESTED_NAMESPACE::vector<int>	vec2;
-		TESTED_NAMESPACE::vector<int>::iterator	it1 = vec1.begin();
-		TESTED_NAMESPACE::vector<int>::iterator	it2 = vec1.end();
-
-		it2--;
-		it2--;
-		it2--;
-
-		vec2.assign(it1, it2);
-		printVectorContent(vec2);
-
-		vec2.assign(10, 42);
-		printVectorContent(vec2);
-	}
-	#endif
-
-	#if ERASE
-	{
-		TESTED_NAMESPACE::vector<int>	vec1;
-
-		for (size_t i = 0; i <= 30; i += 3)
-			vec1.push_back(i);
-		printVectorContent(vec1);
-		LOG_YELLOW("capacity:\t" << vec1.capacity());
-		LOG_YELLOW("size:\t\t" << vec1.size());
-
+		std::cout << std::endl << "TEST1" << std::endl << std::endl;
 		TESTED_NAMESPACE::vector<int>::iterator	pos = vec1.end();
-
-		pos--;
-
-		LOG_RED("pos:\t\t" << *pos);
-
-		TESTED_NAMESPACE::vector<int>::iterator	ret = vec1.erase(pos);
-
-		LOG_BLACK(std::endl << "AFTER ERASE");
-
+		pos -= 4;
+		LOG_RED("pos:\t" << *pos);
+		LOG_GREEN("ret:\t" << *(vec1.insert(pos, 69)));
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
 		printVectorContent(vec1);
-		LOG_YELLOW("capacity:\t" << vec1.capacity());
-		LOG_YELLOW("size:\t\t" << vec1.size());
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
 
-		LOG_GREEN("return:\t\t" << (*ret));
+		std::cout << std::endl << "TEST2	" << std::endl << std::endl;
+		LOG_GREEN("ret:\t" << *(vec1.insert(vec1.end(), 42)));
+		LOG_GREEN("ret:\t" << *(vec1.insert(vec1.end(), 99)));
+		LOG_GREEN("ret:\t" << *(vec1.insert(--vec1.end(), 102)));
+		std::cout << std::endl << "AFTER INSERT" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+
 	}
 	#endif
-
-	#if ERASE_2
-	{
-		TESTED_NAMESPACE::vector<int>	vec1;
-
-		for (size_t i = 0; i <= 30; i += 3)
-			vec1.push_back(i);
-		printVectorContent(vec1);
-		LOG_YELLOW("capacity:\t" << vec1.capacity());
-		LOG_YELLOW("size:\t\t" << vec1.size());
-
-		TESTED_NAMESPACE::vector<int>::iterator	pos1 = vec1.begin();
-		TESTED_NAMESPACE::vector<int>::iterator	pos2 = vec1.end();
-
-		pos1++;
-		pos2--;
-		pos2--;
-		pos2--;
-
-		LOG_RED("pos1:\t\t" << *pos1);
-		LOG_RED("pos2:\t\t" << *pos2);
-
-		TESTED_NAMESPACE::vector<int>::iterator	ret = vec1.erase(pos1, pos2);
-
-		// LOG_BLACK(std::endl << "AFTER ERASE");
-
-		// printVectorContent(vec1);
-		// LOG_YELLOW("capacity:\t" << vec1.capacity());
-		// LOG_YELLOW("size:\t\t" << vec1.size());
-		// LOG_GREEN("return:\t\t" << (*ret));
-
-		system("leaks containers");
-	}
-	#endif
-	
 	return 0;
 }

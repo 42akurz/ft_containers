@@ -1,25 +1,29 @@
 #include "vector_tests.hpp"
 
-#define ONE			0 // push_back
-#define TWO			0 // reserve
-#define THREE		0 // reserve more tests
-#define FOUR		0 // clear
-#define FIVE		0 // get_allocator
-#define SIX			0 // pop_back
-#define SEVEN		0 // resize
-#define EIGHT		0 // resize more tests
-#define NINE		0 // member swap
-#define ELEVEN		0 // operator[]
-#define TWELVE		0 // operator=
-#define FOURTEEN	0 // non member operators (==) (!=)
-#define FIVETEEN	0 // non member operators (<) (<=)
-#define SIXTEEN		0 // non member operators (>) (>=)
-#define SEVENTEEN	0 // non member swap
-#define EIGHTEEN	0 // it operators
-#define TWENTY		0 // assign range
-#define TWENTYONE	0 // assign fill
-#define TWENTYTWO	0 // iterator tests
+#define ONE			1 // push_back
+#define TWO			1 // reserve
+#define THREE		1 // reserve more tests
+#define FOUR		1 // clear
+#define FIVE		1 // get_allocator
+#define SIX			1 // pop_back
+#define SEVEN		1 // resize
+#define EIGHT		1 // resize more tests
+#define NINE		1 // member swap
+#define ELEVEN		1 // operator[]
+#define TWELVE		1 // operator=
+#define FOURTEEN	1 // non member operators (==) (!=)
+#define FIVETEEN	1 // non member operators (<) (<=)
+#define SIXTEEN		1 // non member operators (>) (>=)
+#define SEVENTEEN	1 // non member swap
+#define EIGHTEEN	1 // it operators
+#define TWENTY		1 // assign range
+#define TWENTYONE	1 // assign fill
+#define TWENTYTWO	1 // iterator tests
 #define TWENTYTHREE	1 // more iterator tests
+#define TWENTYFOUR	1 // assign
+#define TWENTYFIVE	1 // erase
+#define TWENTYSIX	1 // erase 2
+#define TWENTYSEVEN	1 // erase 3
 
 int	main( void )
 {
@@ -720,6 +724,160 @@ int	main( void )
 		std::cout << it1[0] << std::endl;
 		std::cout << *it1 << std::endl;
 		std::cout << *(it1 += 1) << std::endl;
+	}
+	#endif
+
+	// assign
+	#if TWENTYFOUR
+	{
+		std::cout << std::endl << "TWENTYFOUR" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+
+		for (size_t i = 0; i <= 30; i += 3)
+			vec1.push_back(i);
+		printVectorContent(vec1);
+
+		TESTED_NAMESPACE::vector<int>	vec2;
+		TESTED_NAMESPACE::vector<int>::iterator	it1 = vec1.begin();
+		TESTED_NAMESPACE::vector<int>::iterator	it2 = vec1.end();
+
+		it2--;
+		it2--;
+		it2--;
+
+		vec2.assign(it1, it2);
+		printVectorContent(vec2);
+
+		vec2.assign(10, 42);
+		printVectorContent(vec2);
+	}
+	#endif
+
+	// erase
+	#if TWENTYFIVE
+	{
+		std::cout << std::endl << "TWENTYFIVE" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+		for (size_t i = 0; i <= 30; i += 3)
+			vec1.push_back(i);
+		printVectorContent(vec1);
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	pos = vec1.end();
+		pos--;
+		std::cout << "pos:\t\t" << *pos << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	ret = vec1.erase(pos);
+		std::cout << std::endl << "AFTER ERASE" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "return:\t\t" << (*ret) << std::endl;
+	}
+	#endif
+
+	// erase 2
+	#if TWENTYSIX
+	{
+		std::cout << std::endl << "TWENTYSIX" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+
+		for (size_t i = 0; i <= 30; i += 3)
+			vec1.push_back(i);
+		printVectorContent(vec1);
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	pos1 = vec1.begin();
+		TESTED_NAMESPACE::vector<int>::iterator	pos2 = vec1.end();
+		pos1++;
+		pos2--;
+		pos2--;
+		pos2--;
+		std::cout << "pos1:\t\t" << *pos1 << std::endl;
+		std::cout << "pos2:\t\t" << *pos2 << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	ret = vec1.erase(pos1, pos2);
+		std::cout << std::endl << "AFTER ERASE" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		std::cout << "return:\t\t" << (*ret) << std::endl;
+	}
+	#endif
+	
+	// erase 3
+	#if TWENTYSEVEN
+	{
+		std::cout << std::endl << "TWENTYSEVEN" << std::endl;
+		std::cout << std::endl << "TEST1" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec1;
+		for (size_t i = 0; i <= 30; i += 3)
+			vec1.push_back(i);
+		printVectorContent(vec1);
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	pos1 = vec1.end();
+		TESTED_NAMESPACE::vector<int>::iterator	pos2 = vec1.end();
+		pos2--;
+		pos2--;
+		pos2--;
+		std::cout << "pos1:\t" << *(pos1 - 1) << std::endl;
+		std::cout << "pos2:\t" << *pos2 << std::endl;
+		std::cout << "ret:\t" << *(vec1.erase(pos2, pos1)) << std::endl;
+		std::cout << std::endl << "AFTER ERASE:" << std::endl;
+		printVectorContent(vec1);
+		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec1.size() << std::endl;
+
+
+		std::cout << std::endl << "TEST2" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec2;
+		for (size_t i = 0; i <= 30; i += 3)
+			vec2.push_back(i);
+		printVectorContent(vec2);
+		std::cout << "capacity:\t" << vec2.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec2.size() << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	pos3 = vec2.end();
+		TESTED_NAMESPACE::vector<int>::iterator	pos4 = vec2.end();
+		pos4--;
+		pos4--;
+		pos4--;
+		pos3--;
+		std::cout << "pos3:\t" << *pos3 << std::endl;
+		std::cout << "pos4:\t" << *pos4 << std::endl;
+		std::cout << "ret:\t" << *(vec2.erase(pos4, pos3)) << std::endl;
+		std::cout << std::endl << "AFTER ERASE:" << std::endl;
+		printVectorContent(vec2);
+		std::cout << "capacity:\t" << vec2.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec2.size() << std::endl;
+
+
+		std::cout << std::endl << "TEST3" << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	sheesh1 = vec2.begin();
+		TESTED_NAMESPACE::vector<int>::iterator	sheesh2 = vec2.end();
+		std::cout << "ret:\t" << *(vec2.erase(sheesh1, sheesh2)) << std::endl;
+		std::cout << std::endl << "AFTER ERASE:" << std::endl;
+		printVectorContent(vec2);
+		std::cout << "capacity:\t" << vec2.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec2.size() << std::endl;
+
+
+		std::cout << std::endl << "TEST4" << std::endl;
+		TESTED_NAMESPACE::vector<int>	vec3;
+		for (size_t i = 0; i <= 30; i += 3)
+			vec3.push_back(i);
+		printVectorContent(vec3);
+		std::cout << "capacity:\t" << vec3.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec3.size() << std::endl;
+		TESTED_NAMESPACE::vector<int>::iterator	pos5 = vec3.begin();
+		TESTED_NAMESPACE::vector<int>::iterator	pos6 = vec3.end();
+		--pos6;
+		--pos6;
+		std::cout << "pos5:\t" << *pos5 << std::endl;
+		std::cout << "pos6:\t" << *pos6 << std::endl;
+		std::cout << "ret:\t" << *(vec3.erase(pos5, pos6)) << std::endl;
+		std::cout << std::endl << "AFTER ERASE:" << std::endl;
+		printVectorContent(vec3);
+		std::cout << "capacity:\t" << vec3.capacity() << std::endl;
+		std::cout << "size:\t\t" << vec3.size() << std::endl;
 	}
 	#endif
 

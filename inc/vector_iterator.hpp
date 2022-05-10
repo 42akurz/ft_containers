@@ -71,7 +71,7 @@ namespace ft {
 			difference_type	operator-( const vector_iterator &in ) { return (this->_ptr - in.base()); }
 
 			vector_iterator	operator-( int offset ) { return (this->_ptr - offset); }
-\
+
 			vector_iterator	operator+( int offset ) { return (this->_ptr + offset); }
 
 			reference	operator[]( int pos ) { return *(operator+(pos)); }
