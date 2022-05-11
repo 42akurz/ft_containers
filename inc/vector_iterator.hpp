@@ -97,6 +97,12 @@ namespace ft {
 
 	template <class T>
 	bool	operator>( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() > rhs.base()); }
+
+	template <class T, class U>
+	typename ft::vector_iterator<T>::difference_type	operator-( const vector_iterator<T>& lhs, const vector_iterator<U>& rhs ) { return (lhs.base() - rhs.base()); }
+	
+	template <class T, class U>
+	typename ft::vector_iterator<T>::difference_type	operator+( const vector_iterator<T>& lhs, const vector_iterator<U>& rhs ) { return (lhs.base() + rhs.base()); }
 }
 
 #endif

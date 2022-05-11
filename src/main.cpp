@@ -21,6 +21,7 @@ void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
 template <typename T>
 void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true)
 {
+
 	const T_SIZE_TYPE size = vct.size();
 	const T_SIZE_TYPE capacity = vct.capacity();
 	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
@@ -45,6 +46,7 @@ int	main( void )
 	// insert 1
 	#if THIRTYONE
 	{
+		LOG_RED("TEST1");
 		TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 		TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
 
@@ -53,30 +55,21 @@ int	main( void )
 		printSize(vct);
 
 		vct2.insert(vct2.end(), 42);
-		// printSize(vct2);
 		vct2.insert(vct2.begin(), 2, 21);
 		printSize(vct2);
 
-		vct2.insert(vct2.end() - 2, 111111);
-
+		vct2.insert(vct2.end() - 2, 42);
 		printSize(vct2);
 
 		vct2.insert(vct2.end(), 2, 84);
 		printSize(vct2);
 
-		// vct2.resize(4);
-		// printSize(vct2);
-
-		printSize(vct);
-
-		LOG_GREEN(*(vct.begin()));
-		LOG_GREEN(*(vct.begin() - 1));
+		vct2.resize(4);
+		printSize(vct2);
 
 		vct2.insert(vct2.begin() + 2, vct.begin(), vct.end());
 		vct.clear();
-		LOG_RED("-------------------------");
 		printSize(vct2);
-		LOG_RED("-------------------------");
 
 		printSize(vct);
 	}
