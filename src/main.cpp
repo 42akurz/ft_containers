@@ -1,9 +1,10 @@
 #include "../inc/vector.hpp"
 
-#define TESTED_NAMESPACE ft
+#define TESTED_NAMESPACE std
 #define TESTED_TYPE int
 
-#define THIRTYONE		0 // insert range
+#define THIRTYONE		1 // insert 1
+#define THIRTYTWO		0 // insert 2
 
 template <typename T>
 void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
@@ -41,51 +42,74 @@ void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true
 
 int	main( void )
 {
-	// 
+	// insert 1
 	#if THIRTYONE
 	{
+		TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
+		TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
 
+		for (unsigned long int i = 0; i < vct.size(); ++i)
+			vct[i] = (vct.size() - i) * 3;
+		printSize(vct);
+
+		vct2.insert(vct2.end(), 42);
+		// printSize(vct2);
+		vct2.insert(vct2.begin(), 2, 21);
+		printSize(vct2);
+
+		vct2.insert(vct2.end() - 2, 111111);
+
+		printSize(vct2);
+
+		vct2.insert(vct2.end(), 2, 84);
+		printSize(vct2);
+
+		// vct2.resize(4);
+		// printSize(vct2);
+
+		printSize(vct);
+
+		LOG_GREEN(*(vct.begin()));
+		LOG_GREEN(*(vct.begin() - 1));
+
+		vct2.insert(vct2.begin() + 2, vct.begin(), vct.end());
+		vct.clear();
+		LOG_RED("-------------------------");
+		printSize(vct2);
+		LOG_RED("-------------------------");
+
+		printSize(vct);
 	}
 	#endif
 
+	// insert 2
+	#if THIRTYTWO
 	{
 		TESTED_NAMESPACE::vector<TESTED_TYPE> vct(5);
-		TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it = vct.begin(), ite = vct.end();
+		TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
+		const int cut = 3;
 
-		std::cout << "len: " << (ite - it) << std::endl;
-		for (; it != ite; ++it)
-			*it = (ite - it);
+		for (unsigned long int i = 0; i < vct.size(); ++i)
+			vct[i] = (vct.size() - i) * 7;
+		printSize(vct);
 
-		it = vct.begin();
-		TESTED_NAMESPACE::vector<TESTED_TYPE> vct_range(it, --(--ite));
-		for (int i = 0; it != ite; ++it)
-			*it = ++i * 5;
+		vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
+		printSize(vct2);
+		vct2.insert(vct2.begin(), vct.begin() + cut, vct.end());
+		printSize(vct2);
+		vct2.insert(vct2.end(), vct.begin(), vct.begin() + cut);
+		printSize(vct2);
 
-		it = vct.begin();
-		TESTED_NAMESPACE::vector<TESTED_TYPE> vct_copy(vct);
-		for (int i = 0; it != ite; ++it)
-			*it = ++i * 7;
-		vct_copy.push_back(42);
-		vct_copy.push_back(21);
+		std::cout << "insert return:" << std::endl;
 
-		// std::cout << "\t-- PART ONE --" << std::endl;
-		// printSize(vct);
-		// printSize(vct_range);
-		// printSize(vct_copy);
+		std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
+		std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
+		std::cout << "----------------------------------------" << std::endl;
 
-		vct = vct_copy;
-		vct_copy = vct_range;
-		vct_range.clear();
-
-		LOG_RED(&(*(vct_range.begin())));
-		LOG_RED(&(*(vct_range.end())));
-
-		std::cout << "\t-- PART TWO --" << std::endl;
-		// printSize(vct);
-		printSize(vct_range);
-		// printSize(vct_copy);
-
+		printSize(vct2);
 	}
+	#endif
+
 
 	return 0;
 }
