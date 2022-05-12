@@ -327,67 +327,48 @@ namespace ft {
 				}
 			}
 
-			// TODO: gibt safe efiizienter methoden, als bis zu position loopen
-			// TODO: real one segfauts, when end is passed
-			// TODO: when last element of vector, i should return the one i removed
+			/* if i dont reallocate, but instead change the values of the elements after pos, its faster */
 			iterator	erase( iterator position ) {
 				pointer		newPtr = this->_alloc.allocate(this->_capacity);
-				iterator	beg = begin();
-				iterator	temp = end() - 1;
-				for (size_t i = 0; beg != this->end(); beg++) {
-					if (position != beg) {
-						this->_alloc.construct(&newPtr[i], (*beg));
+				iterator	ret;
+				size_t		i = 0;
+				for (iterator it = begin(); it != end(); it++) {
+					if (it.base() != position.base()) {
+						this->_alloc.construct(newPtr + i, *it);
 						i++;
 					}
+					else
+						ret = newPtr + i;
 				}
-				for (size_t i = 0; i < this->_size; i++)
-					this->_alloc.destroy(&this->_ptr[i]);
+				this->clear();
 				this->_alloc.deallocate(this->_ptr, this->_capacity);
-
+				this->_size = i;
 				this->_ptr = newPtr;
-				this->_size--;
-
-				if (position == temp) {
-					return position;
-				}
-				else {
-					iterator	ret = position;
-					return (++ret); // TODO: are there edgecases?
-				}
+				return ret;
 			}
 
-			/*	range
-				the range includes all the elements between first and last,
-				including the element pointed by first but not the one pointed by last.
-			*/
+			/* range */
 			iterator	erase( iterator first, iterator last ) {
-				if (last == end()) {
-					while (end() != first)
-						pop_back();
-					return (end());
-				}
-				else {
-					pointer		newPtr = this->_alloc.allocate(this->_capacity);
-					size_t		i = 0;
-					size_type	newSize = 0;
-					for ( ; &this->_ptr[i] != &(*first); i++) {
-						this->_alloc.construct(&newPtr[i], this->_ptr[i]);
-						newSize++;
+				pointer		newPtr = this->_alloc.allocate(this->_capacity);
+				size_t		i = 0;
+				size_t		pos;
+				for (iterator it = begin(); it != end(); it++) {
+					if (it == first) {
+						for ( ; it != (last - 1); ) {
+							it++;
+						}
+						pos = i;
 					}
-					while (&this->_ptr[i] != &(*last))
+					else {
+						this->_alloc.construct(newPtr + i, *it);
 						i++;
-					for ( ; i < this->_size; i++) {
-						this->_alloc.construct(&newPtr[newSize], this->_ptr[i]);
-						newSize++;
 					}
-					for (size_t x = 0; x < this->_size; x++) // TODO: instead of doing this, do clear() everywhere
-						this->_alloc.destroy(&this->_ptr[i]);
-					this->_alloc.deallocate(this->_ptr, this->_capacity);
-					this->_size = newSize;
-					this->_ptr = newPtr;
-
-					return (last); // TODO: correct? ne weil iteartor ist nicht auf gleichem memory bereich, weil ich neu allocated habe
 				}
+				this->clear();
+				this->_alloc.deallocate(this->_ptr, this->_capacity);
+				this->_size = i;
+				this->_ptr = newPtr;
+				return iterator(newPtr + pos);
 			}
 
 			/*
