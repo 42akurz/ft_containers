@@ -9,6 +9,9 @@ SRC =	./src/main.cpp		\
 INC =	./inc/vector.hpp	\
 		./inc/iterator.hpp	\
 		./inc/iterator_traits.hpp	\
+		./inc/vector_iterator.hpp	\
+		./inc/reverse_iterator.hpp	\
+		./inc/enable_if.hpp	\
 
 RM = rm -f
 

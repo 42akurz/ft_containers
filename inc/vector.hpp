@@ -8,6 +8,7 @@
 # include <exception>
 
 # include "vector_iterator.hpp"
+# include "reverse_iterator.hpp"
 # include "enable_if.hpp"
 
 # define LOG(x) (std::cout << x << std::endl)
@@ -40,13 +41,16 @@ namespace ft {
 			typedef				Alloc												allocator_type;
 			typedef typename	allocator_type::reference							reference;
 			typedef typename	allocator_type::const_reference						const_reference;
-			typedef typename	allocator_type::pointer								pointer; // T*
+			typedef typename	allocator_type::pointer								pointer;
 			typedef typename	allocator_type::const_pointer						const_pointer;
 			typedef typename	allocator_type::size_type							size_type;
 
 			typedef				ft::vector_iterator<value_type>						iterator;
 			typedef 			ft::vector_iterator<const value_type>				const_iterator;
 			typedef typename	ft::vector_iterator<value_type>::difference_type	difference_type; // TOD: check if this is even allowed
+			typedef				ft::reverse_iterator<iterator>						reverse_iterator;
+			typedef				ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+
 
 		private:
 			size_type		_size;
@@ -118,8 +122,14 @@ namespace ft {
 			iterator		begin() { return iterator(this->_ptr); }
 			const_iterator	begin() const { return (const_iterator(this->_ptr)); }
 
+			reverse_iterator		rbegin() { return (reverse_iterator(end() - 1)); }
+			const_reverse_iterator	rbegin() const { return (const_reverse_iterator(end() - 1)); }
+
 			iterator		end() { return iterator(this->_ptr + this->_size); }
 			const_iterator	end() const { return (const_iterator(this->_ptr + this->_size)); }
+
+			reverse_iterator		rend() { return (reverse_iterator(begin() - 1)); }
+			const_reverse_iterator	rend() const { return (const_reverse_iterator(begin() - 1)); }
 
 			reference		front() { return (this->_ptr[0]); }
 			const_reference	front() const { return (this->_ptr[0]); }

@@ -64,7 +64,7 @@ namespace ft {
 
 			/* assign */
 			vector_iterator &	operator=( const vector_iterator & in ) {
-				this->_ptr = in._ptr;
+				this->_ptr = in.base();
 				return *this;
 			}
 

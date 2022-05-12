@@ -1,7 +1,8 @@
 #include "../inc/vector.hpp"
 
-#define TESTED_NAMESPACE ft
-#define TESTED_TYPE std::string
+#define TESTED_TYPE			int
+#define T_SIZE_TYPE			typename TESTED_NAMESPACE::vector<T>::size_type
+#define TESTED_NAMESPACE	ft
 
 #define THIRTYONE		1 // insert 1
 #define THIRTYTWO		0 // insert 2
@@ -15,17 +16,6 @@ void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
 	}
 	std::cout << std::endl;
 }
-
-#define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
-
-
-
-/*
-	TODO:
-	FIX INSERTS FUNCTIONS (THEY ARE UGLY)
-*/
-
-
 
 template <typename T>
 void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true)
@@ -62,31 +52,37 @@ int		main(void)
 {
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 
-	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = std::string((vct.size() - i), i + 65);
-	printSize(vct);
+	for (size_t i = 0; i < 10; i++)
+		vct[i] = i + 1;
 
-	checkErase(vct, vct.erase(vct.begin() + 2));
+	printVectorContent(vct);
 
-	checkErase(vct, vct.erase(vct.begin()));
-	checkErase(vct, vct.erase(vct.end() - 1));
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator	rit = vct.rbegin();
 
-	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
+	LOG_RED("--------- TEST1");
+	LOG_RED(*rit);
+	LOG_RED(*(++rit));
+	LOG_RED(*(++rit));
+	LOG_RED(*(++rit));
 
-	vct.push_back("Hello");
-	vct.push_back("Hi there");
-	printSize(vct);
-	LOG_RED("------------------------------");
-	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
-	LOG_RED("------------------------------");
+	LOG_YELLOW(std::endl << "--------- TEST2");
+	LOG_YELLOW(*rit);
+	LOG_YELLOW(*(rit++));
+	LOG_YELLOW(*(rit++));
+	LOG_YELLOW(*(rit++));
+	LOG_YELLOW(*rit);
 
-	vct.push_back("ONE");
-	vct.push_back("TWO");
-	vct.push_back("THREE");
-	vct.push_back("FOUR");
-	printSize(vct);
-	checkErase(vct, vct.erase(vct.begin(), vct.end()));
+	LOG_GREEN(std::endl << "--------- TEST3");
+	LOG_GREEN(rit[-1]);
+	LOG_GREEN(rit[0]);
+	LOG_GREEN(rit[1]);
+	LOG_GREEN(rit[2]);
+
+	LOG_PINK(std::endl << "--------- TEST4");
+	LOG_PINK(*(rit - 1));
+	LOG_PINK(*(rit + 0));
+	LOG_PINK(*(rit + 1));
+	LOG_PINK(*(rit + 2));
 
 	return 0;
 }
