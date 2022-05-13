@@ -262,18 +262,7 @@ int		main(void)
 
 		/* these should not compile */
 		// LOG_GREEN("*(1 - it_rbeg):\t" << *(1 - it_rbeg));
-		// LOG_GREEN("*(1 - it_rend):\t" << *(1 - it_rend));
 		
-		
-		
-		
-		// LOG_GREEN(it2 - 2);
-		// LOG_GREEN(it1 + 2);
-		// LOG_GREEN(*(it2 - it1));
-		// LOG_GREEN(2 - it1);
-		// LOG_GREEN(*(2 - it1));
-		// LOG_GREEN(*(it1 + it2));
-		// LOG_GREEN(it1 + it2);
 	}
 	#endif
 
