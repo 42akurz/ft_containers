@@ -49,16 +49,9 @@ namespace ft {
 			vector_iterator &	operator=( const vector_iterator & in ) { this->_ptr = in.base(); return *this; }
 
 			/* addition / subtraction */
-			// difference_type		operator-( const vector_iterator &in ) { return (this->_ptr - in.base()); }
 			vector_iterator		operator-( int offset ) { return (vector_iterator(_ptr - offset)); }
 			vector_iterator		operator+( int offset ) { return (vector_iterator(_ptr + offset)); }
 	};
-
-	// template <class T>
-	// bool	operator!=( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() != rhs.base()); }
-
-	// template <class T>
-	// bool	operator==( const vector_iterator<T>& lhs, const vector_iterator<T>& rhs ) { return (lhs.base() == rhs.base()); }
 	
 	template <class T, class U>
 	bool	operator!=( const vector_iterator<T>& lhs, const vector_iterator<U>& rhs ) { return (lhs.base() != rhs.base()); }
@@ -81,14 +74,18 @@ namespace ft {
 	template <class T, class U>
 	typename ft::vector_iterator<T>::difference_type	operator-( const vector_iterator<T>& lhs, const vector_iterator<U>& rhs ) { return (lhs.base() - rhs.base()); }
 	
-	// template < typename T>
-	// ft::vector_iterator<T>	operator-( typename ft::vector_iterator<T>::difference_type n, const vector_iterator<T> &in ) { return ft::vector_iterator<T>(in.base() - n); }
-
-	// template <class T, class U> // TODO: not sure if this is needed */
-	// typename ft::vector_iterator<T>::difference_type	operator+( const vector_iterator<T>& lhs, const vector_iterator<U>& rhs ) { return (lhs.base() + rhs.base()); }
-	
 	template < typename T>
 	ft::vector_iterator<T>	operator+( typename ft::vector_iterator<T>::difference_type n, const vector_iterator<T> &in ) { return ft::vector_iterator<T>(in.base() + n); }
+	
+	template <class Iterator>
+	typename ft::iterator_traits<Iterator>::difference_type	difference( Iterator first, Iterator second ) {
+		typename ft::iterator_traits<Iterator>::difference_type	diff = 0;
+		while (first != second) {
+			first++;
+			diff++;
+		}
+		return diff;
+	}
 }
 
 #endif

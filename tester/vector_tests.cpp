@@ -673,28 +673,6 @@ int	main( void )
 		std::cout << (it1 >= it2) << std::endl;
 		std::cout << (it1 < it2) << std::endl;
 		std::cout << (it1 > it2) << std::endl;
-
-		std::cout << std::endl << "TEST8" << std::endl;
-		TESTED_NAMESPACE::vector<int>	vec2(18, 42);
-		TESTED_NAMESPACE::vector<int>::iterator	it3 = vec2.begin();
-		std::cout << (it1 == it3) << std::endl;
-		std::cout << (it1 != it3) << std::endl;
-		std::cout << (it1 <= it3) << std::endl;
-		std::cout << (it1 >= it3) << std::endl;
-		std::cout << (it1 < it3) << std::endl;
-		std::cout << (it1 > it3) << std::endl;
-
-		std::cout << std::endl << "TEST9" << std::endl;
-		it3 = vec2.end();
-		std::cout << (it1 == it3) << std::endl;
-		std::cout << (it1 != it3) << std::endl;
-		std::cout << (it1 <= it3) << std::endl;
-		std::cout << (it1 >= it3) << std::endl;
-		std::cout << (it1 < it3) << std::endl;
-		std::cout << (it1 > it3) << std::endl;
-
-		std::cout << std::endl << "TEST10" << std::endl;
-		std::cout << *(--(vec1.end())) << std::endl;
 	}
 	#endif
 

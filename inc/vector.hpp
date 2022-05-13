@@ -90,7 +90,7 @@ namespace ft {
 			vector ( InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0 ) {
 				this->_alloc = alloc;
-				difference_type	distance = last - first;
+				difference_type	distance = ft::difference(first, last);
 				this->_ptr = this->_alloc.allocate(distance);
 				for (size_t i = 0; first != last; i++) {
 					this->_alloc.construct(&this->_ptr[i], *first);
@@ -291,7 +291,7 @@ namespace ft {
 			template <class InputIterator>
 			void	assign( InputIterator first, InputIterator last,
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0 ) {
-				size_type	distance = last - first;
+				size_t	distance = ft::difference(first, last);
 				if (distance > this->_capacity) {
 					pointer	newPtr = this->_alloc.allocate(distance);
 					for (size_t i = 0; first != last; i++) {
@@ -410,7 +410,7 @@ namespace ft {
 					for (iterator it = begin(); it != position; it++)
 						this->_alloc.construct(&newPtr[it - begin()], *it);
 
-					difference_type	distance = position - begin();
+					difference_type	distance = ft::difference(begin(), position);
 					for (size_t i = 0; i < n; i++)
 						this->_alloc.construct(&newPtr[distance + i], val);
 
@@ -437,7 +437,7 @@ namespace ft {
 					return ;
 				}
 
-				difference_type	n = last - first;
+				difference_type	n = ft::difference(first, last);
 				size_type	sizeToAllocate = this->_capacity;  // TODO: wieso allocate ich uerbhaupt neu??? ich kann einfach clearen in solchen cases
 
 				if (sizeToAllocate < this->_size + n) {
