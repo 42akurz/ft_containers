@@ -240,6 +240,10 @@ int		main(void)
 
 		LOG_RED("it_rbeg:\t" << *it_rbeg);
 		LOG_RED("it_rend:\t" << *it_rend);
+		LOG_RED("it_rbeg[0]:\t" << it_rbeg[0]);
+		LOG_RED("it_rend[0]:\t" << it_rend[0]);
+		LOG_RED("it_rbeg[1]:\t" << it_rbeg[1]);
+		LOG_RED("it_rend[1]:\t" << it_rend[1]);
 
 		LOG_BLACK(std::endl << "TEST1");
 		LOG_GREEN("*(it_rbeg - 1):\t" << *(it_rbeg - 1));

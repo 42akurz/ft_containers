@@ -28,7 +28,7 @@ namespace ft {
 
 			/* references */
 			reference			operator*() { Iterator temp(_it); --temp; return (*temp); } 
-			reference			operator[]( int pos ) { return *(_it - pos); } // TODO: test if still working
+			reference			operator[]( int pos ) { return *(operator+(pos)); } // TODO: test if still working
 
 			/* pointer */ /* when tested type is a class --> access members through iterator */
 			pointer				operator->() { Iterator temp(_it); --temp; return temp.operator->(); }
@@ -102,7 +102,7 @@ namespace ft {
 	}
 
 	template < class T>
-	ft::reverse_iterator<T>	operator+( const ft::reverse_iterator<T>& rit, const typename ft::reverse_iterator<T>::difference_type offset )
+	ft::reverse_iterator<T>	operator+( const typename ft::reverse_iterator<T>::difference_type offset, const ft::reverse_iterator<T>& rit )
 	{
 		return ft::reverse_iterator<T>(rit.base() - offset);
 	}
