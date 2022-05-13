@@ -32,46 +32,26 @@ namespace ft {
 			reference			operator*() { return (*_ptr); }
 			reference			operator[]( int pos ) { return *(operator+(pos)); }
 
+			/* pointer */ /* when tested type is a class --> access members through iterator */
+			pointer				operator->() { return &(operator*()); }
+
 			/* increments */
-			vector_iterator &	operator++() {
-				++this->_ptr;
-				return (*this);
-			}
-			vector_iterator		operator++(int) {
-				pointer	temp = this->_ptr;
-				++this->_ptr;
-				return (temp);
-			}
-			vector_iterator &	operator+=( int offset ) {
-				this->_ptr += offset;
-				return *this;
-			}
+			vector_iterator &	operator++() { ++this->_ptr; return (*this); }
+			vector_iterator		operator++( int ) { vector_iterator	temp(this->_ptr); ++this->_ptr; return (temp); }
+			vector_iterator &	operator+=( int offset ) { this->_ptr += offset; return *this; }
 
 			/* decrements */
-			vector_iterator &	operator--() {
-				--this->_ptr;
-				return (*this);
-			}
-			vector_iterator		operator--(int) {
-				pointer	temp = this->_ptr;
-				--this->_ptr;
-				return (temp);
-			}
-			vector_iterator &	operator-=( int offset ) {
-				this->_ptr -= offset;
-				return *this;
-			}
+			vector_iterator &	operator--() { --this->_ptr; return (*this); }
+			vector_iterator		operator--( int ) { vector_iterator temp(this->_ptr); --this->_ptr; return (temp); }
+			vector_iterator &	operator-=( int offset ) { this->_ptr -= offset; return *this; }
 
 			/* assign */
-			vector_iterator &	operator=( const vector_iterator & in ) {
-				this->_ptr = in.base();
-				return *this;
-			}
+			vector_iterator &	operator=( const vector_iterator & in ) { this->_ptr = in.base(); return *this; }
 
 			/* addition / subtraction */
-			difference_type	operator-( const vector_iterator &in ) { return (this->_ptr - in.base()); }
-			vector_iterator	operator-( int offset ) { return (this->_ptr - offset); }
-			vector_iterator	operator+( int offset ) { return (this->_ptr + offset); }
+			// difference_type		operator-( const vector_iterator &in ) { return (this->_ptr - in.base()); }
+			vector_iterator		operator-( int offset ) { return (vector_iterator(_ptr - offset)); }
+			vector_iterator		operator+( int offset ) { return (vector_iterator(_ptr + offset)); }
 	};
 
 	template <class T>
@@ -101,8 +81,14 @@ namespace ft {
 	template <class T, class U>
 	typename ft::vector_iterator<T>::difference_type	operator-( const vector_iterator<T>& lhs, const vector_iterator<U>& rhs ) { return (lhs.base() - rhs.base()); }
 	
-	template <class T, class U>
+	template < typename T>
+	ft::vector_iterator<T>	operator-( typename ft::vector_iterator<T>::difference_type n, const vector_iterator<T> &in ) { return ft::vector_iterator<T>(in.base() - n); }
+
+	template <class T, class U> // TODO: not sure if this is needed */
 	typename ft::vector_iterator<T>::difference_type	operator+( const vector_iterator<T>& lhs, const vector_iterator<U>& rhs ) { return (lhs.base() + rhs.base()); }
+	
+	template < typename T>
+	ft::vector_iterator<T>	operator+( typename ft::vector_iterator<T>::difference_type n, const vector_iterator<T> &in ) { return ft::vector_iterator<T>(in.base() + n); }
 }
 
 #endif
