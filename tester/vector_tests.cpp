@@ -27,6 +27,9 @@
 #define TWENTYEIGHT	1 // insert single element
 #define TWENTYNINE	1 // insert fill
 #define THIRTY		1 // insert range
+#define THIRTYONE	1 // iter overloads				--> including cases that shouldnt compile (commented)
+#define THIRTYTWO	1 // iter overloads 2			--> including cases that shouldnt compile (commented)
+#define THIRTYTHREE	1 // reverse iter overloads		--> including cases that shouldnt compile (commented)
 
 int	main( void )
 {
@@ -977,6 +980,120 @@ int	main( void )
 		printVectorContent(vec1);
 		std::cout << "size:\t\t" << vec1.size() << std::endl;
 		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
+	}
+	#endif
+
+	// iter overloads
+	#if THIRTYONE
+	{
+		TESTED_NAMESPACE::vector<int> vct(10);
+
+		for (size_t i = 0; i < 10; i++)
+			vct[i] = i + 1;
+
+		printVectorContent(vct);
+
+		TESTED_NAMESPACE::vector<int>::reverse_iterator	rit = vct.rbegin();
+
+		std::cout << "--------- TEST1" << std::endl;
+		std::cout << *rit << std::endl;
+		std::cout << *(++rit) << std::endl;
+		std::cout << *(++rit) << std::endl;
+		std::cout << *(++rit) << std::endl;
+
+		std::cout << std::endl << "--------- TEST2" << std::endl;
+		std::cout << *rit << std::endl;
+		std::cout << *(rit++) << std::endl;
+		std::cout << *(rit++) << std::endl;
+		std::cout << *(rit++) << std::endl;
+		std::cout << *rit << std::endl;
+
+		std::cout << std::endl << "--------- TEST3" << std::endl;
+		std::cout << rit[-1] << std::endl;
+		std::cout << rit[0] << std::endl;
+		std::cout << rit[1] << std::endl;
+		std::cout << rit[2] << std::endl;
+
+		std::cout << std::endl << "--------- TEST4" << std::endl;
+		std::cout << *(rit - 1) << std::endl;
+		std::cout << *(rit + 0) << std::endl;
+		std::cout << *(rit + 1) << std::endl;
+		std::cout << *(rit + 2) << std::endl;
+	}
+	#endif
+
+
+	// iter overloads 2
+	#if THIRTYTWO
+	{
+		TESTED_NAMESPACE::vector<int> vct;
+		for (size_t i = 0; i < 5; i++)
+			vct.push_back(i + 1);
+		printVectorContent(vct);
+
+		TESTED_NAMESPACE::vector<int>::iterator	it1 = vct.begin();
+		TESTED_NAMESPACE::vector<int>::iterator	it2 = vct.end();
+		it1++;
+		it2 -= 2;
+		std::cout << "it1:\t" << *it1 << std::endl;
+		std::cout << "it2:\t" << *it2 << std::endl;
+		std::cout << "*(it2 - 2):\t" << *(it2 - 2) << std::endl;
+		std::cout << "*(it1 + 2):\t" << *(it1 + 2) << std::endl;
+		std::cout << "it2 - it1:\t" << it2 - it1 << std::endl;
+		std::cout << "*(1 + it1):\t" << *(1 + it1) << std::endl;
+
+		/* these should not compile */
+		// std::cout << it2 - 2 << std::endl;
+		// std::cout << it1 + 2 << std::endl;
+		// std::cout << *(it2 - it1) << std::endl;
+		// std::cout << 2 - it1 << std::endl;
+		// std::cout << *(2 - it1) << std::endl;
+		// std::cout << *(it1 + it2) << std::endl;
+		// std::cout << it1 + it2 << std::endl;
+	}
+	#endif
+
+	// reverse iter overloads
+	#if THIRTYTHREE
+	{
+		TESTED_NAMESPACE::vector<int> vct;
+		for (size_t i = 0; i < 5; i++)
+			vct.push_back(i + 1);
+		printVectorContent(vct);
+
+		TESTED_NAMESPACE::vector<int>::reverse_iterator	it_rbeg = vct.rbegin();
+		TESTED_NAMESPACE::vector<int>::reverse_iterator	it_rend = vct.rend();
+		
+		--it_rend;
+		--it_rend;
+		++it_rbeg;
+		++it_rbeg;
+
+		std::cout << "it_rbeg:\t" << *it_rbeg << std::endl;
+		std::cout << "it_rend:\t" << *it_rend << std::endl;
+		std::cout << "it_rbeg[0]:\t" << it_rbeg[0] << std::endl;
+		std::cout << "it_rend[0]:\t" << it_rend[0] << std::endl;
+		std::cout << "it_rbeg[1]:\t" << it_rbeg[1] << std::endl;
+		std::cout << "it_rend[1]:\t" << it_rend[1] << std::endl;
+
+		std::cout << std::endl << "TEST1" << std::endl;
+		std::cout << "*(it_rbeg - 1):\t" << *(it_rbeg - 1) << std::endl;
+		std::cout << "*(it_rbeg + 1):\t" << *(it_rbeg + 1) << std::endl;
+		std::cout << std::endl << "TEST2" << std::endl;
+		std::cout << "*(it_rend - 1):\t" << *(it_rend - 1) << std::endl;
+		std::cout << "*(it_rend + 1):\t" << *(it_rend + 1) << std::endl;
+		
+		std::cout << std::endl << "TEST3" << std::endl;
+		std::cout << "it_rbeg - it_rend:\t" << it_rbeg - it_rend << std::endl;
+		std::cout << "it_rend - it_rbeg:\t" << it_rend - it_rbeg << std::endl;
+		std::cout << std::endl << "TEST4" << std::endl;
+		std::cout << "*(1 + it_rbeg):\t" << *(1 + it_rbeg) << std::endl;
+		std::cout << std::endl << "TEST5" << std::endl;
+		std::cout << "*(1 + it_rend):\t" << *(1 + it_rend) << std::endl;
+
+		/* these should not compile */
+		// LOG_GREEN("*(1 - it_rbeg):\t" << *(1 - it_rbeg));
+		
 	}
 	#endif
 
