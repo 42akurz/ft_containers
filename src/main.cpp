@@ -33,9 +33,10 @@ class foo {
 #define T_SIZE_TYPE			typename TESTED_NAMESPACE::vector<T>::size_type
 #define TESTED_NAMESPACE	ft
 
-#define THIRTYONE		1
+#define THIRTYONE		0
 #define THIRTYTWO		0
 #define THIRTYTHREE		0
+#define THIRTYFOUR		1
 
 template <typename T>
 void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
@@ -152,45 +153,82 @@ int		main(void)
 
 	#if THIRTYTHREE
 	{
-	const int size = 5;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(vct.rbegin());
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite(vct.rend());
+		const int size = 5;
+		TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+		TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(vct.rbegin());
+		TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite(vct.rend());
 
-	for (int i = 1; it != ite; ++i)
-		*it++ = (i * 7);
-	printSize(vct, 1);
+		for (int i = 1; it != ite; ++i)
+			*it++ = (i * 7);
+		printSize(vct, 1);
 
-	it = vct.rbegin();
-	ite = vct.rbegin();
+		it = vct.rbegin();
+		ite = vct.rbegin();
 
-	std::cout << *(++ite) << std::endl;
-	std::cout << *(ite++) << std::endl;
-	std::cout << *ite++ << std::endl;
-	std::cout << *++ite << std::endl;
+		std::cout << *(++ite) << std::endl;
+		std::cout << *(ite++) << std::endl;
+		std::cout << *ite++ << std::endl;
+		std::cout << *++ite << std::endl;
 
-	it->m();
-	ite->m();
+		it->m();
+		ite->m();
 
-	std::cout << *(++it) << std::endl;
-	std::cout << *(it++) << std::endl;
-	std::cout << *it++ << std::endl;
-	std::cout << *++it << std::endl;
+		std::cout << *(++it) << std::endl;
+		std::cout << *(it++) << std::endl;
+		std::cout << *it++ << std::endl;
+		std::cout << *++it << std::endl;
 
-	std::cout << *(--ite) << std::endl;
-	std::cout << *(ite--) << std::endl;
-	std::cout << *--ite << std::endl;
-	std::cout << *ite-- << std::endl;
+		std::cout << *(--ite) << std::endl;
+		std::cout << *(ite--) << std::endl;
+		std::cout << *--ite << std::endl;
+		std::cout << *ite-- << std::endl;
 
-	(*it).m();
-	(*ite).m();
+		(*it).m();
+		(*ite).m();
 
-	std::cout << *(--it) << std::endl;
-	std::cout << *(it--) << std::endl;
-	std::cout << *it-- << std::endl;
-	std::cout << *--it << std::endl;
+		std::cout << *(--it) << std::endl;
+		std::cout << *(it--) << std::endl;
+		std::cout << *it-- << std::endl;
+		std::cout << *--it << std::endl;
+	}
+	#endif
+
+	#if THIRTYFOUR
+	{
+		TESTED_NAMESPACE::vector<TESTED_TYPE> vct;
+
+		for (size_t i = 0; i < 5; i++)
+			vct.push_back(i + 1);
+
+		printVectorContent(vct);
+
+		TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator	it1 = vct.begin();
+		TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator	it2 = vct.end();
+		// TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(vct.rbegin());
+		// TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite(vct.rend());
+
+		it1++;
+		it2 -= 2;
+
+		LOG_RED("it1:\t" << *it1);
+		LOG_RED("it2:\t" << *it2);
+
+		LOG_GREEN("*(it2 - 2):\t" << *(it2 - 2));
+		LOG_GREEN("*(it1 + 2):\t" << *(it1 + 2));
+		LOG_GREEN("it2 - it1:\t" << it2 - it1);
+
+		/* these should not compile */
+		// LOG_GREEN(it2 - 2);
+		// LOG_GREEN(it1 + 2);
+		// LOG_GREEN(*(it2 - it1));
+		// LOG_GREEN(2 - it1);
+		// LOG_GREEN(*(2 - it1));
+		// LOG_GREEN(*(it1 + it2));
+		// LOG_GREEN(it1 + it2);
+
 
 	}
 	#endif
+
 	return 0;
 }

@@ -1,32 +1,32 @@
 #include "vector_tests.hpp"
 
-#define ONE			0 // push_back
-#define TWO			0 // reserve
-#define THREE		0 // reserve more tests
-#define FOUR		0 // clear
-#define FIVE		0 // get_allocator
-#define SIX			0 // pop_back
-#define SEVEN		0 // resize
-#define EIGHT		0 // resize more tests
-#define NINE		0 // member swap
-#define ELEVEN		0 // operator[]
-#define TWELVE		0 // operator=
-#define FOURTEEN	0 // non member operators (==) (!=)
-#define FIVETEEN	0 // non member operators (<) (<=)
-#define SIXTEEN		0 // non member operators (>) (>=)
-#define SEVENTEEN	0 // non member swap
-#define EIGHTEEN	0 // it operators
-#define TWENTY		0 // assign range
-#define TWENTYONE	0 // assign fill
-#define TWENTYTWO	0 // iterator tests
-#define TWENTYTHREE	0 // more iterator tests
-#define TWENTYFOUR	0 // assign
-#define TWENTYFIVE	0 // erase
-#define TWENTYSIX	0 // erase 2
+#define ONE			1 // push_back
+#define TWO			1 // reserve
+#define THREE		1 // reserve more tests
+#define FOUR		1 // clear
+#define FIVE		1 // get_allocator
+#define SIX			1 // pop_back
+#define SEVEN		1 // resize
+#define EIGHT		1 // resize more tests
+#define NINE		1 // member swap
+#define ELEVEN		1 // operator[]
+#define TWELVE		1 // operator=
+#define FOURTEEN	1 // non member operators (==) (!=)
+#define FIVETEEN	1 // non member operators (<) (<=)
+#define SIXTEEN		1 // non member operators (>) (>=)
+#define SEVENTEEN	1 // non member swap
+#define EIGHTEEN	1 // it operators
+#define TWENTY		1 // assign range
+#define TWENTYONE	1 // assign fill
+#define TWENTYTWO	1 // iterator tests
+#define TWENTYTHREE	1 // more iterator tests
+#define TWENTYFOUR	1 // assign
+#define TWENTYFIVE	1 // erase
+#define TWENTYSIX	1 // erase 2
 #define TWENTYSEVEN	1 // erase 3
-#define TWENTYEIGHT	0 // insert single element
-#define TWENTYNINE	0 // insert fill
-#define THIRTY		0 // insert range
+#define TWENTYEIGHT	1 // insert single element
+#define TWENTYNINE	1 // insert fill
+#define THIRTY		1 // insert range
 
 int	main( void )
 {
@@ -774,7 +774,7 @@ int	main( void )
 		printVectorContent(vec1);
 		std::cout << "capacity:\t" << vec1.capacity() << std::endl;
 		std::cout << "size:\t\t" << vec1.size() << std::endl;
-		std::cout << "return:\t\t" << (*ret) << std::endl;
+		std::cout << "return:\t\t" << (*(--ret)) << std::endl;
 	}
 	#endif
 
