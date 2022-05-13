@@ -36,7 +36,8 @@ class foo {
 #define THIRTYONE		0
 #define THIRTYTWO		0
 #define THIRTYTHREE		0
-#define THIRTYFOUR		1
+#define THIRTYFOUR		0
+#define THIRTYFIVE		1
 
 template <typename T>
 void	printVectorContent( TESTED_NAMESPACE::vector<T> & vector ) {
@@ -196,26 +197,20 @@ int		main(void)
 	#if THIRTYFOUR
 	{
 		TESTED_NAMESPACE::vector<TESTED_TYPE> vct;
-
 		for (size_t i = 0; i < 5; i++)
 			vct.push_back(i + 1);
-
 		printVectorContent(vct);
 
 		TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator	it1 = vct.begin();
 		TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator	it2 = vct.end();
-		// TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(vct.rbegin());
-		// TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite(vct.rend());
-
 		it1++;
 		it2 -= 2;
-
 		LOG_RED("it1:\t" << *it1);
 		LOG_RED("it2:\t" << *it2);
-
 		LOG_GREEN("*(it2 - 2):\t" << *(it2 - 2));
 		LOG_GREEN("*(it1 + 2):\t" << *(it1 + 2));
 		LOG_GREEN("it2 - it1:\t" << it2 - it1);
+		LOG_GREEN("*(1 + it1):\t" << *(1 + it1));
 
 		/* these should not compile */
 		// LOG_GREEN(it2 - 2);
@@ -225,8 +220,56 @@ int		main(void)
 		// LOG_GREEN(*(2 - it1));
 		// LOG_GREEN(*(it1 + it2));
 		// LOG_GREEN(it1 + it2);
+	}
+	#endif
 
+	#if THIRTYFIVE
+	{
+		TESTED_NAMESPACE::vector<TESTED_TYPE> vct;
+		for (size_t i = 0; i < 5; i++)
+			vct.push_back(i + 1);
+		printVectorContent(vct);
 
+		TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator	it_rbeg = vct.rbegin();
+		TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator	it_rend = vct.rend();
+		
+		--it_rend;
+		--it_rend;
+		++it_rbeg;
+		++it_rbeg;
+
+		LOG_RED("it_rbeg:\t" << *it_rbeg);
+		LOG_RED("it_rend:\t" << *it_rend);
+
+		LOG_BLACK(std::endl << "TEST1");
+		LOG_GREEN("*(it_rbeg - 1):\t" << *(it_rbeg - 1));
+		LOG_GREEN("*(it_rbeg + 1):\t" << *(it_rbeg + 1));
+		LOG_BLACK(std::endl << "TEST2");
+		LOG_GREEN("*(it_rend - 1):\t" << *(it_rend - 1));
+		LOG_GREEN("*(it_rend + 1):\t" << *(it_rend + 1));
+		
+		LOG_BLACK(std::endl << "TEST3"); 
+		LOG_GREEN("it_rbeg - it_rend:\t" << it_rbeg - it_rend);
+		LOG_GREEN("it_rend - it_rbeg:\t" << it_rend - it_rbeg);
+		LOG_BLACK(std::endl << "TEST4");
+		LOG_GREEN("*(1 + it_rbeg):\t" << *(1 + it_rbeg));
+		LOG_BLACK(std::endl << "TEST5");
+		LOG_GREEN("*(1 + it_rend):\t" << *(1 + it_rend));
+
+		/* these should not compile */
+		// LOG_GREEN("*(1 - it_rbeg):\t" << *(1 - it_rbeg));
+		// LOG_GREEN("*(1 - it_rend):\t" << *(1 - it_rend));
+		
+		
+		
+		
+		// LOG_GREEN(it2 - 2);
+		// LOG_GREEN(it1 + 2);
+		// LOG_GREEN(*(it2 - it1));
+		// LOG_GREEN(2 - it1);
+		// LOG_GREEN(*(2 - it1));
+		// LOG_GREEN(*(it1 + it2));
+		// LOG_GREEN(it1 + it2);
 	}
 	#endif
 

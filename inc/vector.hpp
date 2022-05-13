@@ -122,14 +122,14 @@ namespace ft {
 			iterator		begin() { return iterator(this->_ptr); }
 			const_iterator	begin() const { return (const_iterator(this->_ptr)); }
 
-			reverse_iterator		rbegin() { return (reverse_iterator(end() - 1)); }
-			const_reverse_iterator	rbegin() const { return (const_reverse_iterator(end() - 1)); }
+			reverse_iterator		rbegin() { return (reverse_iterator(end())); }
+			const_reverse_iterator	rbegin() const { return (const_reverse_iterator(end())); }
 
 			iterator		end() { return iterator(this->_ptr + this->_size); }
 			const_iterator	end() const { return (const_iterator(this->_ptr + this->_size)); }
 
-			reverse_iterator		rend() { return (reverse_iterator(begin() - 1)); }
-			const_reverse_iterator	rend() const { return (const_reverse_iterator(begin() - 1)); }
+			reverse_iterator		rend() { return (reverse_iterator(begin())); }
+			const_reverse_iterator	rend() const { return (const_reverse_iterator(begin())); }
 
 			reference		front() { return (this->_ptr[0]); }
 			const_reference	front() const { return (this->_ptr[0]); }
