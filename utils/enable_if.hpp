@@ -1,23 +1,17 @@
 #ifndef ENABLE_IF
 # define ENABLE_IF
 
-/*
-	resources:
-	is_integral:	https://www.cplusplus.com/reference/type_traits/is_integral/
-	enable_if:		https://www.cplusplus.com/reference/type_traits/enable_if/
-*/
-
 namespace ft {
-	// passed condition gets evaluated to either true or false
+	/* passed condition gets evaluated to either true or false */
 	template <bool Cond>
 	struct enable_if {};
 
-	// if the ft::enable_if<Cond> is true, type exists --> function gets executed
-	// else --> type doesnt exists --> other function gets executed, or error if nop matching function is found
+	/* if the ft::enable_if<Cond> is true, type exists --> function gets executed */
+	/* else --> type doesnt exists --> other function gets executed, or error if nop matching function is found */
 	template <>
 	struct enable_if<true> { typedef int type; };
 
-	// classes are false, any integrals are true
+	/* classes are false, any integrals are true */
 	template <class T>
 	struct is_integral { static const bool value = false; };
 

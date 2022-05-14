@@ -1,7 +1,7 @@
 #ifndef VECTOR_TESTS_HPP
 # define VECTOR_TESTS_HPP
 
-#include "../inc/vector.hpp"
+#include "../container/vector.hpp"
 
 #ifdef USING_STD
 	#define TESTED_NAMESPACE std

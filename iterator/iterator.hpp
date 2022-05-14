@@ -15,7 +15,6 @@ namespace ft {
 		typedef Category	iterator_category;
 	};
 
-	
 }
 
 #endif

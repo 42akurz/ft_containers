@@ -1,8 +1,6 @@
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
 
-# include "reverse_iterator.hpp"
-
 namespace ft {
 
 	template<typename Iterator>

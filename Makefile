@@ -6,12 +6,14 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC =	./src/main.cpp		\
 
-INC =	./inc/vector.hpp	\
-		./inc/iterator.hpp	\
-		./inc/iterator_traits.hpp	\
-		./inc/vector_iterator.hpp	\
-		./inc/reverse_iterator.hpp	\
-		./inc/enable_if.hpp	\
+INC =	./container/vector.hpp	\
+		./iterator/iterator.hpp	\
+		./iterator/iterator_traits.hpp	\
+		./iterator/vector_iterator.hpp	\
+		./iterator/reverse_iterator.hpp	\
+		./utils/enable_if.hpp	\
+		./utils/lexicographical_compare.hpp \
+		./utils/equal.hpp \
 
 RM = rm -f
 

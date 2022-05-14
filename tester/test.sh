@@ -8,6 +8,6 @@ clang++ -Wall -Wextra -Werror vector_tests.cpp -o my_vec
 
 rm real_vec my_vec
 
-diff real_out.txt my_out.txt
+diff real_out.txt my_out.txt > diff.txt
 
 exit 0

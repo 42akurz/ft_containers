@@ -2,9 +2,6 @@
 # define ITERATOR_TRAITS_HPP
 
 namespace ft {
-	// template <class Iterator> class iterator_traits;
-	// template <class T> class iterator_traits<T*>;
-	// template <class T> class iterator_traits<const T*>;
 
 	struct input_iterator_tag {};
 	struct output_iterator_tag {};

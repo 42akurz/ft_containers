@@ -2,7 +2,6 @@
 # define VECTOR_ITERATOR_HPP
 
 # include "iterator.hpp"
-# include "iterator_traits.hpp"
 
 namespace ft {
 
