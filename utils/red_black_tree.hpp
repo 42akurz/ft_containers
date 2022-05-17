@@ -1,10 +1,13 @@
 #ifndef RED_BLACK_TREE_HPP
 # define RED_BLACK_TREE_HPP
 
-# include "log_colors.hpp"
 # include <iostream>
 # include <memory>
 # include <queue>
+
+# include "log_colors.hpp"
+# include "tree_node.hpp"
+# include "../iterator/tree_iterator.hpp"
 
 /*
 	Rules That Every Red-Black Tree Follows: 
@@ -15,122 +18,8 @@
 	5.	All leaf nodes are black nodes. (NULL)
 */
 
-enum COLOR {
-	BLACK,
-	RED,
-};
-
 namespace ft {
- 
-	template<class T>
-	class tree_node {
 
-		public:
-			typedef		T			value_type;
-			typedef		tree_node*	node_pointer;
-
-		public:
-			value_type		val;
-			COLOR			color;
-			node_pointer	left;
-			node_pointer	right;
-			node_pointer	parent;
-		
-			tree_node( value_type val ) : val(val) {
-				parent = left = right = NULL;
-				color = RED;
-			}
-		
-			// returns pointer to uncle
-			node_pointer	uncle() {
-				// If no parent or grandparent, then no uncle
-				if (parent == NULL || parent->parent == NULL)
-					return NULL;
-				if (parent->isOnLeft()) // uncle on right
-					return parent->parent->right;
-				else // uncle on left
-					return parent->parent->left;
-			}
-		
-			// check if node is left child of parent
-			bool	isOnLeft() { return this == parent->left; }
-			
-			// returns pointer to sibling
-			node_pointer	sibling() {
-				// sibling null if no parent
-				if (parent == NULL)
-					return NULL;
-				if (isOnLeft())
-					return parent->right;
-				return parent->left;
-			}
-		
-			// moves node down and moves given node in its place
-			void	moveDown( node_pointer nParent ) {
-				if (this->parent != NULL) {
-					if (isOnLeft())
-						parent->left = nParent;
-					else
-						parent->right = nParent;
-				}
-				nParent->parent = this->parent;
-				this->parent = nParent;
-			}
-		
-			bool	hasRedChild() {
-				return ((left != NULL && left->color == RED) || (right != NULL && right->color == RED));
-			}
-
-	}; /* class tree_node */
-
-	template<class T_node, class var_type>
-	class tree_iterator {
-		public:
-			typedef ptrdiff_t						difference_type;
-			typedef T_node							value_type;
-			typedef T_node *						pointer;
-			typedef T_node &						reference;
-			typedef ft::bidirectional_iterator_tag	iterator_category;
-	
-		private:
-			pointer	_ptr;
-
-		public:
-			tree_iterator( pointer ptr = nullptr ) : _ptr(ptr) {}
-			tree_iterator( const tree_iterator &in ) : _ptr(in._ptr) {}
-			~tree_iterator() {}
-
-			tree_iterator &		operator=( const tree_iterator & in ) { this->_ptr = in.base(); return *this; }
-
-			// pointer				base() const { return _ptr; }
-
-			var_type &			operator*() { return _ptr->val; }
-
-			var_type *			operator->() { return &(operator*()); }
-	
-			tree_iterator &		operator++() {
-				if (!_ptr)
-					return *this;
-				if (_ptr->right != NULL) {
-					_ptr = _ptr->right;
-					while (_ptr->left != NULL)
-						_ptr = _ptr->left;
-				}
-				else {
-					pointer	cur;
-					cur = _ptr->parent;
-					while (cur != NULL && cur->right == _ptr) {
-						_ptr = cur;
-						cur = _ptr->parent;
-					}
-					_ptr = cur;
-				}
-				return *this;
-			}
-	
-	
-	}; /* class tree_iterator */
-		
 	template< class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 	class RBTree {
 		public:
@@ -153,8 +42,10 @@ namespace ft {
 			}
 
 		public:
-			node_pointer	_root;
-			value_compare	_compare;
+			node_pointer		_end;
+			node_pointer		_root;
+			value_compare		_compare;
+			node_allocator_type	_alloc_node;
 			
 			// left rotates the given node
 			void	leftRotate( node_pointer x ) {
@@ -329,7 +220,8 @@ namespace ft {
 							parent->right = NULL;
 						}
 					}
-					delete v;
+					// delete v; // TODO: delete line
+					_alloc_node.deallocate(v, 1);
 					return;
 				}
 			
@@ -484,7 +376,11 @@ namespace ft {
 		public:
 			// constructor
 			// initialize root
-			RBTree() { _root = NULL; }
+			RBTree() {
+				_root = NULL;
+				// _end = _alloc_node.allocate(1);
+				// _end->left = _root;
+			}
 			
 			node_pointer	getRoot() { return _root; }
 			
@@ -515,7 +411,9 @@ namespace ft {
 			
 			// inserts the given value to tree
 			void	insert( value_type n ) {
-				node_pointer	newNode = new Node(n);
+				node_pointer	newNode = _alloc_node.allocate(1);
+				newNode->val = n;
+				// node_pointer	newNode = new Node(n); // TODO: delete line
 				if (_root == NULL) {
 					// when root is null
 					// simply insert value at root
@@ -557,7 +455,7 @@ namespace ft {
 				// node_pointer	u;
 			
 				if (v->val != n) {
-					std::cout << "No node found to delete with value:" << n << std::endl;
+					std::cout << "No node found to delete with value:" << std::endl;
 					return;
 				}
 			
@@ -587,95 +485,5 @@ namespace ft {
 			}
 	}; /* class tree */
 } /* namespace ft */
-
-// namespace ft {
-
-// 	template<class T>
-// 	struct tree_node {
-// 		T			data;
-// 		tree_node	*left;
-// 		tree_node	*right;
-// 		tree_node	*parent;
-// 		bool		color;
-// 	};
-
-// 	template< class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
-// 	class tree {
-
-// 		public:
-// 			typedef				T										value_type;
-// 			typedef				tree_node<value_type>					node;
-// 			typedef				tree_node<value_type> *					node_pointer;
-// 			typedef				Alloc									allocator_type;
-// 			typedef typename	Alloc::template rebind<node>::other		node_allocator_type;
-// 			typedef				Compare									value_compare;
-
-// 		public: // TODO: make private
-// 			node_pointer		_root;
-// 			allocator_type		_alloc;
-// 			node_allocator_type	_node_alloc;
-// 			value_compare		_compare;
-
-// 		public:
-// 			tree() { this->_root = nullptr; }
-// 			~tree() {}
-
-// 			// void	printTree( node_pointer current ) {
-// 			// 	if (current == nullptr) {
-// 			// 		std::cout << "\033[1;34m" << "NULL" << "\033[0m";
-// 			// 		return ;
-// 			// 	}
-// 			// 	if (current->color == BLACK)
-// 			// 		std::cout << "\033[1;30m" << current->data << "\033[0m";
-// 			// 	if (current->color == RED)
-// 			// 		std::cout << "\033[1;31m" << current->data << "\033[0m";
-// 			// 	printTree(current->left);
-// 			// 	std::cout << "\t\t";
-// 			// 	printTree(current->right);
-// 			// 	std::cout << std::endl;
-// 			// }
-
-// 			node_pointer	createNode( value_type in ) {
-// 				node_pointer	newNode = _node_alloc.allocate(1);
-// 				newNode->data = in;
-// 				newNode->color = RED;
-// 				newNode->left = nullptr;
-// 				newNode->right = nullptr;
-// 				newNode->parent = nullptr;
-// 				return newNode;
-// 			}
-
-// 			void	insert( value_type in ) {
-// 				node_pointer	newNode = createNode(in);
-// 				if (_root == nullptr) {
-// 					newNode->color = BLACK;
-// 					_root = newNode;
-// 				}
-// 				else {
-// 					node_pointer	finder = _root;
-// 					while (true) {
-// 						if (!_compare(newNode->data, finder->data)) {
-// 							if (finder->right == NULL) {
-// 								newNode->parent = finder;
-// 								finder->right = newNode;
-// 								return ;
-// 							}
-// 							else { finder = finder->right; }
-// 						}
-// 						if (_compare(newNode->data, finder->data)) {
-// 							if (finder->left == NULL) {
-// 								newNode->parent = finder;
-// 								finder->left = newNode;
-// 								return ;
-// 							}
-// 							else { finder = finder->left; }
-// 						}
-// 					}
-// 				}
-// 			}
-
-// 	}; /* class tree */
-
-// } /* namespace ft */
 
 #endif

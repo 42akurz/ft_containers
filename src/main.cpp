@@ -45,6 +45,28 @@ int	main()
 	std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
 	std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
 
+	tree.deleteByVal(ft::pair<int, char>(17, 'j'));
+	tree.deleteByVal(ft::pair<int, char>(8, 'e'));
+	it = tree.begin();
+	std::cout << std::endl;
+
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	std::cout << (it)->first << "\t|\t" << it->second << std::endl;
+	// std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	// std::cout << (it++)->first << "\t|\t" << it->second << std::endl;
+	// std::cout << (it)->first << "\t|\t" << it->second << std::endl;
+
+	// system("leaks containers");
 
 
 	return 0;

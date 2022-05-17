@@ -17,6 +17,8 @@ INC =	./container/vector.hpp	\
 		./utils/pair.hpp \
 		./container/map.hpp	\
 		./utils/red_black_tree.hpp \
+		./utils/tree_node.hpp \
+		./iterator/tree_iterator.hpp \
 
 RM = rm -f
 
