@@ -14,6 +14,9 @@ INC =	./container/vector.hpp	\
 		./utils/enable_if.hpp	\
 		./utils/lexicographical_compare.hpp \
 		./utils/equal.hpp \
+		./utils/pair.hpp \
+		./container/map.hpp	\
+		./utils/red_black_tree.hpp \
 
 RM = rm -f
 
