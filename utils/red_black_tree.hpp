@@ -8,6 +8,7 @@
 # include "log_colors.hpp"
 # include "tree_node.hpp"
 # include "../iterator/tree_iterator.hpp"
+# include "../iterator/tree_reverse_iterator.hpp"
 
 /*
 	Rules That Every Red-Black Tree Follows: 
@@ -31,6 +32,7 @@ namespace ft {
 			typedef				Compare									value_compare;
 
 			typedef				ft::tree_iterator<Node, value_type>		iterator;
+			typedef				ft::tree_reverse_iterator<iterator>		reverse_iterator;
 
 			iterator	begin() {
 				if (_root == NULL)
@@ -41,8 +43,23 @@ namespace ft {
 				return iterator(tmp);
 			}
 
+			iterator	end() {
+				if (_root == NULL)
+					return _root;
+				return &_end;
+			}
+
+			reverse_iterator	rbegin() {
+				if (_root == NULL)
+					return reverse_iterator(_root);
+				node_pointer	tmp = _root;
+				while (tmp->right != NULL)
+					tmp = tmp->right;
+				return reverse_iterator(tmp);
+			}
+
 		public:
-			node_pointer		_end;
+			Node				_end;
 			node_pointer		_root;
 			value_compare		_compare;
 			node_allocator_type	_alloc_node;
@@ -378,8 +395,6 @@ namespace ft {
 			// initialize root
 			RBTree() {
 				_root = NULL;
-				// _end = _alloc_node.allocate(1);
-				// _end->left = _root;
 			}
 			
 			node_pointer	getRoot() { return _root; }
@@ -413,12 +428,16 @@ namespace ft {
 			void	insert( value_type n ) {
 				node_pointer	newNode = _alloc_node.allocate(1);
 				newNode->val = n;
+				newNode->color = RED;
 				// node_pointer	newNode = new Node(n); // TODO: delete line
 				if (_root == NULL) {
 					// when root is null
 					// simply insert value at root
 					newNode->color = BLACK;
 					_root = newNode;
+					_root->parent = &_end;
+					_end.left = _root;
+					_end.right = NULL;
 				}
 				else {
 					node_pointer	temp = search(n);
@@ -460,6 +479,7 @@ namespace ft {
 				}
 			
 				deleteNode(v);
+				_end->left = _root;
 			}
 			
 			// prints inorder of the tree

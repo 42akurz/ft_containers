@@ -11,6 +11,7 @@ namespace ft {
 				typedef T_node *						pointer;
 				typedef T_node &						reference;
 				typedef ft::bidirectional_iterator_tag	iterator_category;
+				typedef var_type						variable_type;
 		
 			private:
 				pointer	_ptr;
@@ -24,9 +25,9 @@ namespace ft {
 
 				pointer				base() const { return _ptr; }
 
-				var_type &			operator*() { return _ptr->val; }
+				variable_type &			operator*() { return _ptr->val; }
 
-				var_type *			operator->() { return &(operator*()); }
+				variable_type *			operator->() { return &(operator*()); }
 		
 				tree_iterator &		operator++() {
 					if (!_ptr)
@@ -48,12 +49,45 @@ namespace ft {
 					return *this;
 				}
 
+				tree_iterator &		operator--() {
+					if (!_ptr)
+						return *this;
+					if (_ptr->left != NULL) {
+						_ptr = _ptr->left;
+						while (_ptr->right != NULL)
+							_ptr = _ptr->right;
+					}
+					else {
+						pointer	cur;
+						cur = _ptr->parent;
+						while (cur != NULL && cur->left == _ptr) {
+							_ptr = cur;
+							cur = _ptr->parent;
+						}
+						_ptr = cur;
+					}
+					return *this;
+				}
+
 				tree_iterator		operator++(int) {
 					tree_iterator	temp = *this;
 					++(*this);
 					return temp;
 				}
 		
+				tree_iterator		operator--(int) {
+					tree_iterator	temp = *this;
+					--(*this);
+					return temp;
+				}
+
+				bool		operator==( const tree_iterator & in ) {
+					return (this->base() == in.base());
+				}
+		
+				bool		operator!=( const tree_iterator & in ) {
+					return (this->base() != in.base());
+				}
 		
 		}; /* class tree_iterator */
 } /* namespace ft */
