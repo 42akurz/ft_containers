@@ -19,6 +19,7 @@ INC =	./container/vector.hpp	\
 		./utils/red_black_tree.hpp \
 		./utils/tree_node.hpp \
 		./iterator/tree_iterator.hpp \
+		./iterator/tree_reverse_iterator.hpp \
 
 RM = rm -f
 

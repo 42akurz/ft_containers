@@ -18,16 +18,17 @@ namespace ft {
 
 			public:
 				tree_reverse_iterator( Iterator it = nullptr ) : _it(it) {}
-				tree_reverse_iterator( const tree_reverse_iterator &in ) : _it(in._it) {}
+				template<class Iter>
+				tree_reverse_iterator( const tree_reverse_iterator<Iter> &in ) : _it(in._it) {}
 				~tree_reverse_iterator() {}
 
 				tree_reverse_iterator &		operator=( const tree_reverse_iterator & in ) { this->_it = in.base(); return *this; }
 
 				Iterator					base() const { return _it; }
 
-				variable_type &					operator*() { return (*_it); }
+				variable_type &				operator*() { Iterator temp(_it); --temp; return (*temp); }
 
-				variable_type *					operator->() { return &(operator*()); }
+				variable_type *				operator->() { Iterator temp(_it); --temp; return temp.operator->(); }
 		
 				tree_reverse_iterator &		operator++() {
 					--(_it);

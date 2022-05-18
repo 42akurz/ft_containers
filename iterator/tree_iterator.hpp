@@ -21,6 +21,8 @@ namespace ft {
 				tree_iterator( const tree_iterator &in ) : _ptr(in._ptr) {}
 				~tree_iterator() {}
 
+				operator			tree_iterator<value_type, variable_type> () const { return tree_iterator<value_type, const variable_type>(this->_ptr); }
+
 				tree_iterator &		operator=( const tree_iterator & in ) { this->_ptr = in.base(); return *this; }
 
 				pointer				base() const { return _ptr; }

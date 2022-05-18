@@ -31,10 +31,41 @@ namespace ft {
 			typedef typename	Alloc::template rebind<Node>::other		node_allocator_type;
 			typedef				Compare									value_compare;
 
-			typedef				ft::tree_iterator<Node, value_type>		iterator;
-			typedef				ft::tree_reverse_iterator<iterator>		reverse_iterator;
+			typedef				ft::tree_iterator<Node, value_type>				iterator;
+			typedef				ft::tree_reverse_iterator<iterator>					reverse_iterator;
+			typedef				ft::tree_iterator<Node, const value_type>		const_iterator;
+			typedef				ft::tree_reverse_iterator<const_iterator>			const_reverse_iterator;
 
-			iterator	begin() {
+
+			reverse_iterator 		rbegin() {
+				return reverse_iterator(end());
+			}
+
+			const_reverse_iterator	rbegin() const {
+				return const_reverse_iterator(end());
+			}
+
+			reverse_iterator		rend() {
+				return reverse_iterator(begin());
+			}
+
+			const_reverse_iterator	rend() const {
+				return const_reverse_iterator(begin());
+			}
+
+			iterator				end() {
+				if (_root == NULL)
+					return iterator(_root);
+				return iterator(&_end);
+			}
+
+			const_iterator			end() const {
+				if (_root == NULL)
+					return const_iterator(_root);
+				return const_iterator(&_end);
+			}
+
+			iterator				begin() {
 				if (_root == NULL)
 					return iterator(_root);
 				node_pointer	tmp = _root;
@@ -43,26 +74,55 @@ namespace ft {
 				return iterator(tmp);
 			}
 
-			iterator	end() {
+			const_iterator			begin() const {
 				if (_root == NULL)
-					return _root;
-				return &_end;
+					return const_iterator(_root);
+				node_pointer	tmp = _root;
+				while (tmp->left != NULL)
+					tmp = tmp->left;
+				return const_iterator(tmp);
 			}
 
-			reverse_iterator	rbegin() {
-				if (_root == NULL)
-					return reverse_iterator(_root);
-				node_pointer	tmp = _root;
-				while (tmp->right != NULL)
-					tmp = tmp->right;
-				return reverse_iterator(tmp);
-			}
+			// iterator	begin() {
+			// 	if (_root == NULL)
+			// 		return iterator(_root);
+			// 	node_pointer	tmp = _root;
+			// 	while (tmp->left != NULL)
+			// 		tmp = tmp->left;
+			// 	return iterator(tmp);
+			// }
+
+			// iterator	end() {
+			// 	if (_root == NULL)
+			// 		return _root;
+			// 	return &_end;
+			// }
+
+			// reverse_iterator	rbegin() {
+			// 	return reverse_iterator(end());
+			// }
+
+			// reverse_iterator	rend() {
+			// 	return reverse_iterator(begin());
+			// }
 
 		public:
 			Node				_end;
 			node_pointer		_root;
 			value_compare		_compare;
 			node_allocator_type	_alloc_node;
+
+			void	print_rb_tree(const std::string & prefix, node_pointer x, bool isleft) const
+			{
+				if (x)
+				{
+					std::cout << prefix;
+					std::cout << (isleft ? "├──" : "└──");
+					std::cout << x->val.first << (x->color == BLACK ? " black" : " red" ) << std::endl;
+					print_rb_tree(prefix + (isleft ? "│   " : "    "), x->left, true);
+					print_rb_tree(prefix + (isleft ? "│   " : "    "), x->right, false);
+				}
+			}
 			
 			// left rotates the given node
 			void	leftRotate( node_pointer x ) {
