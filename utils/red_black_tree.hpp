@@ -21,15 +21,22 @@
 
 namespace ft {
 
-	template< class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
+	template< class Key, class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 	class RBTree {
 		public:
-			typedef				T														value_type;
+			typedef				Key														key_type;
+			typedef				T														mapped_type;
+			typedef				ft::pair<key_type, mapped_type>							value_type;
+
+			typedef				std::allocator<value_type>								pair_allocator_type;
+
 			typedef				tree_node<value_type>									Node;
 			typedef				tree_node<value_type> *									node_pointer;
+
 			typedef				Alloc													allocator_type;
 			typedef typename	Alloc::template rebind<Node>::other						node_allocator_type;
 			typedef				Compare													value_compare;
+
 			typedef				ft::tree_iterator<Node, value_type>						iterator;
 			typedef				ft::tree_reverse_iterator<iterator>						reverse_iterator;
 			typedef				ft::tree_iterator<Node, const value_type, value_type>	const_iterator;
@@ -77,6 +84,7 @@ namespace ft {
 			node_pointer			_root;
 			value_compare			_compare;
 			node_allocator_type		_alloc_node;
+			pair_allocator_type		_alloc_pair;
 
 			void	print_rb_tree(const std::string & prefix, node_pointer x, bool isleft) const {
 				if (x) {
@@ -404,13 +412,12 @@ namespace ft {
 						q.push(curr->right);
 				}
 			}
-			
-			// prints inorder recursively
+
 			void	inorder( node_pointer x ) {
 				if (x == NULL)
 					return;
 				inorder(x->left);
-				std::cout << x->val << " ";
+				std::cout << x->val.first <<  "/" << x->val.second << std::endl;
 				inorder(x->right);
 			}
 		
@@ -451,9 +458,9 @@ namespace ft {
 			// inserts the given value to tree
 			void	insert( value_type n ) {
 				node_pointer	newNode = _alloc_node.allocate(1);
-				newNode->val = n;
+				_alloc_pair.construct(&newNode->val, n);
+				// newNode->val = n;
 				newNode->color = RED;
-				// node_pointer	newNode = new Node(n); // TODO: delete line
 				if (_root == NULL) {
 					// when root is null
 					// simply insert value at root

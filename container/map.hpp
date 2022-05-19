@@ -22,20 +22,24 @@ namespace ft {
 				typedef 			Key										key_type;
 				typedef 			T										mapped_type;
 				typedef typename	ft::pair<const key_type, mapped_type>	value_type;
-				typedef				Compare									key_compare;		// The third template parameter (Compare)	defaults to: less<key_type>
-				// value_compare																// Nested function class to compare elements	see value_comp
+
+				typedef				Compare									key_compare;		// The third template parameter (Compare)	defaults to: less<key_type>															// Nested function class to compare elements	see value_comp
 				typedef				Alloc									allocator_type;		// The fourth template parameter (Alloc)	defaults to: allocator<value_type>
+				
 				typedef typename	allocator_type::reference				reference;
 				typedef typename	allocator_type::const_reference			const_reference;
 				typedef typename	allocator_type::pointer					pointer;
 				typedef typename	allocator_type::const_pointer			const_pointer;
-				// iterator																	// a bidirectional iterator to value_type	convertible to const_iterator
-				// const_iterator															// a bidirectional iterator to const value_type	
-				// reverse_iterator	reverse_iterator<iterator>	
-				// const_reverse_iterator	reverse_iterator<const_iterator>	
+				
 				// typedef typename	ft::iterator_traits<iterator>::difference_type		difference_type		// a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
 				// size_type																// an unsigned integral type that can represent any non-negative value of difference_type
-				typedef				ft::RBTree<value_type>					RBTree;
+				
+				typedef				ft::RBTree<const key_type, mapped_type>					RBTree;
+
+				typedef typename	RBTree::iterator						iterator;
+				typedef typename	RBTree::const_iterator					const_iterator;
+				typedef typename	RBTree::reverse_iterator				reverse_iterator;
+				typedef typename	RBTree::const_reverse_iterator			const_reverse_iterator;
 
 			private:
 				// allocator_type	_alloc;
@@ -53,6 +57,19 @@ namespace ft {
 					(void)alloc;
 				}
 
+				iterator begin () {
+					return tree.begin();
+				}
+
+
+				pair<iterator,bool> insert (const value_type& val) {
+					tree.insert(val);
+					return ft::make_pair<iterator, bool>(tree.begin(), true);
+				}
+
+				void	print() {
+					tree.printInOrder();
+				}
 				/* range */
 				// template <class InputIterator>
 				// map( InputIterator first, InputIterator last,

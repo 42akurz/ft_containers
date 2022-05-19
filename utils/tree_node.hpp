@@ -1,6 +1,8 @@
 #ifndef TREE_NODE_HPP
 # define TREE_NODE_HPP
 
+#include <memory>
+
 enum COLOR {
 	BLACK,
 	RED,
