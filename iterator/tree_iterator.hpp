@@ -3,7 +3,7 @@
 
 namespace ft {
 
-	template<class T_node, class var_type>
+	template<class T_node, class var_type , class var_type_no_const = var_type>
 		class tree_iterator {
 			public:
 				typedef ptrdiff_t						difference_type;
@@ -17,19 +17,23 @@ namespace ft {
 				pointer	_ptr;
 
 			public:
+				/* default */
 				tree_iterator( pointer ptr = nullptr ) : _ptr(ptr) {}
+
+				/* copy */
 				tree_iterator( const tree_iterator &in ) : _ptr(in._ptr) {}
+
+				/* copy from non-const to const */
+				tree_iterator( tree_iterator<value_type, var_type_no_const, var_type_no_const> in ) : _ptr(in.base()) {}
+
+				/* destructor */
 				~tree_iterator() {}
-
-				operator			tree_iterator<value_type, variable_type> () const { return tree_iterator<value_type, const variable_type>(this->_ptr); }
-
-				tree_iterator &		operator=( const tree_iterator & in ) { this->_ptr = in.base(); return *this; }
 
 				pointer				base() const { return _ptr; }
 
-				variable_type &			operator*() { return _ptr->val; }
-
-				variable_type *			operator->() { return &(operator*()); }
+				tree_iterator &		operator=( const tree_iterator & in ) { this->_ptr = in.base(); return *this; }
+				variable_type &		operator*() { return _ptr->val; }
+				variable_type *		operator->() { return &(operator*()); }
 		
 				tree_iterator &		operator++() {
 					if (!_ptr)

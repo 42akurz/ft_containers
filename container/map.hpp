@@ -6,8 +6,9 @@
 # include <memory>
 # include <exception>
 
-# include "../utils/log_colors.hpp"
+// # include "../utils/log_colors.hpp"
 # include "../utils/pair.hpp"
+# include "../utils/red_black_tree.hpp"
 
 namespace ft {
 
@@ -34,20 +35,22 @@ namespace ft {
 				// const_reverse_iterator	reverse_iterator<const_iterator>	
 				// typedef typename	ft::iterator_traits<iterator>::difference_type		difference_type		// a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
 				// size_type																// an unsigned integral type that can represent any non-negative value of difference_type
+				typedef				ft::RBTree<value_type>					RBTree;
 
 			private:
-				allocator_type	_alloc;
-				pointer			_ptr;
-				size_t			_capacity;
+				// allocator_type	_alloc;
+				// pointer			_ptr;
+				// size_t			_capacity;
+				RBTree				tree;
 
 
 			public:
 				/* empty */
 				explicit map( const key_compare& comp = key_compare(),
 							const allocator_type& alloc = allocator_type() ) {
-					_alloc = alloc;
+					tree = RBTree();
 					(void)comp;
-					_ptr = nullptr;
+					(void)alloc;
 				}
 
 				/* range */

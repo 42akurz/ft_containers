@@ -2,14 +2,19 @@
 #include "../container/map.hpp"
 #include "../utils/red_black_tree.hpp"
 
+#include <map>
+
 #define TESTED_TYPE			std::string
 #define TESTED_NAMESPACE	ft
 
 #define TEST1	0
 #define TEST2	0
 #define TEST3	0
-#define TEST4	1
+#define TEST4	0
 #define TEST5	0
+#define TEST6	0
+#define TEST7	0
+#define TEST8	1
 
 int	main()
 {
@@ -130,23 +135,71 @@ int	main()
 
 	#if TEST5
 	{
-		ft::RBTree<const ft::pair<int, char> >::const_iterator	begin = tree.begin();
-		ft::RBTree<const ft::pair<int, char> >::const_iterator	end = tree.end();
+		ft::RBTree<ft::pair<int, char> >::const_iterator	begin = tree.begin();
+		ft::RBTree<ft::pair<int, char> >::const_iterator	end = tree.end();
 
 		for ( ; begin != end; begin++)
-			LOG_RED(begin->first << "\t|\t" << begin->second);
+			LOG_RED(begin->first << " | " << begin->second);
 
 		begin = tree.begin();
 		std::cout << std::endl;
 
 		--end;
 		for ( ; end != begin; end--)
-			LOG_BLUE(end->first << "\t|\t" << end->second);
-		LOG_BLUE(end->first << "\t|\t" << end->second);
+			LOG_BLUE(end->first << " | " << end->second);
+		LOG_BLUE(end->first << " | " << end->second);
 
-		end->first = 42;
+		// end->first = 42;
 
-		LOG_BLUE(end->first << "\t|\t" << end->second);
+	}
+	#endif
+
+	#if TEST6
+	{
+		ft::RBTree<ft::pair<int, char> >::const_reverse_iterator	rbegin = tree.rbegin();
+		ft::RBTree<ft::pair<int, char> >::const_reverse_iterator	rend = tree.rend();
+
+		for ( ; rbegin != rend; rbegin++)
+			LOG_RED(rbegin->first << "\t|\t" << rbegin->second);
+
+		rbegin = tree.rbegin();
+		std::cout << std::endl;
+
+		--rend;
+		for ( ; rend != rbegin; rend--)
+			LOG_BLUE(rend->first << "\t|\t" << rend->second);
+		LOG_BLUE(rend->first << "\t|\t" << rend->second);
+
+	}
+	#endif
+
+	#if TEST7
+	{
+		const ft::RBTree<ft::pair<int,char> > test2(tree);
+
+		ft::RBTree<ft::pair<int,char> >::const_iterator start_const = test2.begin();
+		ft::RBTree<ft::pair<int,char> >::const_iterator end_const = test2.end();
+
+
+		for ( ; start_const != end_const; start_const++) {
+			LOG_RED(start_const->first << " | " << start_const->second);
+		}
+
+		start_const = test2.begin();
+		std::cout << std::endl;
+
+		--end_const;
+		for ( ; end_const != start_const; end_const--)
+			LOG_BLUE(end_const->first << " | " << end_const->second);
+		LOG_BLUE(end_const->first << " | " << end_const->second);
+
+	}
+	#endif
+
+	#if TEST8
+	{
+		ft::map<int, char>	mp;
+
 	}
 	#endif
 
