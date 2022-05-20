@@ -428,6 +428,11 @@ namespace ft {
 				_root = NULL;
 			}
 			
+
+			void			erase( iterator position ){
+				deleteByVal(*position);
+			}
+
 			node_pointer	getRoot() { return _root; }
 			
 			// searches for given value
@@ -456,7 +461,7 @@ namespace ft {
 			}
 			
 			// inserts the given value to tree
-			void	insert( value_type n ) {
+			ft::pair<iterator, bool>	insert( value_type n ) {
 				node_pointer	newNode = _alloc_node.allocate(1);
 				_alloc_pair.construct(&newNode->val, n);
 				// newNode->val = n;
@@ -475,7 +480,7 @@ namespace ft {
 				
 					if (temp->val == n) {
 						// return if value already exists
-						return;
+						return (ft::make_pair<iterator, bool>(iterator(temp), false));
 					}
 				
 					// if value is not found, search returns the node
@@ -492,6 +497,7 @@ namespace ft {
 					// fix red red voilaton if exists
 					fixRedRed(newNode);
 				}
+				return (ft::make_pair<iterator, bool>(iterator(newNode), true));
 			}
 			
 			// utility function that deletes the node with given value

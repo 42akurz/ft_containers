@@ -1,6 +1,8 @@
 #ifndef PAIR_HPP
 # define PAIR_HPP
 
+# include <memory>
+
 namespace ft {
 
 	template <class T1, class T2> // TODO: missing some operators in pair struct
@@ -9,6 +11,14 @@ namespace ft {
 			typedef T1	first_type;
 			typedef T2	second_type;
 
+		private:
+			typedef std::allocator<first_type>	alloctor_first;
+			typedef std::allocator<second_type>	alloctor_second;
+
+			alloctor_first	_alloc_first;
+			alloctor_second	_alloc_second;
+
+		public:
 			first_type	first;
 			second_type	second;
 
@@ -26,8 +36,11 @@ namespace ft {
 			~pair() {}
 
 			/* assign */
-			/* TODO: fix this hit*/
-			pair &	operator=( const pair& pr ) { /* this->first = pr.first; */ this->second = pr.second; return *this;}
+			pair &	operator=( const pair& pr ) {
+				_alloc_first.construct(&this->first, pr.first);
+				_alloc_second.construct(&this->second, pr.second);
+				return *this;
+			}
 	};
 
 	template <class T1, class T2>
