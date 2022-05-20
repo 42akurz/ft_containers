@@ -22,7 +22,7 @@ namespace ft {
 				typedef 			T										mapped_type;
 				typedef typename	ft::pair<const key_type, mapped_type>	value_type;
 
-				typedef				Compare									key_compare;		// The third template parameter (Compare)	defaults to: less<key_type>															// Nested function class to compare elements	see value_comp
+				typedef				Compare									key_compare;		// The third template parameter (Compare)	defaults to: less<key_type>
 				typedef				Alloc									allocator_type;		// The fourth template parameter (Alloc)	defaults to: allocator<value_type>
 
 				typedef typename	allocator_type::reference				reference;
@@ -30,8 +30,8 @@ namespace ft {
 				typedef typename	allocator_type::pointer					pointer;
 				typedef typename	allocator_type::const_pointer			const_pointer;
 				
-				// typedef typename	ft::iterator_traits<iterator>::difference_type		difference_type		// a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
-				// size_type																// an unsigned integral type that can represent any non-negative value of difference_type
+				typedef				ptrdiff_t								difference_type;	// a signed integral type, identical to: iterator_traits<iterator>::difference_type	usually the same as ptrdiff_t
+				typedef				size_t									size_type;			// an unsigned integral type that can represent any non-negative value of difference_type
 				
 				typedef				ft::RBTree<const key_type, mapped_type>	RBTree;
 
@@ -181,10 +181,18 @@ namespace ft {
 					tree.erase(position);
 				}
 
-				 void	erase( iterator first, iterator last ) {
-					for (; first != last; first++)
-						tree.erase(first);
-				 }
+				size_type	erase( const key_type& k ) {
+					iterator it = find(k);
+					if (it == end())
+						return 0;
+					erase(it);
+					return 1;
+				}
+
+				void	erase( iterator first, iterator last ) {
+					while (first != last)
+						erase(first++);
+				}
 
 	};
 }

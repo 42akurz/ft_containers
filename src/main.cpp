@@ -362,7 +362,9 @@ int	main()
 
 		// mp.erase(b);
 
-		mp.erase(mp.begin(), mp.end());
+		// mp.erase(mp.begin(), mp.end());
+
+		mp.erase(43);
 
 		std::cout << std::endl;
 		LOG_GREEN("AFTER ERASE");

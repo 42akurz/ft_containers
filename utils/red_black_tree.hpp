@@ -424,14 +424,9 @@ namespace ft {
 		public:
 			// constructor
 			// initialize root
-			RBTree() {
-				_root = NULL;
-			}
+			RBTree() { _root = NULL; }
 			
-
-			void			erase( iterator position ){
-				deleteByVal(*position);
-			}
+			void			erase( iterator position ){ deleteByVal(*position); }
 
 			node_pointer	getRoot() { return _root; }
 			
