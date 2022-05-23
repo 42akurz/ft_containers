@@ -1,11 +1,80 @@
 #include "../container/vector.hpp"
 #include "../container/map.hpp"
 #include "../utils/red_black_tree.hpp"
+#include "../containers_test/srcs/base.hpp"
 
 #include <map>
 
-#define TESTED_TYPE			std::string
 #define TESTED_NAMESPACE	ft
+
+#define T1 int
+#define T2 std::string
+typedef TESTED_NAMESPACE::map<T1, T2>::value_type T3;
+typedef TESTED_NAMESPACE::map<T1, T2>::iterator iterator;
+
+#define _pair TESTED_NAMESPACE::pair
+
+static int iter = 0;
+
+template <typename T>
+std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
+{
+	o << "key: " << iterator->first << " | value: " << iterator->second;
+	if (nl)
+		o << std::endl;
+	return ("");
+}
+
+template <typename T_MAP>
+void	printSize(T_MAP const &mp, bool print_content = 1)
+{
+	std::cout << "size: " << mp.size() << std::endl;
+	std::cout << "max_size: " << mp.max_size() << std::endl;
+	if (print_content)
+	{
+		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << printPair(it, false) << std::endl;
+	}
+	std::cout << "###############################################" << std::endl;
+}
+
+template <typename T89, typename T99>
+void	printReverse(TESTED_NAMESPACE::map<T89, T99> &mp)
+{
+	typename TESTED_NAMESPACE::map<T89, T99>::iterator it = mp.end(), ite = mp.begin();
+
+	std::cout << "printReverse:" << std::endl;
+	while (it != ite) {
+		it--;
+		std::cout << "-> " << printPair(it, false) << std::endl;
+	}
+	std::cout << "_______________________________________________" << std::endl;
+}
+
+template <typename MAP, typename U>
+void	ft_insert(MAP &mp, U param)
+{
+	_pair<iterator, bool> tmp;
+
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	tmp = mp.insert(param);
+	std::cout << "insert return: " << printPair(tmp.first);
+	std::cout << "Created new node: " << tmp.second << std::endl;
+	printSize(mp);
+}
+
+template <typename MAP, typename U, typename V>
+void	ft_insert(MAP &mp, U param, V param2)
+{
+	iterator tmp;
+
+	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+	tmp = mp.insert(param, param2);
+	std::cout << "insert return: " << printPair(tmp);
+	printSize(mp);
+}
 
 /* START tree tests --------------- */
 #define TEST1	0
@@ -24,7 +93,10 @@
 #define TEST11	0 /* find and bounds */
 #define TEST12	0 /* erase */
 #define TEST13	0 /* copy construct / assign */
-#define TEST14	1 /* insert hint */
+#define TEST14	0 /* insert hint */
+#define TEST15	0 /* count */
+#define TEST16	0 /* TESTER */
+#define TEST17	1 /* size problems */
 /* END map tests ------------------ */
 
 int	main()
@@ -445,7 +517,87 @@ int	main()
 	}
 	#endif
 
+	/* count */
+	#if TEST15
+	{
+		ft::map<int, char>	mp;
 
+		mp.insert(ft::make_pair(1, 'b'));
+		mp.insert(ft::make_pair(10, 'g'));
+		mp.insert(ft::make_pair(5, 'x'));
+		mp.insert(ft::make_pair(20, 'k'));
+		mp.insert(ft::make_pair(3, 'b'));
+		mp.insert(ft::make_pair(8, 'e'));
+		mp.insert(ft::make_pair(15, 'i'));
+		mp.insert(ft::make_pair(25, 'm'));
+		mp.insert(ft::make_pair(4, 'c'));
+		mp.insert(ft::make_pair(6, 'd'));
+		mp.insert(ft::make_pair(9, 'f'));
+		mp.insert(ft::make_pair(12, 'h'));
+		mp.insert(ft::make_pair(17, 'j'));
+		mp.insert(ft::make_pair(21, 'l'));
+		mp.insert(ft::make_pair(30, 'n'));
+
+		mp.printTree();
+
+		LOG_GREEN(mp.count(42));
+	}
+	#endif
+
+	/* TESTER */
+	#if TEST16
+	{
+		std::list<T3> lst;
+		unsigned int lst_size = 7;
+		for (unsigned int i = 0; i < lst_size; ++i)
+			lst.push_back(T3('a' + i, lst_size - i));
+
+		ft::map<T1, T2> mp(lst.begin(), lst.end()), mp2;
+		ft::map<T1, T2>::iterator it;
+
+		lst.clear();
+		is_empty(mp);
+		mp.printTree();
+		printSize(mp);
+
+		// is_empty(mp2);
+		// mp2 = mp;
+		// is_empty(mp2);
+
+		// it = mp.begin();
+		// for (unsigned long int i = 3; i < mp.size(); ++i)
+		// 	it++->second = i * 7;
+
+		// printSize(mp);
+		// printSize(mp2);
+
+		// mp2.clear();
+		// is_empty(mp2);
+		// printSize(mp2);
+	}
+	#endif
+
+	/* size problems */
+	#if TEST17
+	{
+		TESTED_NAMESPACE::map<T1, T2> mp, mp2;
+
+		// ft_insert(mp, T3(42, "lol"));
+		// ft_insert(mp, T3(42, "mdr"));
+
+		// ft_insert(mp, T3(50, "mdr"));
+		// ft_insert(mp, T3(35, "funny"));
+
+		// ft_insert(mp, T3(45, "bunny"));
+		// ft_insert(mp, T3(21, "fizz"));
+		// ft_insert(mp, T3(38, "buzz"));
+
+		// ft_insert(mp, mp.begin(), T3(55, "fuzzy"));
+		ft_insert(mp2, mp2.begin(), T3(1337, "beauty"));
+		ft_insert(mp2, mp2.end(), T3(1000, "Hello"));
+		ft_insert(mp2, mp2.end(), T3(1500, "World"));
+	}
+	#endif
 
 	return 0;
 }

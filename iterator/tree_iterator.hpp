@@ -1,6 +1,8 @@
 #ifndef TREE_ITERATOR_HPP
 # define TREE_ITERATOR_HPP
 
+# include "iterator.hpp"
+
 namespace ft {
 
 	template<class T_node, class var_type , class var_type_no_const = var_type>
@@ -32,8 +34,12 @@ namespace ft {
 				pointer				base() const { return _ptr; }
 
 				tree_iterator &		operator=( const tree_iterator & in ) { this->_ptr = in.base(); return *this; }
+				
 				variable_type &		operator*() { return _ptr->val; }
+				variable_type &		operator*() const { return _ptr->val; }
+				
 				variable_type *		operator->() { return &(operator*()); }
+				variable_type *		operator->() const { return &(operator*()); }
 		
 				tree_iterator &		operator++() {
 					if (!_ptr)
@@ -95,6 +101,8 @@ namespace ft {
 					return (this->base() != in.base());
 				}
 		
+
+				// operator tree_iterator<value_type, variable_type> () const {return tree_iterator<value_type, variable_type>(this->_root);}
 		}; /* class tree_iterator */
 } /* namespace ft */
 

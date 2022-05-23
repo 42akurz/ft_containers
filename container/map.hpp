@@ -7,6 +7,8 @@
 # include <exception>
 
 # include "../utils/pair.hpp"
+# include "../utils/equal.hpp"
+# include "../utils/lexicographical_compare.hpp"
 # include "../utils/red_black_tree.hpp"
 
 namespace ft {
@@ -47,11 +49,7 @@ namespace ft {
 				size_type			_size;
 
 			public:
-
-				void	printTree() {
-					tree.print_rb_tree("", tree.getRoot(), false);
-				}
-
+				void	printTree() { tree.print_rb_tree("", tree.getRoot(), false); }
 				void	print() { tree.printInOrder(); }
 
 				/* empty */
@@ -67,6 +65,7 @@ namespace ft {
 				map( InputIterator first, InputIterator last,
 					const key_compare& comp = key_compare(),
 					const allocator_type& alloc = allocator_type() ) {
+					_size = 0;
 					insert(first, last);
 					_compare = comp;
 					_alloc_pair = alloc;
@@ -91,8 +90,10 @@ namespace ft {
 
 				size_type				max_size() const { return _alloc_pair.max_size(); }
 
+				size_type				count( const key_type& k ) const { return ((find(k) == end()) ? 0 : 1); }
+
 				mapped_type &			operator[]( const key_type& k ) {
-					return (*((this->insert(make_pair(k, mapped_type()))).first)).second;
+					return (*((this->insert(ft::make_pair(k, mapped_type()))).first)).second;
 				}
 
 				iterator				begin() { return tree.begin(); }
@@ -180,29 +181,39 @@ namespace ft {
 
 				/* single element */
 				pair<iterator, bool>	insert( const value_type& val ) {
-					_size += 1;
-					return (tree.insert(val));
+					pair<iterator, bool>	ret = tree.insert(val);
+					if (ret.second)
+						_size += 1;
+					return (ret);
 				}
 
 				/* with hint */
 				iterator	insert( iterator position, const value_type& val ) {
-					tree.insert_hint(val, position.base());
-					return position;
+					if (position == end() || position.base() == NULL)
+						return (insert(val).first);
+					pair<iterator, bool>	ret = tree.insert_hint(val, position.base());
+					if (ret.second)
+						_size += 1;
+					return ret.first;
 				}
 
 				/* range */
 				template <class InputIterator>
 				void	insert( InputIterator first, InputIterator last ) {
-					for (; first != last; first++)
+					for (; first != last; first++) {
+						_size += 1;
 						tree.insert(*first);
+					}
 				}
 
+				/* by position */
 				void		erase( iterator position ) {
 					if (_size > 0)
 						_size -= 1;
 					tree.erase(position);
 				}
 
+				/* by value */
 				size_type	erase( const key_type& k ) {
 					iterator it = find(k);
 					if (it == end())
@@ -211,14 +222,72 @@ namespace ft {
 					return 1;
 				}
 
+				/* range */
 				void		erase( iterator first, iterator last ) {
 					while (first != last)
 						erase(first++);
 				}
 
 				void		clear() { erase(begin(), end()); }
-	};
-}
+
+				ft::pair<const_iterator, const_iterator>	equal_range( const key_type& k ) const {
+					const_iterator	low = lower_bound(k);
+					const_iterator	up = upper_bound(k);
+					return ft::make_pair<const_iterator, const_iterator>(low, up);
+				}
+
+				ft::pair<iterator, iterator>				equal_range( const key_type& k ) {
+					iterator	low = lower_bound(k);
+					iterator	up = upper_bound(k);
+					return ft::make_pair<iterator, iterator>(low, up);
+				}
+
+	}; /* class map */
+
+
+	template <class T, class U>
+	bool	operator==( const map<T,U>& lhs, const map<T,U>& rhs ) {
+		if (lhs.size() != rhs.size())
+			return false;
+		return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	}
+
+	template <class T, class U>
+	bool	operator!=( const map<T,U>& lhs, const map<T,U>& rhs ) {
+		if (lhs.size() != rhs.size())
+			return true;
+		return !ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	}
+
+	template <class T, class U>
+	bool	operator<( const map<T,U>& lhs, const map<T,U>& rhs ) {
+		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	}
+
+	template <class T, class U>
+	bool	operator<=( const map<T,U>& lhs, const map<T,U>& rhs ) {
+		if (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
+			return true;
+		if (ft::equal(lhs.begin(), lhs.end(), rhs.begin()) && (lhs.size() == rhs.size()))
+			return true;
+		return false;
+	}
+
+	template <class T, class U>
+	bool	operator>( const map<T,U>& lhs, const map<T,U>& rhs ) {
+		return ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end());
+	}
+
+	template <class T, class U>
+	bool	operator>=( const map<T,U>& lhs, const map<T,U>& rhs ) {
+		if (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()))
+			return true;
+		if (ft::equal(lhs.begin(), lhs.end(), rhs.begin()) && (lhs.size() == rhs.size()))
+			return true;
+		return false;
+	}
+
+} /* namespace ft */
 
 
 #endif

@@ -18,7 +18,7 @@ namespace ft {
 
 			public:
 				/* default */
-				tree_reverse_iterator( Iterator it = nullptr ) : _it(it) {}
+				tree_reverse_iterator( Iterator it = NULL ) : _it(it) {}
 
 				/* copy */
 				template<class Iter>
@@ -30,8 +30,12 @@ namespace ft {
 				Iterator					base() const { return _it; }
 
 				tree_reverse_iterator &		operator=( const tree_reverse_iterator & in ) { this->_it = in.base(); return *this; }
+				
 				variable_type &				operator*() { Iterator temp(_it); --temp; return (*temp); }
+				variable_type &				operator*() const { Iterator temp(_it); --temp; return (*temp); }
+				
 				variable_type *				operator->() { Iterator temp(_it); --temp; return temp.operator->(); }
+				variable_type *				operator->() const { Iterator temp(_it); --temp; return temp.operator->(); }
 		
 				tree_reverse_iterator &		operator++() {
 					--(_it);

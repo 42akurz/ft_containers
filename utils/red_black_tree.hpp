@@ -274,7 +274,7 @@ namespace ft {
 						}
 					}
 					// delete v; // TODO: delete line
-					_alloc_node.deallocate(v, 1);
+					// _alloc_node.deallocate(v, 1);
 					return;
 				}
 			
@@ -294,7 +294,7 @@ namespace ft {
 						else {
 							parent->right = u;
 						}
-						delete v;
+						// delete v;
 						u->parent = parent;
 						if (uvBlack) {
 							// u and v both black, fix double black at u
@@ -432,12 +432,12 @@ namespace ft {
 			
 			void			erase( iterator position ){ deleteByVal(*position); }
 
-			node_pointer	getRoot() { return _root; }
+			node_pointer	getRoot() const { return _root; }
 			
 			// searches for given value
 			// if found returns the node (used for delete)
 			// else returns the last node while traversing (used in insert)
-			node_pointer	search( value_type n, const node_pointer start ) {
+			node_pointer	search( value_type n, const node_pointer start ) const {
 				node_pointer	temp = start;
 				while (temp != NULL) {
 					if (n < temp->val) {
@@ -463,6 +463,9 @@ namespace ft {
 			ft::pair<iterator, bool>	insert( value_type n ) {
 				node_pointer	newNode = _alloc_node.allocate(1);
 				_alloc_pair.construct(&newNode->val, n);
+				newNode->left = NULL;
+				newNode->right = NULL;
+				newNode->parent = NULL;
 				newNode->color = RED;
 				if (_root == NULL) {
 					// when root is null
@@ -515,6 +518,9 @@ namespace ft {
 				node_pointer	newNode = _alloc_node.allocate(1);
 				_alloc_pair.construct(&newNode->val, n);
 				newNode->color = RED;
+				newNode->left = NULL;
+				newNode->right = NULL;
+				newNode->parent = NULL;
 				if (_root == NULL) {
 					// when root is null
 					// simply insert value at root
