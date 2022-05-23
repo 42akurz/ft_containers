@@ -22,7 +22,9 @@
 #define TEST9	0 /* insert range */
 #define TEST10	0 /* swap */
 #define TEST11	0 /* find and bounds */
-#define TEST12	1 /* erase */
+#define TEST12	0 /* erase */
+#define TEST13	0 /* copy construct / assign */
+#define TEST14	1 /* insert hint */
 /* END map tests ------------------ */
 
 int	main()
@@ -343,39 +345,107 @@ int	main()
 		LOG_BLUE("map ---------------------");
 		mp.print();
 		LOG_BLUE("-------------------------");
-		// std::cout << std::endl;
-		// LOG_RED("map2 --------------------");
-		// mp2.print();
-		// LOG_RED("-------------------------");
+		std::cout << std::endl;
+		LOG_RED("map2 --------------------");
+		mp2.print();
+		LOG_RED("-------------------------");
 
-		// mp.swap(mp2);
-
-		// LOG_GREEN("AFTER SWAP");
-		// std::cout << std::endl;
-		// LOG_BLUE("map ---------------------");
-		// mp.print();
-		// LOG_BLUE("-------------------------");
-		// std::cout << std::endl;
-		// LOG_RED("map2 --------------------");
-		// mp2.print();
-		// LOG_RED("-------------------------");
-
-		// mp.erase(b);
-
-		// mp.erase(mp.begin(), mp.end());
-
-		mp.erase(43);
+		mp.erase(b);
 
 		std::cout << std::endl;
 		LOG_GREEN("AFTER ERASE");
 		LOG_BLUE("map ---------------------");
 		mp.print();
 		LOG_BLUE("-------------------------");
-		// std::cout << std::endl;
-		// LOG_RED("map2 --------------------");
-		// mp2.print();
-		// LOG_RED("-------------------------");
+		std::cout << std::endl;
+		LOG_RED("map2 --------------------");
+		mp2.print();
+		LOG_RED("-------------------------");
+
+		mp.erase(mp.begin(), mp.end());
+
+		std::cout << std::endl;
+		LOG_GREEN("AFTER ERASE");
+		LOG_BLUE("map ---------------------");
+		mp.print();
+		LOG_BLUE("-------------------------");
+		std::cout << std::endl;
+		LOG_RED("map2 --------------------");
+		mp2.print();
+		LOG_RED("-------------------------");
 	}
 	#endif
+
+	/* copy construct / assign */
+	#if TEST13
+	{
+		ft::map<int, char>	mp;
+
+		mp.insert(ft::make_pair<int, char>(42, 'c'));
+		mp.insert(ft::make_pair<int, char>(1, 'a'));
+		mp.insert(ft::make_pair<int, char>(4, 'b'));
+		mp.insert(ft::make_pair<int, char>(88, 'd'));
+		mp.insert(ft::make_pair<int, char>(89, 'e'));
+
+
+		ft::map<int, char>	mp2(mp);
+
+		LOG_GREEN("AFTER clear");
+		LOG_BLUE("map ---------------------");
+		mp.print();
+		LOG_BLUE("-------------------------");
+		std::cout << std::endl;
+		LOG_RED("map2 --------------------");
+		mp2.print();
+		LOG_RED("-------------------------");
+
+		mp.clear();
+
+		std::cout << std::endl;
+		LOG_GREEN("AFTER clear");
+		LOG_BLUE("map ---------------------");
+		mp.print();
+		LOG_BLUE("-------------------------");
+		std::cout << std::endl;
+		LOG_RED("map2 --------------------");
+		mp2.print();
+		LOG_RED("-------------------------");
+	}
+	#endif
+
+	/* insert hint */
+	#if TEST14
+	{
+		ft::map<int, char>	mp;
+
+		mp.insert(ft::make_pair(1, 'b'));
+		mp.insert(ft::make_pair(10, 'g'));
+		mp.insert(ft::make_pair(5, 'x'));
+		mp.insert(ft::make_pair(20, 'k'));
+		mp.insert(ft::make_pair(3, 'b'));
+		mp.insert(ft::make_pair(8, 'e'));
+		mp.insert(ft::make_pair(15, 'i'));
+		mp.insert(ft::make_pair(25, 'm'));
+		mp.insert(ft::make_pair(4, 'c'));
+		mp.insert(ft::make_pair(6, 'd'));
+		mp.insert(ft::make_pair(9, 'f'));
+		mp.insert(ft::make_pair(12, 'h'));
+		mp.insert(ft::make_pair(17, 'j'));
+		mp.insert(ft::make_pair(21, 'l'));
+		mp.insert(ft::make_pair(30, 'n'));
+
+		mp.printTree();
+
+		ft::map<int, char>::iterator	it = mp.find(17);
+		mp.insert(it, ft::make_pair<int, char>(19, '5'));
+
+		std::cout << std::endl;
+
+		mp.printTree();
+	}
+	#endif
+
+
+
 	return 0;
 }

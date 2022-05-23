@@ -90,7 +90,11 @@ namespace ft {
 				if (x) {
 					std::cout << prefix;
 					std::cout << (isleft ? "├──" : "└──");
-					std::cout << x->val.first << (x->color == BLACK ? " black" : " red" ) << std::endl;
+					if (x->color == BLACK)
+						std::cout << "\033[1;30m" << x->val.first << "\033[0m";
+					else
+						std::cout << "\033[1;31m" << x->val.first << "\033[0m";
+					std::cout << std::endl;
 					print_rb_tree(prefix + (isleft ? "│   " : "    "), x->left, true);
 					print_rb_tree(prefix + (isleft ? "│   " : "    "), x->right, false);
 				}
@@ -433,8 +437,8 @@ namespace ft {
 			// searches for given value
 			// if found returns the node (used for delete)
 			// else returns the last node while traversing (used in insert)
-			node_pointer	search( value_type n ) {
-				node_pointer	temp = _root;
+			node_pointer	search( value_type n, const node_pointer start ) {
+				node_pointer	temp = start;
 				while (temp != NULL) {
 					if (n < temp->val) {
 						if (temp->left == NULL)
@@ -459,7 +463,6 @@ namespace ft {
 			ft::pair<iterator, bool>	insert( value_type n ) {
 				node_pointer	newNode = _alloc_node.allocate(1);
 				_alloc_pair.construct(&newNode->val, n);
-				// newNode->val = n;
 				newNode->color = RED;
 				if (_root == NULL) {
 					// when root is null
@@ -471,7 +474,62 @@ namespace ft {
 					_end.right = NULL;
 				}
 				else {
-					node_pointer	temp = search(n);
+					node_pointer	temp = search(n, _root);
+				
+					if (temp->val == n) {
+						// return if value already exists
+						return (ft::make_pair<iterator, bool>(iterator(temp), false));
+					}
+				
+					// if value is not found, search returns the node
+					// where the value is to be inserted
+				
+					// connect new node to correct node
+					newNode->parent = temp;
+				
+					if (n < temp->val)
+						temp->left = newNode;
+					else
+						temp->right = newNode;
+				
+					// fix red red voilaton if exists
+					fixRedRed(newNode);
+				}
+				return (ft::make_pair<iterator, bool>(iterator(newNode), true));
+			}
+
+			bool	hintIsUseful( value_type n, node_pointer pos ) {
+				if ((n < _root->val && pos->val < _root->val) || (n > _root->val && pos->val > _root->val)) {
+					if ((!pos->isOnLeft() && n > pos->parent->val) || (pos->isOnLeft() && n < pos->parent->val)) {
+						if ((!pos->parent->isOnLeft() && (n > pos->parent->parent->val || pos->parent == _root)) || 
+							(pos->parent->isOnLeft() && (n < pos->parent->parent->val || pos->parent == _root))) {
+								return true;
+							}
+					}
+				}
+				return false;
+			}
+
+			// inserts the given value to tree
+			ft::pair<iterator, bool>	insert_hint( value_type n, node_pointer pos ) {
+				node_pointer	newNode = _alloc_node.allocate(1);
+				_alloc_pair.construct(&newNode->val, n);
+				newNode->color = RED;
+				if (_root == NULL) {
+					// when root is null
+					// simply insert value at root
+					newNode->color = BLACK;
+					_root = newNode;
+					_root->parent = &_end;
+					_end.left = _root;
+					_end.right = NULL;
+				}
+				else {
+					node_pointer	temp;
+					if (hintIsUseful(n, pos))
+						temp = search(n, pos);
+					else
+						temp = search(n, _root);
 				
 					if (temp->val == n) {
 						// return if value already exists
@@ -502,7 +560,7 @@ namespace ft {
 					return;
 				}
 			
-				node_pointer	v = search(n);
+				node_pointer	v = search(n, _root);
 				// node_pointer	u;
 			
 				if (v->val != n) {
