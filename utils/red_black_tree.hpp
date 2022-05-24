@@ -50,14 +50,20 @@ namespace ft {
 			const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
 
 			iterator				end() {
-				if (_root == NULL)
+				if (_root == NULL) {
+					// node_pointer	temp = &_end;
+					// return iterator(temp); // fix for find_count
 					return iterator(_root);
+				}
 				return iterator(_root->parent);
 			}
 
 			const_iterator			end() const {
-				if (_root == NULL)
+				if (_root == NULL) {
+					// node_pointer	temp = const_cast<node_pointer>(&_end);
+					// return const_iterator(temp); // fix for find_count
 					return const_iterator(_root);
+				}
 				return const_iterator(_root->parent);
 			}
 
@@ -570,7 +576,7 @@ namespace ft {
 				// node_pointer	u;
 			
 				if (v->val != n) {
-					std::cout << "No node found to delete with value:" << std::endl;
+					// No node found to delete
 					return;
 				}
 			

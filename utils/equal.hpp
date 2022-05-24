@@ -12,6 +12,17 @@ namespace ft {
 		}
 		return true;
 	}
+
+	// template <class InputIterator1, class InputIterator2, class Compare>
+	// bool	equal( InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, Compare comp )
+	// {
+	// 	while (first1 != last1) {
+	// 		if (!(*first1 == *first2) || !(comp(*first1, *first2)))
+	// 			return false;
+	// 		++first1; ++first2;
+	// 	}
+	// 	return true;
+	// }
 }
 
 #endif

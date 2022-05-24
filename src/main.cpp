@@ -4,17 +4,33 @@
 #include "../containers_test/srcs/base.hpp"
 
 #include <map>
+#include <list>
 
 #define TESTED_NAMESPACE	ft
 
-#define T1 int
-#define T2 std::string
-typedef TESTED_NAMESPACE::map<T1, T2>::value_type T3;
-typedef TESTED_NAMESPACE::map<T1, T2>::iterator iterator;
 
 #define _pair TESTED_NAMESPACE::pair
 
-static int iter = 0;
+
+#define T1 char
+#define T2 int
+typedef _pair<const T1, T2> T3;
+
+template <class MAP>
+void	cmp(const MAP &lhs, const MAP &rhs)
+{
+	static int i = 0;
+
+	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+	std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
+	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
+	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
+}
+
+// static int iter = 0;
+
+TESTED_NAMESPACE::map<T1, T2> mp;
+TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.end();
 
 template <typename T>
 std::string	printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
@@ -40,564 +56,71 @@ void	printSize(T_MAP const &mp, bool print_content = 1)
 	std::cout << "###############################################" << std::endl;
 }
 
-template <typename T89, typename T99>
-void	printReverse(TESTED_NAMESPACE::map<T89, T99> &mp)
+void	ft_find(T1 const &k)
 {
-	typename TESTED_NAMESPACE::map<T89, T99>::iterator it = mp.end(), ite = mp.begin();
+	TESTED_NAMESPACE::map<T1, T2>::iterator ret = mp.find(k);
 
-	std::cout << "printReverse:" << std::endl;
-	while (it != ite) {
-		it--;
-		std::cout << "-> " << printPair(it, false) << std::endl;
-	}
-	std::cout << "_______________________________________________" << std::endl;
+	if (ret != it)
+		printPair(ret);
+	else
+		std::cout << "map::find(" << k << ") returned end()" << std::endl;
 }
 
-template <typename MAP, typename U>
-void	ft_insert(MAP &mp, U param)
+void	ft_count(T1 const &k)
 {
-	_pair<iterator, bool> tmp;
-
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	tmp = mp.insert(param);
-	std::cout << "insert return: " << printPair(tmp.first);
-	std::cout << "Created new node: " << tmp.second << std::endl;
-	printSize(mp);
+	std::cout << "map::count(" << k << ")\treturned [" << mp.count(k) << "]" << std::endl;
 }
 
-template <typename MAP, typename U, typename V>
-void	ft_insert(MAP &mp, U param, V param2)
-{
-	iterator tmp;
-
-	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
-	tmp = mp.insert(param, param2);
-	std::cout << "insert return: " << printPair(tmp);
-	printSize(mp);
-}
-
-/* START tree tests --------------- */
-#define TEST1	0
-#define TEST2	0
-#define TEST3	0
-#define TEST4	0
-#define TEST5	0
-#define TEST6	0
-#define TEST7	0
-/* END tree tests ----------------- */
-
-/* START map tests ---------------- */
-#define TEST8	0 /* insert single element */
-#define TEST9	0 /* insert range */
-#define TEST10	0 /* swap */
-#define TEST11	0 /* find and bounds */
-#define TEST12	0 /* erase */
-#define TEST13	0 /* copy construct / assign */
-#define TEST14	0 /* insert hint */
-#define TEST15	0 /* count */
-#define TEST16	0 /* TESTER */
-#define TEST17	1 /* size problems */
-/* END map tests ------------------ */
 
 int	main()
 {
-	// ft::RBTree<int, char> tree;
+	// TESTED_NAMESPACE::map<T1, T2> mp1;
+	// TESTED_NAMESPACE::map<T1, T2> mp2;
+
+	// mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	// mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
+
+	// cmp(mp1, mp1); // 0
+	// cmp(mp1, mp2); // 1
+
+	// mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
+
+	// cmp(mp1, mp2); // 2
+	// cmp(mp2, mp1); // 3
+
+	// (++(++mp1.begin()))->second = 42;
+
+	// for (TESTED_NAMESPACE::map<T1, T2>::iterator it = mp1.begin(); it != mp1.end(); it++)
+	// 	LOG_RED(it->first << " | " << it->second);
+	// LOG_RED("size: " << mp1.size() << std::endl);
+
+	// for (TESTED_NAMESPACE::map<T1, T2>::iterator it = mp2.begin(); it != mp2.end(); it++)
+	// 	LOG_GREEN(it->first << " | " << it->second);
+	// LOG_GREEN("size: " << mp2.size() << std::endl);
+
+	// cmp(mp1, mp2); // 4
+	// cmp(mp2, mp1); // 5
+
+	// swap(mp1, mp2);
+
+	// cmp(mp1, mp2); // 6
+	// cmp(mp2, mp1); // 7
+
+	ft::map<int, int>	og1;
+	ft::map<int, int>	og2;
+
+	og1[1] = 10;
+	og1[2] = 20;
+	og1[3] = 30;
+	og1[4] = 40;
+
+	og2[1] = 10;
+	og2[2] = 20;
+	og2[3] = 30;
+	og2[4] = 40;
+
+	LOG_GREEN((og1 == og2));
+	LOG_GREEN((og1 != og2));
 	
-	// tree.insert(ft::make_pair(0, 'b'));
-	// tree.insert(ft::make_pair(10, 'g'));
-	// tree.insert(ft::make_pair(5, 'x'));
-	// tree.insert(ft::make_pair(20, 'k'));
-	// tree.insert(ft::make_pair(3, 'b'));
-	// tree.insert(ft::make_pair(8, 'e'));
-	// tree.insert(ft::make_pair(15, 'i'));
-	// tree.insert(ft::make_pair(25, 'm'));
-	// tree.insert(ft::make_pair(4, 'c'));
-	// tree.insert(ft::make_pair(7, 'd'));
-	// tree.insert(ft::make_pair(9, 'f'));
-	// tree.insert(ft::make_pair(12, 'h'));
-	// tree.insert(ft::make_pair(17, 'j'));
-	// tree.insert(ft::make_pair(21, 'l'));
-	// tree.insert(ft::make_pair(30, 'n'));
-
-	// tree.print_rb_tree("", tree.getRoot(), false);
-	// std::cout << std::endl;
-
-	#if TEST1
-	{
-		ft::RBTree<int, char>::iterator	it = tree.begin();
-
-		std::cout << it->first << "\t|\t" << it->second << std::endl;
-		std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (++it)->first << "\t|\t" << it->second << std::endl;
-
-		std::cout << std::endl;
-
-		std::cout << it->first << "\t|\t" << it->second << std::endl;
-		std::cout << (--it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (--it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (--it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (--it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (--it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (--it)->first << "\t|\t" << it->second << std::endl;
-		std::cout << (--it)->first << "\t|\t" << it->second << std::endl;
-	}
-	#endif
-
-	#if TEST2
-	{
-		ft::RBTree<int, char>::iterator	start = tree.begin();
-		ft::RBTree<int, char>::iterator	end = tree.end();
-
-		for ( ; start != end; start++)
-			LOG_BLUE(start->first << "\t|\t" << start->second);
-		
-		start = tree.begin();
-		std::cout << std::endl;
-
-		for ( ; end != start; end--)
-			LOG_RED(end->first << "\t|\t" << end->second);
-		LOG_RED(end->first << "\t|\t" << end->second);
-	}
-	#endif
-
-	#if TEST3
-	{
-		ft::RBTree<int, char>::reverse_iterator	rbegin = tree.rbegin();
-
-		LOG_CYAN(rbegin->first << "\t|\t" << rbegin->second);
-		rbegin++;
-		LOG_CYAN(rbegin->first << "\t|\t" << rbegin->second);
-		rbegin++;
-		LOG_CYAN(rbegin->first << "\t|\t" << rbegin->second);
-		rbegin++;
-		LOG_CYAN(rbegin->first << "\t|\t" << rbegin->second);
-		rbegin++;
-		LOG_CYAN(rbegin->first << "\t|\t" << rbegin->second);
-
-		std::cout << std::endl;
-
-		LOG_CYAN((rbegin++)->first << "\t|\t" << rbegin->second);
-		LOG_CYAN((rbegin)->first << "\t|\t" << rbegin->second);
-		LOG_CYAN((++rbegin)->first << "\t|\t" << rbegin->second);
-
-		std::cout << std::endl;
-
-		LOG_CYAN((rbegin--)->first << "\t|\t" << rbegin->second);
-		LOG_CYAN((rbegin)->first << "\t|\t" << rbegin->second);
-		LOG_CYAN((--rbegin)->first << "\t|\t" << rbegin->second);
-
-
-		ft::RBTree<int, char>::reverse_iterator	copy = rbegin;
-		LOG_RED(std::endl << copy->first << "\t|\t" << copy->second);
-		LOG_RED(rbegin->first << "\t|\t" << rbegin->second);
-	}
-	#endif
-
-	#if TEST4
-	{
-		ft::RBTree<int, char>::reverse_iterator	rbegin = tree.rbegin();
-		ft::RBTree<int, char>::reverse_iterator	rend = tree.rend();
-
-		for ( ; rbegin != rend; rbegin++)
-			LOG_RED(rbegin->first << "\t|\t" << rbegin->second);
-
-		rbegin = tree.rbegin();
-		std::cout << std::endl;
-
-		--rend;
-		for ( ; rend != rbegin; rend--)
-			LOG_BLUE(rend->first << "\t|\t" << rend->second);
-		LOG_BLUE(rend->first << "\t|\t" << rend->second);
-	}
-	#endif
-
-	#if TEST5
-	{
-		ft::RBTree<int, char>::const_iterator	begin = tree.begin();
-		ft::RBTree<int, char>::const_iterator	end = tree.end();
-
-		for ( ; begin != end; begin++)
-			LOG_RED(begin->first << " | " << begin->second);
-
-		begin = tree.begin();
-		std::cout << std::endl;
-
-		--end;
-		for ( ; end != begin; end--)
-			LOG_BLUE(end->first << " | " << end->second);
-		LOG_BLUE(end->first << " | " << end->second);
-
-		// end->first = 42;
-
-	}
-	#endif
-
-	#if TEST6
-	{
-		ft::RBTree<int, char>::const_reverse_iterator	rbegin = tree.rbegin();
-		ft::RBTree<int, char>::const_reverse_iterator	rend = tree.rend();
-
-		for ( ; rbegin != rend; rbegin++)
-			LOG_RED(rbegin->first << "\t|\t" << rbegin->second);
-
-		rbegin = tree.rbegin();
-		std::cout << std::endl;
-
-		--rend;
-		for ( ; rend != rbegin; rend--)
-			LOG_BLUE(rend->first << "\t|\t" << rend->second);
-		LOG_BLUE(rend->first << "\t|\t" << rend->second);
-
-	}
-	#endif
-
-	#if TEST7
-	{
-		const ft::RBTree<int, char> test2(tree);
-
-		ft::RBTree<int,char>::const_iterator start_const = test2.begin();
-		ft::RBTree<int,char>::const_iterator end_const = test2.end();
-
-
-		for ( ; start_const != end_const; start_const++) {
-			LOG_RED(start_const->first << " | " << start_const->second);
-		}
-
-		start_const = test2.begin();
-		std::cout << std::endl;
-
-		--end_const;
-		for ( ; end_const != start_const; end_const--)
-			LOG_BLUE(end_const->first << " | " << end_const->second);
-		LOG_BLUE(end_const->first << " | " << end_const->second);
-
-	}
-	#endif
-
-	/* insert single element */
-	#if TEST8
-	{
-		ft::map<int, char>	mp;
-
-		mp.insert(ft::make_pair<int, char>(42, 'a'));
-		mp.insert(ft::make_pair<int, char>(1, 'a'));
-		mp.insert(ft::make_pair<int, char>(4, 'a'));
-		mp.insert(ft::make_pair<int, char>(88, 'a'));
-		mp.insert(ft::make_pair<int, char>(89, 'a'));
-		mp.print();
-
-		ft::pair<ft::map<int, char>::iterator, bool>	ret1 = mp.insert(ft::make_pair<int, char>(42, 'b'));
-		ft::pair<ft::map<int, char>::iterator, bool>	ret2 = mp.insert(ft::make_pair<int, char>(43, 'x'));
-		LOG_RED("[" << ret1.first->first << ", " << ret1.first->second << "] | " << ret1.second);
-		LOG_GREEN("[" << ret2.first->first << ", " << ret2.first->second << "] | " << ret2.second);
-		mp.print();
-	}
-	#endif
-
-	/* insert range */
-	#if TEST9
-	{
-		ft::map<int, char>	mp;
-		ft::map<int, char>	mp2;
-
-		mp.insert(ft::make_pair<int, char>(42, 'a'));
-		mp.insert(ft::make_pair<int, char>(1, 'a'));
-		mp.insert(ft::make_pair<int, char>(4, 'a'));
-		mp.insert(ft::make_pair<int, char>(88, 'a'));
-		mp.insert(ft::make_pair<int, char>(89, 'a'));
-		mp.print();
-
-		std::cout << std::endl;
-
-		mp2.insert(mp.begin(), mp.end());
-		mp2.print();
-
-		const ft::map<int, char>	mp3;
-		ft::map<int, char>			mp4;
-
-		ft::map<int, char>::const_iterator				citb = mp3.begin();
-		ft::map<int, char>::const_iterator				cite = mp3.end();
-		ft::map<int, char>::const_reverse_iterator		critb = mp3.rbegin();
-		ft::map<int, char>::const_reverse_iterator		crite = mp3.rend();
-		ft::map<int, char>::const_iterator				citb2 = mp4.begin();
-		ft::map<int, char>::const_iterator				cite2 = mp4.end();
-		ft::map<int, char>::const_reverse_iterator		critb2 = mp4.rbegin();
-		ft::map<int, char>::const_reverse_iterator		crite2 = mp4.rend();
-	}
-	#endif
-
-	/* swap */
-	#if TEST10
-	{
-		ft::map<int, char>	mp;
-		ft::map<int, char>	mp2;
-
-		mp.insert(ft::make_pair<int, char>(42, 'a'));
-		mp.insert(ft::make_pair<int, char>(1, 'a'));
-		mp.insert(ft::make_pair<int, char>(4, 'a'));
-		mp.insert(ft::make_pair<int, char>(88, 'a'));
-		mp.insert(ft::make_pair<int, char>(89, 'a'));
-		mp.print();
-
-		std::cout << std::endl;
-
-		ft::map<int, char>::iterator end = mp.end();
-		end--;
-		end--;
-		end--;
-
-		mp2.insert(mp.begin(), end);
-		mp2.print();
-
-		mp.swap(mp2);
-
-		std::cout << std::endl;
-		mp.print();
-		std::cout << std::endl;
-		mp2.print();
-	}
-	#endif
-
-	/* find and bounds */
-	#if TEST11
-	{
-		ft::map<int, char>	mp;
-
-		mp.insert(ft::make_pair<int, char>(42, 'c'));
-		mp.insert(ft::make_pair<int, char>(1, 'a'));
-		mp.insert(ft::make_pair<int, char>(4, 'b'));
-		mp.insert(ft::make_pair<int, char>(88, 'd'));
-		mp.insert(ft::make_pair<int, char>(89, 'e'));
-
-		ft::map<int, char>::iterator	it1 = mp.find(4);
-		LOG_CYAN(it1->first << " | " << it1->second);
-
-		ft::map<int, char>::iterator	it2 = mp.find(89);
-		LOG_CYAN(it2->first << " | " << it2->second);
-
-		ft::map<int, char>::iterator	it3 = mp.find(102);
-		LOG_CYAN((it3 == mp.end()));
-
-		ft::map<int, char>::iterator	it4 = mp.upper_bound(86);
-		LOG_RED(it4->first << " | " << it4->second);
-
-		ft::map<int, char>::iterator	it5 = mp.lower_bound(1);
-		LOG_RED(it5->first << " | " << it5->second);
-
-		LOG_PINK(mp[42]);
-
-
-	}
-	#endif
-
-	/* erase */
-	#if TEST12
-	{
-		ft::map<int, char>	mp;
-
-		mp.insert(ft::make_pair<int, char>(42, 'c'));
-		mp.insert(ft::make_pair<int, char>(1, 'a'));
-		mp.insert(ft::make_pair<int, char>(4, 'b'));
-		mp.insert(ft::make_pair<int, char>(88, 'd'));
-		mp.insert(ft::make_pair<int, char>(89, 'e'));
-
-		ft::map<int, char>::iterator b = mp.begin();
-		ft::map<int, char>::iterator e = mp.end();
-
-		b++;
-		e--;
-
-		ft::map<int, char>	mp2(b, e);
-
-		LOG_BLUE("map ---------------------");
-		mp.print();
-		LOG_BLUE("-------------------------");
-		std::cout << std::endl;
-		LOG_RED("map2 --------------------");
-		mp2.print();
-		LOG_RED("-------------------------");
-
-		mp.erase(b);
-
-		std::cout << std::endl;
-		LOG_GREEN("AFTER ERASE");
-		LOG_BLUE("map ---------------------");
-		mp.print();
-		LOG_BLUE("-------------------------");
-		std::cout << std::endl;
-		LOG_RED("map2 --------------------");
-		mp2.print();
-		LOG_RED("-------------------------");
-
-		mp.erase(mp.begin(), mp.end());
-
-		std::cout << std::endl;
-		LOG_GREEN("AFTER ERASE");
-		LOG_BLUE("map ---------------------");
-		mp.print();
-		LOG_BLUE("-------------------------");
-		std::cout << std::endl;
-		LOG_RED("map2 --------------------");
-		mp2.print();
-		LOG_RED("-------------------------");
-	}
-	#endif
-
-	/* copy construct / assign */
-	#if TEST13
-	{
-		ft::map<int, char>	mp;
-
-		mp.insert(ft::make_pair<int, char>(42, 'c'));
-		mp.insert(ft::make_pair<int, char>(1, 'a'));
-		mp.insert(ft::make_pair<int, char>(4, 'b'));
-		mp.insert(ft::make_pair<int, char>(88, 'd'));
-		mp.insert(ft::make_pair<int, char>(89, 'e'));
-
-
-		ft::map<int, char>	mp2(mp);
-
-		LOG_GREEN("AFTER clear");
-		LOG_BLUE("map ---------------------");
-		mp.print();
-		LOG_BLUE("-------------------------");
-		std::cout << std::endl;
-		LOG_RED("map2 --------------------");
-		mp2.print();
-		LOG_RED("-------------------------");
-
-		mp.clear();
-
-		std::cout << std::endl;
-		LOG_GREEN("AFTER clear");
-		LOG_BLUE("map ---------------------");
-		mp.print();
-		LOG_BLUE("-------------------------");
-		std::cout << std::endl;
-		LOG_RED("map2 --------------------");
-		mp2.print();
-		LOG_RED("-------------------------");
-	}
-	#endif
-
-	/* insert hint */
-	#if TEST14
-	{
-		ft::map<int, char>	mp;
-
-		mp.insert(ft::make_pair(1, 'b'));
-		mp.insert(ft::make_pair(10, 'g'));
-		mp.insert(ft::make_pair(5, 'x'));
-		mp.insert(ft::make_pair(20, 'k'));
-		mp.insert(ft::make_pair(3, 'b'));
-		mp.insert(ft::make_pair(8, 'e'));
-		mp.insert(ft::make_pair(15, 'i'));
-		mp.insert(ft::make_pair(25, 'm'));
-		mp.insert(ft::make_pair(4, 'c'));
-		mp.insert(ft::make_pair(6, 'd'));
-		mp.insert(ft::make_pair(9, 'f'));
-		mp.insert(ft::make_pair(12, 'h'));
-		mp.insert(ft::make_pair(17, 'j'));
-		mp.insert(ft::make_pair(21, 'l'));
-		mp.insert(ft::make_pair(30, 'n'));
-
-		mp.printTree();
-
-		ft::map<int, char>::iterator	it = mp.find(17);
-		mp.insert(it, ft::make_pair<int, char>(19, '5'));
-
-		std::cout << std::endl;
-
-		mp.printTree();
-	}
-	#endif
-
-	/* count */
-	#if TEST15
-	{
-		ft::map<int, char>	mp;
-
-		mp.insert(ft::make_pair(1, 'b'));
-		mp.insert(ft::make_pair(10, 'g'));
-		mp.insert(ft::make_pair(5, 'x'));
-		mp.insert(ft::make_pair(20, 'k'));
-		mp.insert(ft::make_pair(3, 'b'));
-		mp.insert(ft::make_pair(8, 'e'));
-		mp.insert(ft::make_pair(15, 'i'));
-		mp.insert(ft::make_pair(25, 'm'));
-		mp.insert(ft::make_pair(4, 'c'));
-		mp.insert(ft::make_pair(6, 'd'));
-		mp.insert(ft::make_pair(9, 'f'));
-		mp.insert(ft::make_pair(12, 'h'));
-		mp.insert(ft::make_pair(17, 'j'));
-		mp.insert(ft::make_pair(21, 'l'));
-		mp.insert(ft::make_pair(30, 'n'));
-
-		mp.printTree();
-
-		LOG_GREEN(mp.count(42));
-	}
-	#endif
-
-	/* TESTER */
-	#if TEST16
-	{
-		std::list<T3> lst;
-		unsigned int lst_size = 7;
-		for (unsigned int i = 0; i < lst_size; ++i)
-			lst.push_back(T3('a' + i, lst_size - i));
-
-		ft::map<T1, T2> mp(lst.begin(), lst.end()), mp2;
-		ft::map<T1, T2>::iterator it;
-
-		lst.clear();
-		is_empty(mp);
-		mp.printTree();
-		printSize(mp);
-
-		// is_empty(mp2);
-		// mp2 = mp;
-		// is_empty(mp2);
-
-		// it = mp.begin();
-		// for (unsigned long int i = 3; i < mp.size(); ++i)
-		// 	it++->second = i * 7;
-
-		// printSize(mp);
-		// printSize(mp2);
-
-		// mp2.clear();
-		// is_empty(mp2);
-		// printSize(mp2);
-	}
-	#endif
-
-	/* size problems */
-	#if TEST17
-	{
-		TESTED_NAMESPACE::map<T1, T2> mp, mp2;
-
-		// ft_insert(mp, T3(42, "lol"));
-		// ft_insert(mp, T3(42, "mdr"));
-
-		// ft_insert(mp, T3(50, "mdr"));
-		// ft_insert(mp, T3(35, "funny"));
-
-		// ft_insert(mp, T3(45, "bunny"));
-		// ft_insert(mp, T3(21, "fizz"));
-		// ft_insert(mp, T3(38, "buzz"));
-
-		// ft_insert(mp, mp.begin(), T3(55, "fuzzy"));
-		ft_insert(mp2, mp2.begin(), T3(1337, "beauty"));
-		ft_insert(mp2, mp2.end(), T3(1000, "Hello"));
-		ft_insert(mp2, mp2.end(), T3(1500, "World"));
-	}
-	#endif
-
 	return 0;
 }
