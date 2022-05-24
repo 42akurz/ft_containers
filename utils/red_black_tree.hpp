@@ -21,7 +21,7 @@
 
 namespace ft {
 
-	template< class Key, class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
+	template< class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<T> >
 	class RBTree {
 		public:
 			typedef				Key														key_type;
@@ -35,7 +35,7 @@ namespace ft {
 
 			typedef				Alloc													allocator_type;
 			typedef typename	Alloc::template rebind<Node>::other						node_allocator_type;
-			typedef				Compare													value_compare;
+			typedef				Compare													key_compare;
 
 			typedef				ft::tree_iterator<Node, value_type>						iterator;
 			typedef				ft::tree_reverse_iterator<iterator>						reverse_iterator;
@@ -51,17 +51,13 @@ namespace ft {
 
 			iterator				end() {
 				if (_root == NULL) {
-					// node_pointer	temp = &_end;
-					// return iterator(temp); // fix for find_count
-					return iterator(_root);
+					return iterator(&_end);
 				}
-				return iterator(_root->parent);
+				return iterator(&_end);
 			}
 
 			const_iterator			end() const {
 				if (_root == NULL) {
-					// node_pointer	temp = const_cast<node_pointer>(&_end);
-					// return const_iterator(temp); // fix for find_count
 					return const_iterator(_root);
 				}
 				return const_iterator(_root->parent);
@@ -88,7 +84,7 @@ namespace ft {
 		public:
 			Node					_end;
 			node_pointer			_root;
-			value_compare			_compare;
+			key_compare				_compare;
 			node_allocator_type		_alloc_node;
 			pair_allocator_type		_alloc_pair;
 
@@ -430,6 +426,18 @@ namespace ft {
 				std::cout << x->val.first <<  "/" << x->val.second << std::endl;
 				inorder(x->right);
 			}
+
+			bool	hintIsUseful( value_type n, node_pointer pos ) {
+				if ((_compare(n.first, _root->val.first) && _compare(pos->val.first, _root->val.first)) || (n.first > _root->val.first && pos->val.first > _root->val.first)) {
+					if ((!pos->isOnLeft() && n.first > pos->parent->val.first) || (pos->isOnLeft() && _compare(n.first, pos->parent->val.first))) {
+						if ((!pos->parent->isOnLeft() && (n.first > pos->parent->parent->val.first || pos->parent == _root)) || 
+							(pos->parent->isOnLeft() && (_compare(n.first, pos->parent->parent->val.first) || pos->parent == _root))) {
+								return true;
+							}
+					}
+				}
+				return false;
+			}
 		
 		public:
 			// constructor
@@ -446,13 +454,13 @@ namespace ft {
 			node_pointer	search( value_type n, const node_pointer start ) const {
 				node_pointer	temp = start;
 				while (temp != NULL) {
-					if (n < temp->val) {
+					if (_compare(n.first, temp->val.first)) {
 						if (temp->left == NULL)
 							break;
 						else
 							temp = temp->left;
 					}
-					else if (n == temp->val) {
+					else if (n.first == temp->val.first) {
 						break;
 					}
 					else {
@@ -485,7 +493,7 @@ namespace ft {
 				else {
 					node_pointer	temp = search(n, _root);
 				
-					if (temp->val == n) {
+					if (temp->val.first == n.first) {
 						// return if value already exists
 						return (ft::make_pair<iterator, bool>(iterator(temp), false));
 					}
@@ -496,7 +504,7 @@ namespace ft {
 					// connect new node to correct node
 					newNode->parent = temp;
 				
-					if (n < temp->val)
+					if (_compare(n.first, temp->val.first))
 						temp->left = newNode;
 					else
 						temp->right = newNode;
@@ -505,18 +513,6 @@ namespace ft {
 					fixRedRed(newNode);
 				}
 				return (ft::make_pair<iterator, bool>(iterator(newNode), true));
-			}
-
-			bool	hintIsUseful( value_type n, node_pointer pos ) {
-				if ((n < _root->val && pos->val < _root->val) || (n > _root->val && pos->val > _root->val)) {
-					if ((!pos->isOnLeft() && n > pos->parent->val) || (pos->isOnLeft() && n < pos->parent->val)) {
-						if ((!pos->parent->isOnLeft() && (n > pos->parent->parent->val || pos->parent == _root)) || 
-							(pos->parent->isOnLeft() && (n < pos->parent->parent->val || pos->parent == _root))) {
-								return true;
-							}
-					}
-				}
-				return false;
 			}
 
 			// inserts the given value to tree
@@ -543,7 +539,7 @@ namespace ft {
 					else
 						temp = search(n, _root);
 				
-					if (temp->val == n) {
+					if (temp->val.first == n.first) {
 						// return if value already exists
 						return (ft::make_pair<iterator, bool>(iterator(temp), false));
 					}
@@ -554,7 +550,7 @@ namespace ft {
 					// connect new node to correct node
 					newNode->parent = temp;
 				
-					if (n < temp->val)
+					if (_compare(n.first, temp->val.first))
 						temp->left = newNode;
 					else
 						temp->right = newNode;
@@ -575,7 +571,7 @@ namespace ft {
 				node_pointer	v = search(n, _root);
 				// node_pointer	u;
 			
-				if (v->val != n) {
+				if (v->val.first != n.first) {
 					// No node found to delete
 					return;
 				}
