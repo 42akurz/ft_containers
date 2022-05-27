@@ -256,8 +256,14 @@ namespace ft {
 
 				/* range */
 				void		erase( iterator first, iterator last ) {
-					while (first != last)
-						erase(first++);
+					key_type next = first->first;
+					while (first != last) {
+						first = find(next);
+						key_type	curr = first->first;
+						first++;
+						next = first->first;
+						erase(curr);
+					}
 				}
 
 				void		clear() { erase(begin(), end()); }

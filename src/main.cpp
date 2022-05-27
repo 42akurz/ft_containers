@@ -59,7 +59,7 @@ void	ft_erase(MAP &mp, U param, V param2)
 	// LOG_BLUE("param2: " << param2->second);
 	std::cout << "\t-- [" << iter++ << "] --" << std::endl;
 	for (typename MAP::iterator it = param; it != param2; it++)
-		LOG_BLUE(it->second);
+		LOG_BLUE_INFO(it->first);
 	mp.erase(param, param2);
 	printSize(mp);
 }
