@@ -5,7 +5,7 @@
 
 namespace ft {
 
-	template <class T1, class T2> // TODO: missing some operators in pair struct
+	template <class T1, class T2>
 	struct pair {
 		public:
 			typedef T1	first_type;

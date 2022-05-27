@@ -2,6 +2,7 @@
 # define TREE_ITERATOR_HPP
 
 # include "iterator.hpp"
+// # include "enable_if.hpp"
 
 namespace ft {
 
@@ -28,12 +29,20 @@ namespace ft {
 				/* copy from non-const to const */
 				tree_iterator( tree_iterator<value_type, var_type_no_const, var_type_no_const> in ) : _ptr(in.base()) {}
 
+				/* copy from const to non-const */
+				// tree_iterator( tree_iterator<value_type, const var_type, var_type> in ) : _ptr(in.base()) {}
+
+				// operator tree_iterator<value_type, var_type_no_const> () const
+				// {
+				// 	return tree_iterator<value_type, var_type_no_const>(this->_ptr);
+				// }
+
 				/* destructor */
 				~tree_iterator() {}
 
 				pointer				base() const { return _ptr; }
 
-				tree_iterator &		operator=( const tree_iterator & in ) { this->_ptr = in.base(); return *this; }
+				// tree_iterator &		operator=( const tree_iterator & in ) { this->_ptr = in.base(); return *this; }
 				
 				variable_type &		operator*() { return _ptr->val; }
 				variable_type &		operator*() const { return _ptr->val; }
@@ -100,9 +109,6 @@ namespace ft {
 				bool		operator!=( const tree_iterator & in ) {
 					return (this->base() != in.base());
 				}
-		
-
-				// operator tree_iterator<value_type, variable_type, var_type_no_const> () const {return tree_iterator<value_type, variable_type, var_type_no_const>(this->_root);}
 		}; /* class tree_iterator */
 } /* namespace ft */
 

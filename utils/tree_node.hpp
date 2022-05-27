@@ -18,11 +18,11 @@ namespace ft {
 			typedef		tree_node*	node_pointer;
 
 		public:
-			value_type		val;
-			COLOR			color;
 			node_pointer	left;
 			node_pointer	right;
 			node_pointer	parent;
+			value_type		val;
+			COLOR			color;
 		
 			tree_node() {
 				parent = NULL;

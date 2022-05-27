@@ -22,11 +22,11 @@ namespace ft {
 			typedef typename	allocator_type::pointer				pointer;
 			typedef typename	allocator_type::const_pointer		const_pointer;
 
-			typedef				ft::RBTree<const T, const T, T, value_compare>	RBTree;
-			typedef typename	RBTree::iterator								iterator;
-			typedef typename	RBTree::const_iterator							const_iterator;
-			typedef typename	RBTree::reverse_iterator						reverse_iterator;
-			typedef typename	RBTree::const_reverse_iterator					const_reverse_iterator;
+			typedef				ft::RBTree<T, value_compare>		RBTree;
+			typedef typename	RBTree::iterator					iterator;
+			typedef typename	RBTree::const_iterator				const_iterator;
+			typedef typename	RBTree::reverse_iterator			reverse_iterator;
+			typedef typename	RBTree::const_reverse_iterator		const_reverse_iterator;
 
 			typedef				size_t								size_type;
 			typedef				ptrdiff_t							difference_type;

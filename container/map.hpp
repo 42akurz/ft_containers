@@ -20,20 +20,20 @@ namespace ft {
 			> class map {
 
 			public:
-				typedef 			Key														key_type;
-				typedef 			T														mapped_type;
-				typedef typename	ft::pair<const key_type, mapped_type>					value_type;
+				typedef 			Key											key_type;
+				typedef 			T											mapped_type;
+				typedef typename	ft::pair<const key_type, mapped_type>		value_type;
 
-				typedef				Compare													key_compare;
-				typedef				Alloc													allocator_type;
+				typedef				Compare										key_compare;
+				typedef				Alloc										allocator_type;
 
-				typedef typename	allocator_type::reference								reference;
-				typedef typename	allocator_type::const_reference							const_reference;
-				typedef typename	allocator_type::pointer									pointer;
-				typedef typename	allocator_type::const_pointer							const_pointer;
+				typedef typename	allocator_type::reference					reference;
+				typedef typename	allocator_type::const_reference				const_reference;
+				typedef typename	allocator_type::pointer						pointer;
+				typedef typename	allocator_type::const_pointer				const_pointer;
 				
-				typedef				ptrdiff_t												difference_type;
-				typedef				size_t													size_type;
+				typedef				ptrdiff_t									difference_type;
+				typedef				size_t										size_type;
 				
 				class value_compare {
 					public:
@@ -56,11 +56,11 @@ namespace ft {
 						key_compare	compare;
 				};
 
-				typedef				ft::RBTree<const key_type, mapped_type, ft::pair<const key_type, mapped_type>, value_compare>	RBTree;
-				typedef typename	RBTree::iterator										iterator;
-				typedef typename	RBTree::const_iterator									const_iterator;
-				typedef typename	RBTree::reverse_iterator								reverse_iterator;
-				typedef typename	RBTree::const_reverse_iterator							const_reverse_iterator;
+				typedef				ft::RBTree<ft::pair<const key_type, mapped_type>, value_compare>	RBTree;
+				typedef typename	RBTree::iterator					iterator;
+				typedef typename	RBTree::const_iterator				const_iterator;
+				typedef typename	RBTree::reverse_iterator			reverse_iterator;
+				typedef typename	RBTree::const_reverse_iterator		const_reverse_iterator;
 
 			private:
 				RBTree				tree;
@@ -113,7 +113,7 @@ namespace ft {
 
 				allocator_type			get_allocator() const { return allocator_type(_alloc_pair); }
 
-				size_type				max_size() const { return _alloc_pair.max_size(); }
+				size_type				max_size() const { return tree.max_size(); }
 
 				size_type				count( const key_type& k ) const { return ((find(k) == end()) ? 0 : 1); }
 
@@ -316,40 +316,6 @@ namespace ft {
 			return true;
 		return false;
 	}
-
-
-	
-	// template <class Key, class T, class Compare, class Alloc>
-	// bool	operator==( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs ) {
-	// 	if (lhs.size() != rhs.size())
-	// 		return false;
-	// 	return ft::equal(lhs.begin(), lhs.end(), rhs.begin(), lhs.value_comp());
-	// }
-	
-	// template <class Key, class T, class Compare, class Alloc>
-	// bool	operator!=( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs ) {
-	// 	return (!(lhs == rhs));
-	// }
-	
-	// template <class Key, class T, class Compare, class Alloc>
-	// bool	operator<( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs ) {
-
-	// }
-	
-	// template <class Key, class T, class Compare, class Alloc>
-	// bool	operator<=( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs ) {
-
-	// }
-	
-	// template <class Key, class T, class Compare, class Alloc>
-	// bool	operator>( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs ) {
-
-	// }
-	
-	// template <class Key, class T, class Compare, class Alloc>
-	// bool	operator>=( const map<Key,T,Compare,Alloc>& lhs, const map<Key,T,Compare,Alloc>& rhs ) {
-
-	// }
 
 } /* namespace ft */
 

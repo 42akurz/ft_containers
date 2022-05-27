@@ -22,19 +22,15 @@
 
 namespace ft {
 
-	template< class Key, class T, class Value, class Compare = std::less<Key>, class Alloc = std::allocator<T> >
+	template<class Value, class Compare, class Alloc = std::allocator<Value> >
 	class RBTree {
 		public:
-			typedef				Key														key_type;
-			typedef				T														mapped_type;
 			typedef				Value													value_type;
-
-			typedef				std::allocator<value_type>								pair_allocator_type;
 
 			typedef				tree_node<value_type>									Node;
 			typedef				tree_node<value_type> *									node_pointer;
 
-			typedef				Alloc													allocator_type;
+			typedef				Alloc													pair_allocator_type;
 			typedef typename	Alloc::template rebind<Node>::other						node_allocator_type;
 			typedef				Compare													key_compare;
 
@@ -152,7 +148,7 @@ namespace ft {
 				x1->color = x2->color;
 				x2->color = temp;
 			}
-			
+
 			void	swapValues( node_pointer u, node_pointer v ) {
 				value_type	temp;
 				temp = u->val;
@@ -448,6 +444,8 @@ namespace ft {
 			int			erase( iterator position ){ return deleteByVal(*position); }
 
 			node_pointer	getRoot() const { return _root; }
+
+			size_t			max_size() const { return _alloc_node.max_size(); }
 			
 			// searches for given value
 			// if found returns the node (used for delete)
