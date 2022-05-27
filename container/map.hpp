@@ -19,8 +19,6 @@ namespace ft {
 			class Alloc = std::allocator<ft::pair<const Key, T> >	// map::allocator_type
 			> class map {
 
-
-
 			public:
 				typedef 			Key														key_type;
 				typedef 			T														mapped_type;
@@ -37,33 +35,32 @@ namespace ft {
 				typedef				ptrdiff_t												difference_type;
 				typedef				size_t													size_type;
 				
-				typedef				ft::RBTree<const key_type, mapped_type, key_compare>	RBTree;
+				class value_compare {
+					public:
+						value_compare() : compare() {}
+						value_compare( Compare c ) : compare(c) {}
+						value_compare( const value_compare& other ) : compare (other.compare) {}
+						~value_compare() {}
 
+						value_compare &	operator=( const value_compare& other ) {
+							if (this != &other)
+								compare = other.compare;
+							return (*this);
+						}
+						
+						bool			operator()( const value_type& lhs, const value_type& rhs ) const {
+							return (compare(lhs.first, rhs.first));
+						}
+
+					private:
+						key_compare	compare;
+				};
+
+				typedef				ft::RBTree<const key_type, mapped_type, ft::pair<const key_type, mapped_type>, value_compare>	RBTree;
 				typedef typename	RBTree::iterator										iterator;
 				typedef typename	RBTree::const_iterator									const_iterator;
 				typedef typename	RBTree::reverse_iterator								reverse_iterator;
 				typedef typename	RBTree::const_reverse_iterator							const_reverse_iterator;
-
-			class value_compare {
-				public:
-					value_compare() : compare() {}
-					value_compare( Compare c ) : compare(c) {}
-					value_compare( const value_compare& other ) : compare (other.compare) {}
-					~value_compare() {}
-
-					value_compare &	operator=( const value_compare& other ) {
-						if (this != &other)
-							compare = other.compare;
-						return (*this);
-					}
-					
-					bool			operator()( const value_type& lhs, const value_type& rhs ) const {
-						return (compare(lhs.first, rhs.first));
-					}
-
-				private:
-					key_compare	compare;
-			};
 
 			private:
 				RBTree				tree;
@@ -173,7 +170,7 @@ namespace ft {
 					iterator	temp = begin();
 					for (iterator it = begin(); it != end(); it++) {
 						if (!comp(it->first, k)) {
-							if (it->first == k)
+							if (!comp(it->first, k) && !comp(k, it->first))
 								return it;
 							return temp;
 						}
@@ -240,9 +237,8 @@ namespace ft {
 
 				/* by position */
 				void		erase( iterator position ) {
-					if (_size > 0)
+					if (tree.erase(position))
 						_size -= 1;
-					tree.erase(position);
 				}
 
 				/* by value */
@@ -266,7 +262,7 @@ namespace ft {
 					}
 				}
 
-				void		clear() { erase(begin(), end()); }
+				void		clear() { if (_size) {erase(begin(), end());} }
 
 				ft::pair<const_iterator, const_iterator>	equal_range( const key_type& k ) const {
 					return ft::make_pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));

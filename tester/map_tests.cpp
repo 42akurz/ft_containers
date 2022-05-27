@@ -1,7 +1,4 @@
-#include "../container/vector.hpp"
 #include "../container/map.hpp"
-#include "../utils/red_black_tree.hpp"
-#include "../containers_test/srcs/base.hpp"
 
 #include <map>
 #include <list>
@@ -19,14 +16,14 @@
 /* END tree tests ----------------- */
 
 /* START map tests ---------------- */
-#define TEST8	0 /* insert single element */
-#define TEST9	0 /* insert range */
-#define TEST10	0 /* swap */
-#define TEST11	0 /* find and bounds */
-#define TEST12	0 /* erase */
-#define TEST13	0 /* copy construct / assign */
-#define TEST14	0 /* insert hint */
-#define TEST15	0 /* count */
+#define TEST8	1 /* insert single element */
+#define TEST9	1 /* insert range */
+#define TEST10	1 /* swap */
+#define TEST11	1 /* find and bounds */
+#define TEST12	1 /* erase */
+#define TEST13	1 /* copy construct / assign */
+#define TEST14	1 /* insert hint */
+#define TEST15	1 /* count */
 /* END map tests ------------------ */
 
 int	main()

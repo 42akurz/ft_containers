@@ -21,6 +21,7 @@ INC =	./container/vector.hpp	\
 		./iterator/tree_iterator.hpp \
 		./iterator/tree_reverse_iterator.hpp \
 		./container/stack.hpp \
+		./container/set.hpp \
 
 RM = rm -f
 

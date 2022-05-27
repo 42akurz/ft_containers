@@ -9,6 +9,7 @@
 # include "tree_node.hpp"
 # include "../iterator/tree_iterator.hpp"
 # include "../iterator/tree_reverse_iterator.hpp"
+# include "pair.hpp"
 
 /*
 	Rules That Every Red-Black Tree Follows: 
@@ -21,12 +22,12 @@
 
 namespace ft {
 
-	template< class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<T> >
+	template< class Key, class T, class Value, class Compare = std::less<Key>, class Alloc = std::allocator<T> >
 	class RBTree {
 		public:
 			typedef				Key														key_type;
 			typedef				T														mapped_type;
-			typedef				ft::pair<key_type, mapped_type>							value_type;
+			typedef				Value													value_type;
 
 			typedef				std::allocator<value_type>								pair_allocator_type;
 
@@ -428,10 +429,10 @@ namespace ft {
 			}
 
 			bool	hintIsUseful( value_type n, node_pointer pos ) {
-				if ((_compare(n.first, _root->val.first) && _compare(pos->val.first, _root->val.first)) || (n.first > _root->val.first && pos->val.first > _root->val.first)) {
-					if ((!pos->isOnLeft() && n.first > pos->parent->val.first) || (pos->isOnLeft() && _compare(n.first, pos->parent->val.first))) {
-						if ((!pos->parent->isOnLeft() && (n.first > pos->parent->parent->val.first || pos->parent == _root)) || 
-							(pos->parent->isOnLeft() && (_compare(n.first, pos->parent->parent->val.first) || pos->parent == _root))) {
+				if ((_compare(n, _root->val) && _compare(pos->val, _root->val)) || (_compare(_root->val, n) && _compare(_root->val, pos->val))) {
+					if ((!pos->isOnLeft() && _compare(pos->parent->val, n)) || (pos->isOnLeft() && _compare(n, pos->parent->val))) {
+						if ((!pos->parent->isOnLeft() && (_compare(pos->parent->parent->val, n) || pos->parent == _root)) || 
+							(pos->parent->isOnLeft() && (_compare(n, pos->parent->parent->val) || pos->parent == _root))) {
 								return true;
 							}
 					}
@@ -444,7 +445,7 @@ namespace ft {
 			// initialize root
 			RBTree() { _root = NULL; }
 			
-			void			erase( iterator position ){ deleteByVal(*position); }
+			int			erase( iterator position ){ return deleteByVal(*position); }
 
 			node_pointer	getRoot() const { return _root; }
 			
@@ -454,13 +455,13 @@ namespace ft {
 			node_pointer	search( value_type n, const node_pointer start ) const {
 				node_pointer	temp = start;
 				while (temp != NULL) {
-					if (_compare(n.first, temp->val.first)) {
+					if (_compare(n, temp->val)) {
 						if (temp->left == NULL)
 							break;
 						else
 							temp = temp->left;
 					}
-					else if (n.first == temp->val.first) {
+					else if (!_compare(n, temp->val) && !_compare(temp->val, n)) {
 						break;
 					}
 					else {
@@ -493,7 +494,7 @@ namespace ft {
 				else {
 					node_pointer	temp = search(n, _root);
 				
-					if (temp->val.first == n.first) {
+					if (!_compare(temp->val, n) && !_compare(n, temp->val)) {
 						// return if value already exists
 						return (ft::make_pair<iterator, bool>(iterator(temp), false));
 					}
@@ -504,7 +505,7 @@ namespace ft {
 					// connect new node to correct node
 					newNode->parent = temp;
 				
-					if (_compare(n.first, temp->val.first))
+					if (_compare(n, temp->val))
 						temp->left = newNode;
 					else
 						temp->right = newNode;
@@ -539,7 +540,7 @@ namespace ft {
 					else
 						temp = search(n, _root);
 				
-					if (temp->val.first == n.first) {
+					if (!_compare(temp->val, n) && !_compare(n, temp->val)) {
 						// return if value already exists
 						return (ft::make_pair<iterator, bool>(iterator(temp), false));
 					}
@@ -550,7 +551,7 @@ namespace ft {
 					// connect new node to correct node
 					newNode->parent = temp;
 				
-					if (_compare(n.first, temp->val.first))
+					if (_compare(n, temp->val))
 						temp->left = newNode;
 					else
 						temp->right = newNode;
@@ -562,21 +563,22 @@ namespace ft {
 			}
 			
 			// utility function that deletes the node with given value
-			void	deleteByVal( value_type n ) {
+			int	deleteByVal( value_type n ) {
 				if (_root == NULL) {
 					// Tree is empty
-					return;
+					return 0;
 				}
 			
 				node_pointer	v = search(n, _root);
 				// node_pointer	u;
 			
-				if (v->val.first != n.first) {
+				if (!(!_compare(v->val, n) && !_compare(n, v->val))) {
 					// No node found to delete
-					return;
+					return 0;
 				}
 			
 				deleteNode(v);
+				return 1;
 				// _end->left = _root;
 			}
 			

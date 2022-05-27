@@ -102,7 +102,7 @@ namespace ft {
 				}
 		
 
-				// operator tree_iterator<value_type, variable_type> () const {return tree_iterator<value_type, variable_type>(this->_root);}
+				// operator tree_iterator<value_type, variable_type, var_type_no_const> () const {return tree_iterator<value_type, variable_type, var_type_no_const>(this->_root);}
 		}; /* class tree_iterator */
 } /* namespace ft */
 
