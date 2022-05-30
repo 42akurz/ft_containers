@@ -149,11 +149,50 @@ namespace ft {
 				x2->color = temp;
 			}
 
-			void	swapValues( node_pointer u, node_pointer v ) {
-				value_type	temp;
-				temp = u->val;
-				u->val = v->val;
-				v->val = temp;
+			void	swapNodes( node_pointer u, node_pointer v ) {
+				Node tmp_v;
+
+				//swap these nodes
+				tmp_v.parent = v->parent;
+				tmp_v.left = v->left;
+				tmp_v.right = v->right;
+				v->left = u->left;
+				v->right = u->right;
+				v->parent = u->parent;
+				if (tmp_v.left == u)
+					u->left = v;
+				else
+					u->left = tmp_v.left;
+				if (tmp_v.right == u)
+					u->right = v;
+				else
+					u->right = tmp_v.right;
+				u->parent = tmp_v.parent;
+
+
+				//set childs parents
+				if (v->left != NULL)
+					v->left->parent = v;
+				if (v->right != NULL)
+					v->right->parent = v;
+				if (u->left != NULL)
+					u->left->parent = u;
+				if (u->right != NULL)
+					u->right->parent = u;
+
+				if (u->parent != NULL && u->parent->left == v)
+					u->parent->left = u;
+				if (u->parent != NULL && u->parent->right == v)
+					u->parent->right = u;
+				if (v->parent != NULL && v->parent->left == u)
+					v->parent->left = v;
+				if (v->parent != NULL && v->parent->right == u)
+					v->parent->right = v;
+
+				if (v == getRoot())
+					_root = u;
+				else if (u == getRoot())
+					_root = v;
 			}
 			
 			// fix red red at given node
@@ -238,12 +277,13 @@ namespace ft {
 			
 			// deletes the given node
 			void	deleteNode( node_pointer v ) {
+				// LOG_CYAN("TO DELETE :" << v->val.first);
 				node_pointer	u = BSTreplace(v);
-			
+
 				// True when u and v are both black
 				bool	uvBlack = ((u == NULL || u->color == BLACK) && (v->color == BLACK));
 				node_pointer	parent = v->parent;
-			
+
 				if (u == NULL) {
 					// u is NULL therefore v is leaf
 					if (v == _root) {
@@ -263,37 +303,30 @@ namespace ft {
 								v->sibling()->color = RED;
 							}
 						}
-				
 						// delete v from the tree
-						if (v->isOnLeft()) {
+						if (v->isOnLeft())
 							parent->left = NULL;
-						}
-						else {
+						else
 							parent->right = NULL;
-						}
 					}
-					// delete v; // TODO: delete line
-					// _alloc_node.deallocate(v, 1);
+					_alloc_node.deallocate(v, 1);
 					return;
 				}
-			
 				if (v->left == NULL || v->right == NULL) {
 					// v has 1 child
 					if (v == _root) {
 						// v is root, assign the value of u to v, and delete u
 						v->val = u->val;
 						v->left = v->right = NULL;
-						delete u;
+						_alloc_node.deallocate(u, 1);
 					}
 					else {
 						// Detach v from tree and move u up
-						if (v->isOnLeft()) {
+						if (v->isOnLeft())
 							parent->left = u;
-						}
-						else {
+						else
 							parent->right = u;
-						}
-						// delete v;
+						_alloc_node.deallocate(v, 1);
 						u->parent = parent;
 						if (uvBlack) {
 							// u and v both black, fix double black at u
@@ -306,10 +339,9 @@ namespace ft {
 					}
 					return;
 				}
-			
 				// v has 2 children, swap values with successor and recurse
-				swapValues(u, v);
-				deleteNode(u);
+				swapNodes(u, v);
+				deleteNode(v);
 			}
 			
 			void	fixDoubleBlack( node_pointer x ) {
@@ -440,8 +472,18 @@ namespace ft {
 			// constructor
 			// initialize root
 			RBTree() { _root = NULL; }
+
+			RBTree &		operator=( const RBTree &in ) {
+				this->_end = in._end;
+				this->_root = in._root;
+				this->_root->parent = &_end;
+				this->_compare = in._compare;
+				this->_alloc_node = in._alloc_node;
+				this->_alloc_pair = in._alloc_pair;
+				return *this;
+			}
 			
-			int			erase( iterator position ){ return deleteByVal(*position); }
+			int				erase( iterator position ) { return deleteByVal(*position); }
 
 			node_pointer	getRoot() const { return _root; }
 
@@ -494,6 +536,7 @@ namespace ft {
 				
 					if (!_compare(temp->val, n) && !_compare(n, temp->val)) {
 						// return if value already exists
+						_alloc_node.deallocate(newNode, 1);
 						return (ft::make_pair<iterator, bool>(iterator(temp), false));
 					}
 				
@@ -551,7 +594,6 @@ namespace ft {
 				
 					if (_compare(n, temp->val))
 						temp->left = newNode;
-					else
 						temp->right = newNode;
 				
 					// fix red red voilaton if exists

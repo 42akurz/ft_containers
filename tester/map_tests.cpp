@@ -223,6 +223,9 @@ int	main()
 		LOG_RED("[" << ret1.first->first << ", " << ret1.first->second << "] | " << ret1.second);
 		LOG_GREEN("[" << ret2.first->first << ", " << ret2.first->second << "] | " << ret2.second);
 		mp.print();
+
+		system("leaks a.out");
+		exit(1);
 	}
 	#endif
 

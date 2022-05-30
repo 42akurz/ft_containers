@@ -97,6 +97,8 @@ namespace ft {
 				/* copy */
 				map( const map& x ) : _size(0) { *this = x; }
 
+				~map() { clear(); }
+
 				map &					operator=( const map& x ) {
 					if (_size)
 						this->clear();
@@ -253,10 +255,14 @@ namespace ft {
 				/* range */
 				void		erase( iterator first, iterator last ) {
 					key_type next = first->first;
-					while (first != last) {
+					key_type curr;
+					while (first != last)
+					{
 						first = find(next);
-						key_type	curr = first->first;
+						curr = first->first;
 						first++;
+						if (first == NULL)
+							break;
 						next = first->first;
 						erase(curr);
 					}

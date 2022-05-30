@@ -84,6 +84,8 @@ namespace ft {
 				this->_size = x._size;
 			}
 
+			~vector() { clear(); }
+
 			/* inline */
 			size_type				size() const { return (this->_size); }
 

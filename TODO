@@ -1,0 +1,7 @@
+/*
+
+	4. in set fix const_iterator to iterator conversion (caution this is noit possible in map)
+
+	5. in set call the tree with const value_type (ft::RBTree<const T, value_compare>)
+
+*/

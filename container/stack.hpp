@@ -15,20 +15,22 @@ namespace ft {
 
 		private:
 			container_type	_c;
-			size_type		_size;
+			// size_type		_size;
 
 		public:
 			container_type		base() const { return _c; }
 
-			explicit stack( const container_type& ctnr = container_type() ) : _c(ctnr), _size(ctnr.size()) {}
+			explicit stack( const container_type& ctnr = container_type() ) : _c(ctnr) {}
 
-			bool				empty() const { return (_size == 0); }
+			~stack() { _c.clear(); }
 
-			size_type			size() const { return _size; }
+			bool				empty() const { return (size() == 0); }
 
-			void				push( const value_type& val ) { _c.push_back(val); _size++; }
+			size_type			size() const { return _c.size(); }
 
-			void				pop() { if (_size) {_c.pop_back(); _size--;} }
+			void				push( const value_type& val ) { _c.push_back(val); }
+
+			void				pop() { if (size()) {_c.pop_back(); } }
 
 			value_type &		top() { return _c.back(); }
 
