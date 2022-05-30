@@ -583,6 +583,7 @@ namespace ft {
 				
 					if (!_compare(temp->val, n) && !_compare(n, temp->val)) {
 						// return if value already exists
+						_alloc_node.deallocate(newNode, 1);
 						return (ft::make_pair<iterator, bool>(iterator(temp), false));
 					}
 				
@@ -594,6 +595,7 @@ namespace ft {
 				
 					if (_compare(n, temp->val))
 						temp->left = newNode;
+					else
 						temp->right = newNode;
 				
 					// fix red red voilaton if exists
