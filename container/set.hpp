@@ -22,8 +22,7 @@ namespace ft {
 			typedef typename	allocator_type::pointer				pointer;
 			typedef typename	allocator_type::const_pointer		const_pointer;
 
-			typedef				ft::RBTree<T, value_compare>		RBTree; // TODO this is wrong
-			// typedef				ft::RBTree<const T, value_compare>	RBTree; // TODO this is right
+			typedef				ft::RBTree<const T, value_compare>	RBTree;
 			typedef typename	RBTree::iterator					iterator;
 			typedef typename	RBTree::const_iterator				const_iterator;
 			typedef typename	RBTree::reverse_iterator			reverse_iterator;
@@ -109,7 +108,7 @@ namespace ft {
 
 			size_type				size() const { return _size; }
 
-			size_type				max_size() const { return _alloc.max_size(); };
+			size_type				max_size() const { return _tree.max_size(); };
 
 			allocator_type			get_allocator() const { return allocator_type(_alloc); }
 

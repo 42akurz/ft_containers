@@ -24,7 +24,7 @@ namespace ft {
 			value_type		val;
 			COLOR			color;
 		
-			tree_node() {
+			tree_node() : val() {
 				parent = NULL;
 				left = NULL;
 				right = NULL;

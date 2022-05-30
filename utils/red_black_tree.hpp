@@ -316,7 +316,8 @@ namespace ft {
 					// v has 1 child
 					if (v == _root) {
 						// v is root, assign the value of u to v, and delete u
-						v->val = u->val;
+						_alloc_pair.construct(&v->val, u->val);
+						// v->val = u->val;
 						v->left = v->right = NULL;
 						_alloc_node.deallocate(u, 1);
 					}
@@ -474,7 +475,11 @@ namespace ft {
 			RBTree() { _root = NULL; }
 
 			RBTree &		operator=( const RBTree &in ) {
-				this->_end = in._end;
+				_alloc_pair.construct(&this->_end.val, in._end.val);
+				this->_end.left = in._end.left;
+				this->_end.right = in._end.right;
+				this->_end.parent = in._end.parent;
+				this->_end.color = in._end.color;
 				this->_root = in._root;
 				this->_root->parent = &_end;
 				this->_compare = in._compare;
