@@ -16,9 +16,9 @@
 #include <set>
 #include <map>
 
-#include "../container/vector.hpp"
-#include "../container/stack.hpp"
-#include "../container/map.hpp"
+#include "../../container/vector.hpp"
+#include "../../container/stack.hpp"
+#include "../../container/map.hpp"
 
 #include <sys/time.h>
 #include <iomanip>
@@ -30,11 +30,14 @@
 #define CYAN    "\033[36m"
 #define BLUE    "\033[34m"
 
+// c++ -Wall -Werror -Wextra map.cpp -o ft_container
+// c++ -Wall -Werror -Wextra -DSTD map.cpp -o std_container
+
 #define NAMESPACE ft
-// #ifdef STD
-// # undef NAMESPACE
-// # define NAMESPACE std
-// #endif
+#ifdef STD
+# undef NAMESPACE
+# define NAMESPACE std
+#endif
 
 // functions for map & set
 bool fncomp (char lhs, char rhs) {return lhs<rhs;}

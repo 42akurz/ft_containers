@@ -314,14 +314,13 @@ namespace ft {
 
 			/* single element */
 			iterator	insert( iterator position, const value_type& val ) {
+				difference_type	index = ft::difference(begin(), position);
 				insert(position, 1, val);
-				value_type & val2 = const_cast<value_type &>(val);
-				return (iterator(&val2));
+				return (iterator(this->_ptr + index));
 			}
 
 			/* fill */
 			void	insert( iterator position, size_type n, const value_type& val ) {
-
 				if (position == end() || (position == begin() && !this->_size)) {
 					for (size_t i = 0; i < n; i++)
 						push_back(val);
