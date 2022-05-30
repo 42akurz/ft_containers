@@ -56,11 +56,11 @@ namespace ft {
 			set( const set& x ) : _size(0) { *this = x; }
 
 			set &	operator=( const set& x ) {
-				// if (_size)
-				// 	this->clear();
-				this->_alloc = x._alloc;
-				this->_compare = x._compare;
+				if (_size)
+					this->clear();
 				this->insert(x.begin(), x.end());
+				this->_compare = x._compare;
+				this->_alloc = x._alloc;
 				this->_size = x._size;
 				return *this;
 			}
@@ -173,26 +173,23 @@ namespace ft {
 			}
 
 			iterator	upper_bound( const value_type& val ) const {
-				for (iterator it = begin(); it != end(); it++) {
-					if (!_compare(val, *it) && !_compare(*it, val))
-						return ++it;
-					if (!_compare(val, *it))
-						return it;
+				iterator beg = this->begin();
+				while (beg != this->end()) {
+					if (_compare(val, *beg))
+						return beg;
+					beg++;
 				}
-				return end();
+				return beg;
 			}
 
 			iterator	lower_bound( const value_type& val ) const {
-				iterator	temp = begin();
-				for (iterator it = begin(); it != end(); it++) {
-					if (!_compare(*it, val)) {
-						if (!_compare(*it, val) && !_compare(val, *it))
-							return it;
-						return temp;
-					}
-					temp = it;
+				iterator beg = this->begin();
+				while (beg != this->end()) {
+					if (!_compare(*beg, val))
+						return beg;
+					beg++;
 				}
-				return end();
+				return beg;
 			}
 
 			ft::pair<iterator, iterator>	equal_range( const value_type& val ) const {

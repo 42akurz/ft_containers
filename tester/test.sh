@@ -10,4 +10,7 @@ rm real_vec my_vec
 
 diff real_out.txt my_out.txt > diff.txt
 
+rm real_out.txt
+rm my_out.txt
+
 exit 0
