@@ -10,5 +10,6 @@ rm ft_container std_container
 
 diff out1 out2 > diff.txt
 
+rm out1 out2
 
 exit 0

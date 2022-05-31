@@ -1,4 +1,4 @@
-NAME = containers
+NAME = ft_containers
 
 CC = clang++
 
@@ -29,13 +29,12 @@ all: $(NAME)
 
 $(NAME): $(SRC) $(INC)
 	$(CC) $(CFLAGS) $(SRC) -o $@
-
-test: $(SRC) $(INC)
-	$(CC) $(SRC) -o $@
+	$(CC) $(CFLAGS) -DUSING_STD $(SRC) -o std_containers
 
 clean: fclean
 
 fclean:
 	$(RM) $(NAME)
+	$(RM) std_containers
 
 re: fclean all

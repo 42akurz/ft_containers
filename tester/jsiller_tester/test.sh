@@ -9,3 +9,5 @@ c++ -Wall -Wextra -Werror -DFT main.cpp -o mine
 diff real.txt mine.txt > diff.txt
 
 rm real mine
+
+rm real.txt mine.txt
