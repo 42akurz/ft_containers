@@ -39,65 +39,12 @@ namespace ft {
 			typedef				ft::tree_iterator<Node, const value_type, value_type>	const_iterator;
 			typedef				ft::tree_reverse_iterator<const_iterator>				const_reverse_iterator;
 
-
-			reverse_iterator 		rbegin() { return reverse_iterator(end()); }
-			const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
-
-			reverse_iterator		rend() { return reverse_iterator(begin()); }
-			const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
-
-			iterator				end() {
-				if (_root == NULL) {
-					return iterator(&_end);
-				}
-				return iterator(&_end);
-			}
-
-			const_iterator			end() const {
-				if (_root == NULL) {
-					return const_iterator(_root);
-				}
-				return const_iterator(_root->parent);
-			}
-
-			iterator				begin() {
-				if (_root == NULL)
-					return iterator(_root);
-				node_pointer	tmp = _root;
-				while (tmp->left != NULL)
-					tmp = tmp->left;
-				return iterator(tmp);
-			}
-
-			const_iterator			begin() const {
-				if (_root == NULL)
-					return const_iterator(_root);
-				node_pointer	tmp = _root;
-				while (tmp->left != NULL)
-					tmp = tmp->left;
-				return const_iterator(tmp);
-			}
-
-		public:
+		private:
 			Node					_end;
 			node_pointer			_root;
 			key_compare				_compare;
 			node_allocator_type		_alloc_node;
 			pair_allocator_type		_alloc_pair;
-
-			void	print_rb_tree(const std::string & prefix, node_pointer x, bool isleft) const {
-				if (x) {
-					std::cout << prefix;
-					std::cout << (isleft ? "├──" : "└──");
-					if (x->color == BLACK)
-						std::cout << "\033[1;30m" << x->val.first << "\033[0m";
-					else
-						std::cout << "\033[1;31m" << x->val.first << "\033[0m";
-					std::cout << std::endl;
-					print_rb_tree(prefix + (isleft ? "│   " : "    "), x->left, true);
-					print_rb_tree(prefix + (isleft ? "│   " : "    "), x->right, false);
-				}
-			}
 			
 			// left rotates the given node
 			void	leftRotate( node_pointer x ) {
@@ -152,7 +99,7 @@ namespace ft {
 			void	swapNodes( node_pointer u, node_pointer v ) {
 				Node tmp_v;
 
-				//swap these nodes
+				// swap these nodes
 				tmp_v.parent = v->parent;
 				tmp_v.left = v->left;
 				tmp_v.right = v->right;
@@ -169,8 +116,7 @@ namespace ft {
 					u->right = tmp_v.right;
 				u->parent = tmp_v.parent;
 
-
-				//set childs parents
+				// set childs parents
 				if (v->left != NULL)
 					v->left->parent = v;
 				if (v->right != NULL)
@@ -470,10 +416,10 @@ namespace ft {
 			}
 		
 		public:
-			// constructor
-			// initialize root
+			/* constructor */
 			RBTree() { _root = NULL; }
 
+			/* operator overload */
 			RBTree &		operator=( const RBTree &in ) {
 				_alloc_pair.construct(&this->_end.val, in._end.val);
 				this->_end.left = in._end.left;
@@ -487,6 +433,46 @@ namespace ft {
 				this->_alloc_pair = in._alloc_pair;
 				return *this;
 			}
+
+			/* iterator */
+			reverse_iterator 		rbegin() { return reverse_iterator(end()); }
+			const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
+
+			reverse_iterator		rend() { return reverse_iterator(begin()); }
+			const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
+
+			iterator				end() {
+				if (_root == NULL) {
+					return iterator(&_end);
+				}
+				return iterator(&_end);
+			}
+
+			const_iterator			end() const {
+				if (_root == NULL) {
+					return const_iterator(_root);
+				}
+				return const_iterator(_root->parent);
+			}
+
+			iterator				begin() {
+				if (_root == NULL)
+					return iterator(_root);
+				node_pointer	tmp = _root;
+				while (tmp->left != NULL)
+					tmp = tmp->left;
+				return iterator(tmp);
+			}
+
+			const_iterator			begin() const {
+				if (_root == NULL)
+					return const_iterator(_root);
+				node_pointer	tmp = _root;
+				while (tmp->left != NULL)
+					tmp = tmp->left;
+				return const_iterator(tmp);
+			}
+			/* iterator */
 			
 			int				erase( iterator position ) { return deleteByVal(*position); }
 
@@ -628,7 +614,22 @@ namespace ft {
 				return 1;
 				// _end->left = _root;
 			}
-			
+
+			/* print functions */
+			void	print_rb_tree(const std::string & prefix, node_pointer x, bool isleft) const {
+				if (x) {
+					std::cout << prefix;
+					std::cout << (isleft ? "├──" : "└──");
+					if (x->color == BLACK)
+						std::cout << "\033[1;30m" << x->val.first << "\033[0m";
+					else
+						std::cout << "\033[1;31m" << x->val.first << "\033[0m";
+					std::cout << std::endl;
+					print_rb_tree(prefix + (isleft ? "│   " : "    "), x->left, true);
+					print_rb_tree(prefix + (isleft ? "│   " : "    "), x->right, false);
+				}
+			}
+
 			// prints inorder of the tree
 			void	printInOrder() {
 				std::cout << "Inorder: " << std::endl;
@@ -650,7 +651,9 @@ namespace ft {
 					std::cout << std::endl;
 				}
 			}
+			/* print functions */
 	}; /* class tree */
+
 } /* namespace ft */
 
 #endif

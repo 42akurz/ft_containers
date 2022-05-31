@@ -1,10 +1,7 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-# include <iostream>
-# include <string>
 # include <memory>
-# include <exception>
 
 # include "../utils/pair.hpp"
 # include "../utils/equal.hpp"
@@ -23,15 +20,12 @@ namespace ft {
 				typedef 			Key											key_type;
 				typedef 			T											mapped_type;
 				typedef typename	ft::pair<const key_type, mapped_type>		value_type;
-
 				typedef				Compare										key_compare;
 				typedef				Alloc										allocator_type;
-
 				typedef typename	allocator_type::reference					reference;
 				typedef typename	allocator_type::const_reference				const_reference;
 				typedef typename	allocator_type::pointer						pointer;
 				typedef typename	allocator_type::const_pointer				const_pointer;
-				
 				typedef				ptrdiff_t									difference_type;
 				typedef				size_t										size_type;
 				
@@ -69,11 +63,8 @@ namespace ft {
 				size_type			_size;
 
 			public:
+				/* print red-black-tree */
 				void	printTree() { tree.print_rb_tree("", tree.getRoot(), false); }
-				void	print() { tree.printInOrder(); }
-
-				key_compare key_comp() const { return (key_compare()); }
-				value_compare value_comp() const { return (_compare); }
 
 				/* empty */
 				explicit map( const key_compare& comp = key_compare(),
@@ -97,8 +88,10 @@ namespace ft {
 				/* copy */
 				map( const map& x ) : _size(0) { *this = x; }
 
+				/* destructor */
 				~map() { clear(); }
 
+				/* operator overload */
 				map &					operator=( const map& x ) {
 					if (_size)
 						this->clear();
@@ -109,20 +102,17 @@ namespace ft {
 					return *this;
 				}
 
-				size_type				size() const { return _size; }
-
-				bool					empty() const { return (_size == 0); }
-
-				allocator_type			get_allocator() const { return allocator_type(_alloc_pair); }
-
-				size_type				max_size() const { return tree.max_size(); }
-
-				size_type				count( const key_type& k ) const { return ((find(k) == end()) ? 0 : 1); }
-
 				mapped_type &			operator[]( const key_type& k ) {
 					return (*((this->insert(ft::make_pair(k, mapped_type()))).first)).second;
 				}
+				/* operator overload */
 
+				/* size */
+				size_type				size() const { return _size; }
+				size_type				max_size() const { return tree.max_size(); }
+				/* size */
+
+				/* iterator */
 				iterator				begin() { return tree.begin(); }
 				const_iterator			begin() const { return tree.begin(); }
 
@@ -134,43 +124,65 @@ namespace ft {
 
 				reverse_iterator		rend() { return tree.rend(); }
 				const_reverse_iterator	rend() const { return tree.rend(); }
+				/* iterator */
 
-				iterator				find( const key_type& k ) {
+				/* compare */
+				key_compare				key_comp() const { return (key_compare()); }
+				value_compare			value_comp() const { return (_compare); }
+				/* compare */
+
+				bool					empty() const { return (_size == 0); }
+
+				allocator_type			get_allocator() const { return allocator_type(_alloc_pair); }
+
+				size_type				count( const key_type& k ) const { return ((find(k) == end()) ? 0 : 1); }
+
+				void					clear() { if (_size) {erase(begin(), end());} }
+
+				ft::pair<const_iterator, const_iterator>	equal_range( const key_type& k ) const {
+					return ft::make_pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+				}
+
+				ft::pair<iterator, iterator>	equal_range( const key_type& k ) {
+					return ft::make_pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+				}
+
+				iterator	find( const key_type& k ) {
 					iterator	ret = tree.search(value_type(k, mapped_type()), tree.getRoot());
 					if (ret->first != k)
 						return end();
 					return ret;
 				}
 
-				const_iterator			find( const key_type& k ) const {
+				const_iterator	find( const key_type& k ) const {
 					const_iterator	ret = tree.search(value_type(k, mapped_type()), tree.getRoot());
 					if (ret->first != k)
 						return end();
 					return ret;
 				}
 
-				iterator	lower_bound(const Key& key) {
+				iterator	lower_bound( const Key& key ) {
 					iterator it = begin();
 					while (it != end() && it->first < key)
 						++it;
 					return it;
 				}
 
-				const_iterator	lower_bound(const Key& key) const {
+				const_iterator	lower_bound( const Key& key ) const {
 					const_iterator it = begin();
 					while (it != end() && it->first < key)
 						++it;
 					return it;
 				}
 
-				iterator	upper_bound(const Key& key) {
+				iterator	upper_bound( const Key& key ) {
 					iterator it = begin();
 					while (it != end() && it->first <= key)
 						++it;
 					return it;
 				}
 
-				const_iterator	upper_bound(const Key& key) const {
+				const_iterator	upper_bound( const Key& key ) const {
 					const_iterator it = begin();
 					while (it != end() && it->first <= key)
 						++it;
@@ -251,17 +263,6 @@ namespace ft {
 						erase(curr);
 					}
 				}
-
-				void		clear() { if (_size) {erase(begin(), end());} }
-
-				ft::pair<const_iterator, const_iterator>	equal_range( const key_type& k ) const {
-					return ft::make_pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
-				}
-
-				ft::pair<iterator, iterator>				equal_range( const key_type& k ) {
-					return ft::make_pair<iterator, iterator>(lower_bound(k), upper_bound(k));
-				}
-
 	}; /* class map */
 
 
@@ -306,8 +307,6 @@ namespace ft {
 			return true;
 		return false;
 	}
-
 } /* namespace ft */
-
 
 #endif

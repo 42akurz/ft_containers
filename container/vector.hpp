@@ -1,13 +1,9 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include <iostream>
-# include <string>
 # include <memory>
-# include <vector>
 # include <exception>
 
-# include "../utils/log_colors.hpp"
 # include "../iterator/vector_iterator.hpp"
 # include "../iterator/reverse_iterator.hpp"
 # include "../utils/enable_if.hpp"
@@ -28,7 +24,6 @@ namespace ft {
 			typedef typename	allocator_type::const_pointer						const_pointer;
 			typedef typename	allocator_type::size_type							size_type;
 			typedef typename	ft::vector_iterator<value_type>::difference_type	difference_type;
-
 			typedef				ft::vector_iterator<value_type>						iterator;
 			typedef 			ft::vector_iterator<const value_type>				const_iterator;
 			typedef				ft::reverse_iterator<iterator>						reverse_iterator;
@@ -77,24 +72,22 @@ namespace ft {
 			/* copy constructor */
 			vector( const vector& x ) {
 				this->_alloc = x.get_allocator();
-				this->_ptr = this->_alloc.allocate(x._capacity); // TODO: test if size or capacity is used?
+				this->_ptr = this->_alloc.allocate(x._capacity);
 				for (size_t i = 0; i < x._size; i++)
 					this->_alloc.construct(&this->_ptr[i], x._ptr[i]);
 				this->_capacity = x._capacity;
 				this->_size = x._size;
 			}
 
+			/* destructor */
 			~vector() { clear(); }
 
-			/* inline */
+			/* size */
 			size_type				size() const { return (this->_size); }
-
 			size_type				max_size() const { return (this->_alloc.max_size()); }
+			/* size */
 
-			bool					empty() const { return (this->_size == 0); }
-
-			size_type				capacity() const { return (this->_capacity); }
-
+			/* iterator */
 			iterator				begin() { return iterator(this->_ptr); }
 			const_iterator			begin() const { return (const_iterator(this->_ptr)); }
 
@@ -106,17 +99,24 @@ namespace ft {
 
 			reverse_iterator		rend() { return (reverse_iterator(begin())); }
 			const_reverse_iterator	rend() const { return (const_reverse_iterator(begin())); }
+			/* iterator */
 
+			/* get values */
 			reference				front() { return (this->_ptr[0]); }
 			const_reference			front() const { return (this->_ptr[0]); }
 
 			reference				back() { return (this->_ptr[this->_size - 1]); }
 			const_reference			back() const { return (this->_ptr[this->_size - 1]); }
 
-			allocator_type			get_allocator() const { return (Alloc(this->_alloc)); }
-
 			reference				operator[]( size_type n ) { return (this->_ptr[n]); }
 			const_reference			operator[]( size_type n ) const { return (this->_ptr[n]); }
+			/* get values */
+
+			bool					empty() const { return (this->_size == 0); }
+
+			size_type				capacity() const { return (this->_capacity); }
+
+			allocator_type			get_allocator() const { return (Alloc(this->_alloc)); }
 
 			void	reserve( size_type n ) {
 				if (n > this->_alloc.max_size())
@@ -358,13 +358,13 @@ namespace ft {
 			template <class InputIterator>
 			void	insert( iterator position, InputIterator first, InputIterator last,
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0 ) {
-				if (position == end() || (position == begin() && !this->_size)) { // TODO: not sure about this
+				if (position == end() || (position == begin() && !this->_size)) {
 					for ( ; first != last; first++)
 						push_back(*first);
 					return ;
 				}
 				difference_type	n = ft::difference(first, last);
-				size_type	sizeToAllocate = this->_capacity;  // TODO: wieso allocate ich uerbhaupt neu??? ich kann einfach clearen in solchen cases
+				size_type	sizeToAllocate = this->_capacity;
 				if (sizeToAllocate < this->_size + n) {
 					while (sizeToAllocate < this->_size + n)
 						sizeToAllocate *= 2;
@@ -388,7 +388,7 @@ namespace ft {
 				this->_size = newSize;
 				this->_capacity = sizeToAllocate;
 			}
-	};
+	}; /* class vector */
 
 	template <class T, class Alloc>
 	bool	operator==( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs ) {
@@ -434,6 +434,6 @@ namespace ft {
 
 	template <class T, class Alloc>
 	void	swap( vector<T,Alloc>& x, vector<T,Alloc>& y ) { x.swap(y); }
-}
+} /* namespace ft */
 
 #endif

@@ -1,14 +1,15 @@
 #ifndef SET_HPP
 # define SET_HPP
 
-# include "../utils/log_colors.hpp"
+# include <memory>
+
 # include "../utils/red_black_tree.hpp"
 # include "../utils/pair.hpp"
 # include "../utils/equal.hpp"
 # include "../utils/lexicographical_compare.hpp"
-# include <memory>
 
 namespace ft {
+
 	template < class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 	class set {
 		public:
@@ -21,23 +22,19 @@ namespace ft {
 			typedef typename	allocator_type::const_reference		const_reference;
 			typedef typename	allocator_type::pointer				pointer;
 			typedef typename	allocator_type::const_pointer		const_pointer;
-
 			typedef				ft::RBTree<const T, value_compare>	RBTree;
 			typedef typename	RBTree::iterator					iterator;
 			typedef typename	RBTree::const_iterator				const_iterator;
 			typedef typename	RBTree::reverse_iterator			reverse_iterator;
 			typedef typename	RBTree::const_reverse_iterator		const_reverse_iterator;
-
 			typedef				size_t								size_type;
 			typedef				ptrdiff_t							difference_type;
-
 
 		private:
 			allocator_type	_alloc;
 			key_compare		_compare;
 			size_type		_size;
 			RBTree			_tree;
-
 
 		public:
 			/* default */
@@ -55,6 +52,10 @@ namespace ft {
 			/* copy */
 			set( const set& x ) : _size(0) { *this = x; }
 
+			/* destructor */
+			~set() { clear(); }
+
+			/* operator overload */
 			set &	operator=( const set& x ) {
 				if (_size)
 					this->clear();
@@ -92,6 +93,7 @@ namespace ft {
 				}
 			}
 
+			/* iterator */
 			iterator				begin() { return _tree.begin(); }
 			const_iterator			begin() const { return _tree.begin(); }
 
@@ -103,17 +105,21 @@ namespace ft {
 
 			reverse_iterator		rend() { return _tree.rend(); }
 			const_reverse_iterator	rend() const { return _tree.rend(); }
+			/* iterator */
+
+			/* size */
+			size_type				size() const { return _size; }
+			size_type				max_size() const { return _tree.max_size(); };
+			/* size */
+
+			/* compare */
+			value_compare			value_comp() const { return _compare; }
+			key_compare				key_comp() const { return _compare; }
+			/* compare */
 
 			bool					empty() const { return (_size == 0); }
 
-			size_type				size() const { return _size; }
-
-			size_type				max_size() const { return _tree.max_size(); };
-
 			allocator_type			get_allocator() const { return allocator_type(_alloc); }
-
-			value_compare			value_comp() const { return _compare; }
-			key_compare				key_comp() const { return _compare; }
 
 			void					clear() { if (_size) {erase(begin(), end());} }
 

@@ -5,9 +5,9 @@
 # include "vector.hpp"
 
 namespace ft {
+
 	template <class T, class Container = ft::vector<T> >
 	class stack {
-
 		public:
 			typedef 	T			value_type;
 			typedef 	Container	container_type;
@@ -49,7 +49,6 @@ namespace ft {
 			template <class X, class TContainer>
 			friend bool	operator>=( const stack<X,TContainer>& lhs, const stack<X,TContainer>& rhs );
 	}; /* class stack */
-
 
 	template <class T, class Container>
 	bool	operator==( const stack<T,Container>& lhs, const stack<T,Container>& rhs ) {

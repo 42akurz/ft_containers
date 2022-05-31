@@ -2,6 +2,8 @@
 # define VECTOR_TESTS_HPP
 
 #include "../container/vector.hpp"
+#include <iostream>
+#include <vector>
 
 #ifdef USING_STD
 	#define TESTED_NAMESPACE std

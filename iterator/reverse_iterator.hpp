@@ -26,7 +26,7 @@ namespace ft {
 
 			/* references */
 			reference			operator*() { Iterator temp(_it); --temp; return (*temp); } 
-			reference			operator[]( int pos ) { return *(operator+(pos)); } // TODO: test if still working
+			reference			operator[]( int pos ) { return *(operator+(pos)); }
 
 			/* pointer */ /* when tested type is a class --> access members through iterator */
 			pointer				operator->() { Iterator temp(_it); --temp; return temp.operator->(); }
