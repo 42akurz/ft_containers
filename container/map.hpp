@@ -149,50 +149,32 @@ namespace ft {
 					return ret;
 				}
 
-				iterator				upper_bound( const key_type& k ) {
-					key_compare	comp;
-					for (iterator it = begin(); it != end(); it++) {
-						if (comp(k, it->first))
-							return it;
-					}
-					return end();
+				iterator	lower_bound(const Key& key) {
+					iterator it = begin();
+					while (it != end() && it->first < key)
+						++it;
+					return it;
 				}
 
-				const_iterator			upper_bound( const key_type& k ) const {
-					key_compare	comp;
-					for (const_iterator it = begin(); it != end(); it++) {
-						if (comp(k, it->first))
-							return it;
-					}
-					return end();
+				const_iterator	lower_bound(const Key& key) const {
+					const_iterator it = begin();
+					while (it != end() && it->first < key)
+						++it;
+					return it;
 				}
 
-				iterator				lower_bound( const key_type& k ) {
-					key_compare	comp;
-					iterator	temp = begin();
-					for (iterator it = begin(); it != end(); it++) {
-						if (!comp(it->first, k)) {
-							if (!comp(it->first, k) && !comp(k, it->first))
-								return it;
-							return temp;
-						}
-						temp = it;
-					}
-					return end();
+				iterator	upper_bound(const Key& key) {
+					iterator it = begin();
+					while (it != end() && it->first <= key)
+						++it;
+					return it;
 				}
 
-				const_iterator			lower_bound( const key_type& k ) const {
-					key_compare	comp;
-					const_iterator	temp = begin();
-					for (const_iterator it = begin(); it != end(); it++) {
-						if (!comp(it->first, k)) {
-							if (it->first == k)
-								return it;
-							return temp;
-						}
-						temp = it;
-					}
-					return end();
+				const_iterator	upper_bound(const Key& key) const {
+					const_iterator it = begin();
+					while (it != end() && it->first <= key)
+						++it;
+					return it;
 				}
 
 				void					swap( map & x ) {
@@ -245,6 +227,8 @@ namespace ft {
 
 				/* by value */
 				size_type	erase( const key_type& k ) {
+					if (!size())
+						return 0;
 					iterator it = find(k);
 					if (it == end())
 						return 0;

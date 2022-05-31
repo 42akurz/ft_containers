@@ -298,8 +298,11 @@ namespace ft {
 
 			/* single element */
 			iterator	erase( iterator position ) {
-				for (iterator it = position; it != end(); it++)
-					*it = *(it + 1);
+				iterator posp1 = position;
+				posp1++;
+				for (iterator cop = position; cop != this->end(); cop++, posp1++)
+					if (posp1 != this->end())
+						*cop = *posp1;
 				this->_size--;
 				return position;
 			}
