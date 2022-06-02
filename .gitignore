@@ -1,4 +1,6 @@
 .vscode
-.containers
+.ft_containers
+.std_containers
 /containers_test
+/tester
 *DS_Store
